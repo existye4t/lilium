@@ -882,6 +882,189 @@
 
   .study-spec { color: var(--ink-ftr-faint); }
 
+  .footer-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .gh-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 11px 5px 9px;
+    border-radius: 999px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--ink-ftr);
+    text-decoration: none;
+    text-shadow: none;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.03em;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition:
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.24s ease,
+      box-shadow 0.28s ease,
+      background 0.24s ease;
+  }
+
+  .gh-pill::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: radial-gradient(circle at 82% 50%, var(--accent-soft), transparent 65%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .gh-pill::after {
+    content: "";
+    position: absolute;
+    top: -40%;
+    left: -65%;
+    width: 44%;
+    height: 180%;
+    background: linear-gradient(105deg, transparent 20%, rgba(255, 252, 240, 0.42) 50%, transparent 80%);
+    transform: skewX(-20deg);
+    animation: ghSheen 5.8s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+    pointer-events: none;
+  }
+
+  .gh-pill:hover,
+  .gh-pill:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 22px var(--accent-soft), 0 2px 8px rgba(0, 0, 0, 0.14);
+    outline: none;
+  }
+
+  .gh-pill:hover::before,
+  .gh-pill:focus-visible::before {
+    opacity: 1;
+  }
+
+  .gh-pill:hover::after {
+    animation: ghSheenFast 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .gh-pill:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  .gh-mark {
+    width: 13px;
+    height: 13px;
+    fill: currentColor;
+    flex-shrink: 0;
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), color 0.24s ease;
+  }
+
+  .gh-pill:hover .gh-mark,
+  .gh-pill:focus-visible .gh-mark {
+    color: var(--accent);
+    transform: rotate(-8deg) scale(1.1);
+  }
+
+  .gh-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+    animation: ghDotPulse 2.8s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  .gh-label {
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .gh-repo {
+    opacity: 0.72;
+  }
+
+  .gh-arrow-box {
+    position: relative;
+    width: 13px;
+    height: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .gh-arrow {
+    position: absolute;
+    inset: 0;
+    width: 13px;
+    height: 13px;
+    transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.26s ease;
+  }
+
+  .gh-arrow.primary {
+    animation: ghArrowBreathe 2.8s ease-in-out infinite;
+  }
+
+  .gh-arrow.echo {
+    transform: translate(-13px, 13px);
+    opacity: 0;
+  }
+
+  .gh-pill:hover .gh-arrow.primary,
+  .gh-pill:focus-visible .gh-arrow.primary {
+    animation: none;
+    transform: translate(13px, -13px);
+    opacity: 0;
+  }
+
+  .gh-pill:hover .gh-arrow.echo,
+  .gh-pill:focus-visible .gh-arrow.echo {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+
+  @keyframes ghSheen {
+    0%, 62% { left: -65%; opacity: 0; }
+    68% { opacity: 0.85; }
+    88% { left: 135%; opacity: 0.85; }
+    100% { left: 135%; opacity: 0; }
+  }
+
+  @keyframes ghSheenFast {
+    0% { left: -65%; opacity: 0.9; }
+    100% { left: 135%; opacity: 0; }
+  }
+
+  @keyframes ghArrowBreathe {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(1.8px, -1.8px); }
+  }
+
+  @keyframes ghDotPulse {
+    0%, 100% { transform: scale(1); opacity: 0.82; }
+    50% { transform: scale(1.35); opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gh-pill::after, .gh-arrow.primary, .gh-dot { animation: none !important; }
+  }
+
+  @media (max-width: 1020px) {
+    .study-spec { display: none; }
+  }
+
   @media (max-width: 720px) {
     .chamber-wrap { height: 54vh; min-height: 300px; }
     .chamber-hint { display: none; }
@@ -894,6 +1077,7 @@
       justify-content: space-between;
       padding: 8px 12px;
     }
+    .study-footer { justify-content: center; text-align: center; }
   }
 </style>
 </head>
@@ -1048,7 +1232,21 @@
 
     <footer class="study-footer">
       <span>Taç yapraklara ve polenlere dokun &middot; Suya damlayan çiy dalgalarını izle &middot; Cam anahtarla zamanı kaydır</span>
-      <span class="study-spec">WebGL 2 Subsurface &amp; Su Aynası &middot; F Lidyen Sentezi</span>
+      <div class="footer-right">
+        <span class="study-spec">WebGL 2 &middot; F Lidyen</span>
+        <a id="githubLink" class="gh-pill" href="https://github.com/existye4t/lilium" target="_blank" rel="noopener noreferrer" title="GitHub projesini yeni sekmede aç" aria-label="GitHub deposunu yeni sekmede aç: existye4t/lilium">
+          <svg class="gh-mark" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+          </svg>
+          <span class="gh-dot" aria-hidden="true"></span>
+          <span class="gh-label">GitHub</span>
+          <span class="gh-repo">existye4t/lilium</span>
+          <span class="gh-arrow-box" aria-hidden="true">
+            <svg class="gh-arrow primary" viewBox="0 0 16 16"><path d="M4.2 11.8L11.8 4.2M5.4 4.2h6.4v6.4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <svg class="gh-arrow echo" viewBox="0 0 16 16"><path d="M4.2 11.8L11.8 4.2M5.4 4.2h6.4v6.4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </span>
+        </a>
+      </div>
     </footer>
   </main>
 
@@ -5538,6 +5736,13 @@
 
     requestAnimationFrame(frame);
   }
+
+  document.getElementById("githubLink").addEventListener("click", () => {
+    audio.init();
+    updateAudioBtn();
+    audio.playKnobTink(true);
+    spawnScentRing(0.65, 0.85, 0.90);
+  });
 
   renderHerbarium();
   syncBgControls();
