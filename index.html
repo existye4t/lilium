@@ -41,24 +41,34 @@
   }
 
   body {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 100dvh;
     padding: 12px 16px 14px;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 18%, var(--chamber-glow), transparent 70%),
-      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bot) 100%);
+    background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bot) 100%);
     color: var(--ink);
     font-family: var(--sans);
     user-select: none;
     overflow-x: hidden;
-    transition: color 0.35s ease;
+  }
+
+  #ambientBackdrop {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    display: block;
   }
 
   .study-shell {
-    width: min(95vw, 960px);
+    position: relative;
+    z-index: 1;
+    width: min(94vw, 1100px);
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -168,13 +178,14 @@
   .chamber-wrap {
     position: relative;
     width: 100%;
-    height: clamp(320px, 55vh, 500px);
+    height: clamp(320px, 57vh, 550px);
     border-radius: 22px;
     overflow: hidden;
     border: 1px solid var(--card-border);
     box-shadow:
-      0 22px 58px rgba(0, 0, 0, 0.30),
-      0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+      0 26px 72px rgba(0, 0, 0, 0.34),
+      0 0 88px var(--chamber-glow),
+      0 0 0 1px rgba(255, 255, 255, 0.06) inset;
     background: #140f19;
   }
 
@@ -484,9 +495,8 @@
     display: flex;
     flex-direction: column;
     gap: 3px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: background 0.35s ease, border-color 0.35s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .readout-label {
@@ -538,6 +548,7 @@
 </style>
 </head>
 <body>
+  <canvas id="ambientBackdrop" aria-hidden="true"></canvas>
   <main class="study-shell">
     <header class="study-header">
       <div class="study-meta">
@@ -1026,7 +1037,7 @@
 
       const dayCurve = Math.sin(clamp(u, 0, 1) * Math.PI);
       const lpFreq = 580 + dayCurve * 9800;
-      this.musicLP.frequency.setTargetAtTime(lpFreq, now, 0.09);
+      this.musicLP.frequency.setTargetAtTime(lpFreq, now, 0.035);
 
       if (this.windGain) {
         this.windGain.gain.setTargetAtTime(0.015 + clamp(windEnergy * 0.11, 0, 0.20), now, 0.08);
@@ -1578,6 +1589,8 @@
       this.pollen = [];
       this.wishPetals = [];
       this.memoryOrbs = [];
+      this._dewReleaseTimer = 2.6;
+      this._ambientPetalTimer = 4.2;
 
       this.fireflies = Array.from({ length: 26 }, (_, i) => ({
         x: (hash2(i, 3) - 0.5) * 3.6,
@@ -2252,7 +2265,23 @@
         }
       }
 
-      // 6. Dewdrops & Falling Droplets onto Water Mirror
+      // 6. Dewdrops & Autonomous Natural Drip onto Water Mirror
+      this._dewReleaseTimer -= dt;
+      if (this._dewReleaseTimer <= 0) {
+        this._dewReleaseTimer = 3.2 + Math.random() * 2.8;
+        if (this.dewdrops.length < 18) this.addDewdrop();
+        if (this.dewdrops.length > 0) {
+          const idx = Math.floor(Math.random() * this.dewdrops.length);
+          this.dewdrops[idx].slideV = Math.max(this.dewdrops[idx].slideV, 0.26);
+        }
+      }
+      this._ambientPetalTimer -= dt;
+      if (this._ambientPetalTimer <= 0) {
+        this._ambientPetalTimer = 5.0 + Math.random() * 3.5;
+        if (this.wishPetals.length < 8 && smoothstep(0.18, 0.45, uCycle) > 0.25) {
+          this.spawnWishPetals(1);
+        }
+      }
       const shakeMag = Math.hypot(this.stemVelX, this.stemVelZ) + Math.hypot(windX, windZ);
       for (let i = this.dewdrops.length - 1; i >= 0; i--) {
         const d = this.dewdrops[i];
@@ -2531,6 +2560,28 @@
     return fract((p3.x + p3.y) * p3.z);
   }
 
+  float noise21(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(
+      mix(hash12(i), hash12(i + vec2(1.0, 0.0)), u.x),
+      mix(hash12(i + vec2(0.0, 1.0)), hash12(i + vec2(1.0, 1.0)), u.x),
+      u.y
+    );
+  }
+
+  float fbmClouds(vec2 p) {
+    float v = 0.0;
+    float a = 0.52;
+    for (int i = 0; i < 3; i++) {
+      v += a * noise21(p);
+      p = p * 2.07 + vec2(1.7, 9.2);
+      a *= 0.48;
+    }
+    return v;
+  }
+
   void main() {
     vec2 uv = vUv;
 
@@ -2570,40 +2621,67 @@
 
     vec3 col = mix(botC, topC, pow(y, 0.84));
 
-    // Soft atmospheric sun / moon aura & gentle conservatory diagonal shaft
+    // Flowing volumetric conservatory mist & drifting celestial clouds
+    vec2 cUv1 = vec2(uv.x * 2.2 + uTime * 0.014, uv.y * 3.1 - uTime * 0.004);
+    vec2 cUv2 = vec2(uv.x * 3.6 - uTime * 0.010, uv.y * 4.4 + 2.1);
+    float clouds = smoothstep(0.42, 0.84, fbmClouds(cUv1) * 0.65 + fbmClouds(cUv2) * 0.40) * smoothstep(0.14, 0.86, uv.y);
+    vec3 cloudCol = mix(
+      mix(vec3(0.24, 0.25, 0.42), uCultivarBio * 0.65, 0.35),
+      mix(vec3(1.0, 0.84, 0.74), vec3(0.98, 0.99, 0.97), dayAmt),
+      smoothstep(0.12, 0.50, dayAmt)
+    );
+    col = mix(col, cloudCol, clouds * (0.22 + 0.18 * dayAmt + 0.14 * clamp(dawnAmt, 0.0, 1.0)));
+
+    // Soft atmospheric sun / moon aura & sweeping conservatory sunbeams
     vec2 sunD = uv - uSunScreen;
     sunD.x *= 1.65;
     float sDist = length(sunD);
-    vec3 celestialCol = mix(vec3(0.62, 0.72, 0.98), mix(vec3(1.0, 0.78, 0.56), vec3(1.0, 0.97, 0.88), dayAmt), smoothstep(0.12, 0.46, dayAmt));
-    col += celestialCol * exp(-sDist * 2.5) * (0.24 + 0.36 * dayAmt);
-    col += celestialCol * exp(-sDist * 11.0) * 0.28;
-    float shaft = exp(-pow((uv.x * 0.75 - uv.y * 0.45 - 0.16), 2.0) * 18.0) * smoothstep(0.15, 0.9, uv.y);
-    col += celestialCol * shaft * 0.09 * dayAmt;
+    vec3 celestialCol = mix(vec3(0.62, 0.72, 0.98), mix(vec3(1.0, 0.74, 0.50), vec3(1.0, 0.97, 0.88), smoothstep(0.35, 0.85, dayAmt)), smoothstep(0.10, 0.42, dayAmt));
+    col += celestialCol * exp(-sDist * 2.4) * (0.20 + 0.44 * dayAmt);
+    col += celestialCol * exp(-sDist * 10.5) * (0.14 + 0.34 * dayAmt);
 
-    // Smooth round twinkling starlight + soft bokeh circles at night (no blocky grid pixels)
-    float nightMask = 1.0 - smoothstep(0.14, 0.44, dayAmt);
+    float beamSlope = (uSunScreen.x - 0.5) * 0.95;
+    float shaftA = exp(-pow((uv.x - (uSunScreen.x + (uv.y - uSunScreen.y) * beamSlope)), 2.0) * 14.0) * smoothstep(0.05, 0.92, uv.y);
+    float shaftB = exp(-pow((uv.x - (uSunScreen.x * 0.85 + 0.08 + (uv.y - 0.5) * (beamSlope - 0.18))), 2.0) * 28.0) * smoothstep(0.12, 0.95, uv.y);
+    float rayFlicker = 0.88 + 0.12 * sin(uTime * 0.9 + uv.x * 5.0);
+    col += celestialCol * (shaftA * 0.11 + shaftB * 0.07) * rayFlicker * (0.16 + 0.84 * dayAmt);
+
+    // Smooth round twinkling starlight, crescent moon & nocturnal aurora at night
+    float nightMask = 1.0 - smoothstep(0.14, 0.46, dayAmt);
     if (nightMask > 0.02) {
+      float aurora = exp(-pow(uv.y - 0.68 - 0.09 * sin(uv.x * 4.2 + uTime * 0.25), 2.0) * 18.0);
+      col += mix(uCultivarBio, vec3(0.46, 0.62, 0.98), 0.45) * aurora * nightMask * 0.15;
+
+      vec2 moonPos = vec2(fract(uSunScreen.x + 0.50), 0.72 + 0.12 * sin((uCycle + 0.5) * 3.14159));
+      vec2 mD = uv - moonPos;
+      mD.x *= 1.65;
+      float outerM = smoothstep(0.036, 0.030, length(mD));
+      float innerM = smoothstep(0.031, 0.025, length(mD - vec2(0.014, 0.008)));
+      float crescent = clamp(outerM - innerM, 0.0, 1.0);
+      col += vec3(0.92, 0.95, 1.0) * crescent * nightMask * 0.85;
+      col += mix(vec3(0.66, 0.76, 1.0), uCultivarBio, 0.30) * exp(-length(mD) * 5.8) * nightMask * 0.28;
+
       vec2 starGrid = uv * vec2(68.0, 39.0);
       vec2 cellId = floor(starGrid);
       vec2 cellUv = fract(starGrid) - 0.5;
       float h = hash12(cellId);
-      if (h > 0.968) {
+      if (h > 0.964) {
         vec2 off = vec2(hash12(cellId + 7.1) - 0.5, hash12(cellId + 13.7) - 0.5) * 0.45;
         float sd = length(cellUv - off);
         float starPt = exp(-sd * sd * 34.0);
-        float tw = 0.45 + 0.55 * sin(uTime * 2.1 + h * 50.0);
-        col += mix(vec3(0.90, 0.93, 1.0), uCultivarBio, 0.30) * starPt * tw * nightMask * 1.15;
+        float tw = 0.42 + 0.58 * sin(uTime * 2.2 + h * 55.0);
+        col += mix(vec3(0.90, 0.94, 1.0), uCultivarBio, 0.32) * starPt * tw * nightMask * 1.18;
       }
       // Subtle distant bokeh orbs
       vec2 bGrid = uv * vec2(14.0, 8.0);
       vec2 bId = floor(bGrid);
       vec2 bUv = fract(bGrid) - 0.5;
       float bh = hash12(bId + 31.3);
-      if (bh > 0.86) {
+      if (bh > 0.85) {
         vec2 bOff = vec2(hash12(bId + 3.1) - 0.5, hash12(bId + 9.2) - 0.5) * 0.4;
         float bd = length(bUv - bOff);
-        float bCircle = smoothstep(0.32, 0.22, bd) * 0.085;
-        col += mix(vec3(0.75, 0.82, 1.0), uCultivarBio, 0.45) * bCircle * nightMask;
+        float bCircle = smoothstep(0.32, 0.22, bd) * 0.095;
+        col += mix(vec3(0.75, 0.84, 1.0), uCultivarBio, 0.45) * bCircle * nightMask;
       }
     }
 
@@ -3555,23 +3633,256 @@
   }
 
   // =========================================================================
+  // 5.5 FULL-VIEWPORT LIVING CONSERVATORY BACKDROP (2D ATMOSPHERE LAYER)
+  // =========================================================================
+  class AmbientBackdropRenderer {
+    constructor(canvas) {
+      this.canvas = canvas;
+      this.ctx = canvas.getContext("2d");
+      this.w = 1;
+      this.h = 1;
+      this.stars = Array.from({ length: 72 }, (_, i) => ({
+        x: hash2(i, 5),
+        y: hash2(i, 13) * 0.78,
+        r: 0.7 + hash2(i, 19) * 1.4,
+        phase: hash2(i, 29) * Math.PI * 2,
+      }));
+      this.motes = Array.from({ length: 38 }, (_, i) => ({
+        x: hash2(i, 37),
+        y: hash2(i, 41),
+        r: 2.0 + hash2(i, 47) * 6.5,
+        speed: 0.010 + hash2(i, 53) * 0.018,
+        drift: (hash2(i, 59) - 0.5) * 0.014,
+        phase: hash2(i, 61) * Math.PI * 2,
+      }));
+      this.petals = Array.from({ length: 14 }, (_, i) => ({
+        x: hash2(i, 71),
+        y: hash2(i, 73),
+        len: 7 + hash2(i, 79) * 11,
+        vx: 0.008 + hash2(i, 83) * 0.012,
+        vy: 0.014 + hash2(i, 89) * 0.018,
+        rot: hash2(i, 97) * Math.PI * 2,
+        spin: (hash2(i, 101) - 0.5) * 0.8,
+        phase: hash2(i, 103) * Math.PI * 2,
+      }));
+      this.meteor = { active: false, x: 0.2, y: 0.15, vx: 0.42, vy: 0.22, life: 0, timer: 2.2 };
+      this._lastTime = 0;
+    }
+
+    draw(sim, cultivar, topC, botC) {
+      const ctx = this.ctx;
+      if (!ctx) return;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      if (this.canvas.width !== w || this.canvas.height !== h) {
+        this.canvas.width = w;
+        this.canvas.height = h;
+      }
+      this.w = w;
+      this.h = h;
+      const dt = Math.min(0.05, Math.max(0.001, this._lastTime ? sim.time - this._lastTime : 0.016));
+      this._lastTime = sim.time;
+
+      const u = sim.u;
+      const dayAmt = Math.sin(clamp(u, 0, 1) * Math.PI);
+      const isLight = smoothstep(0.38, 0.58, dayAmt);
+      const dawnAmt = clamp(expBell(u, 0.24, 0.16) + expBell(u, 0.78, 0.16), 0, 1);
+      const nightMask = clamp(1 - smoothstep(0.14, 0.48, dayAmt), 0, 1);
+
+      // 1. Living sky gradient synchronized at 0ms lag
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+      bgGrad.addColorStop(0, `rgb(${Math.round(topC[0])},${Math.round(topC[1])},${Math.round(topC[2])})`);
+      bgGrad.addColorStop(1, `rgb(${Math.round(botC[0])},${Math.round(botC[1])},${Math.round(botC[2])})`);
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      // 2. Traveling Celestial Glow Halo (sweeps continuously across viewport with u)
+      const celX = lerp(0.10, 0.90, u) * w;
+      const celY = (0.72 - 0.54 * Math.sin(u * Math.PI)) * h;
+      const celRad = Math.max(w, h) * (0.42 + 0.18 * dayAmt);
+      const celGlow = ctx.createRadialGradient(celX, celY, 0, celX, celY, celRad);
+      const bio = cultivar.bioCol;
+      if (isLight > 0.45) {
+        celGlow.addColorStop(0, `rgba(255, 249, 228, ${0.42 * dayAmt})`);
+        celGlow.addColorStop(0.45, `rgba(246, 224, 182, ${0.18 * dayAmt})`);
+        celGlow.addColorStop(1, "rgba(255, 248, 232, 0)");
+      } else {
+        const cr = dawnAmt > 0.25 ? 248 : Math.round(bio[0] * 210);
+        const cg = dawnAmt > 0.25 ? 168 : Math.round(bio[1] * 225);
+        const cb = dawnAmt > 0.25 ? 156 : Math.round(bio[2] * 255);
+        celGlow.addColorStop(0, `rgba(${cr}, ${cg}, ${cb}, ${0.22 + 0.24 * dawnAmt})`);
+        celGlow.addColorStop(0.55, `rgba(${cr}, ${cg}, ${cb}, ${0.07 + 0.08 * dawnAmt})`);
+        celGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
+      }
+      ctx.fillStyle = celGlow;
+      ctx.fillRect(0, 0, w, h);
+
+      // 3. Undulating Auroral / Silk Light Curtains
+      ctx.save();
+      for (let b = 0; b < 2; b++) {
+        ctx.beginPath();
+        const baseY = h * (0.30 + b * 0.22);
+        const amp = 26 + b * 14;
+        ctx.moveTo(0, baseY);
+        for (let px = 0; px <= w; px += Math.max(40, w / 22)) {
+          const wave = Math.sin(px * 0.0032 + sim.time * (0.28 + b * 0.12) + b * 2.1) * amp
+            + Math.cos(px * 0.0018 - sim.time * 0.19) * amp * 0.6;
+          ctx.lineTo(px, baseY + wave);
+        }
+        ctx.lineTo(w, h);
+        ctx.lineTo(0, h);
+        ctx.closePath();
+        const ribGrad = ctx.createLinearGradient(0, baseY - amp * 1.4, 0, baseY + h * 0.40);
+        if (isLight > 0.5) {
+          ribGrad.addColorStop(0, "rgba(255, 252, 242, 0)");
+          ribGrad.addColorStop(0.30, `rgba(255, 252, 242, ${0.14 - b * 0.04})`);
+          ribGrad.addColorStop(1, "rgba(255, 252, 242, 0)");
+        } else {
+          const rc = Math.round(lerp(bio[0] * 255, 244, dawnAmt));
+          const gc = Math.round(lerp(bio[1] * 255, 178, dawnAmt));
+          const bc = Math.round(lerp(bio[2] * 255, 196, dawnAmt));
+          ribGrad.addColorStop(0, `rgba(${rc}, ${gc}, ${bc}, 0)`);
+          ribGrad.addColorStop(0.30, `rgba(${rc}, ${gc}, ${bc}, ${0.10 - b * 0.03})`);
+          ribGrad.addColorStop(1, `rgba(${rc}, ${gc}, ${bc}, 0)`);
+        }
+        ctx.fillStyle = ribGrad;
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // 4. Delicate Conservatory Arched Glasshouse Frames in Background
+      ctx.save();
+      ctx.strokeStyle = isLight > 0.5 ? "rgba(64, 78, 62, 0.075)" : "rgba(255, 245, 236, 0.065)";
+      ctx.lineWidth = 1;
+      const cx = w * 0.5;
+      const archBaseY = h * 0.88;
+      for (const scaleR of [0.39, 0.48]) {
+        const rx = Math.min(w * 0.49, 640 * (scaleR / 0.39));
+        const ry = Math.min(h * 0.78, 490 * (scaleR / 0.39));
+        ctx.beginPath();
+        ctx.ellipse(cx, archBaseY, rx, ry, 0, Math.PI, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // 5. Outer Viewport Starlight & Shooting Stars at Night / Twilight
+      if (nightMask > 0.03) {
+        for (const s of this.stars) {
+          const tw = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(sim.time * 2.1 + s.phase));
+          ctx.fillStyle = `rgba(242, 246, 255, ${tw * nightMask * 0.72})`;
+          ctx.beginPath();
+          ctx.arc(s.x * w, s.y * h, s.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        const m = this.meteor;
+        m.timer -= dt;
+        if (!m.active && m.timer <= 0) {
+          m.active = true;
+          m.x = 0.1 + Math.random() * 0.7;
+          m.y = 0.06 + Math.random() * 0.25;
+          m.vx = (m.x < 0.5 ? 1 : -1) * (0.38 + Math.random() * 0.25);
+          m.vy = 0.16 + Math.random() * 0.12;
+          m.life = 1.0;
+          m.timer = 3.8 + Math.random() * 4.5;
+        }
+        if (m.active) {
+          m.x += m.vx * dt;
+          m.y += m.vy * dt;
+          m.life -= dt * 1.45;
+          if (m.life <= 0) {
+            m.active = false;
+          } else {
+            const x1 = m.x * w, y1 = m.y * h;
+            const x0 = x1 - m.vx * 140, y0 = y1 - m.vy * 140;
+            const mg = ctx.createLinearGradient(x0, y0, x1, y1);
+            mg.addColorStop(0, "rgba(255,255,255,0)");
+            mg.addColorStop(1, `rgba(255, 246, 224, ${m.life * nightMask * 0.85})`);
+            ctx.strokeStyle = mg;
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x1, y1);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // 6. Continuously Floating Ambient Pollen Bokeh / Fireflies
+      const pol = cultivar.pollenCol;
+      for (const mt of this.motes) {
+        mt.y -= mt.speed * dt;
+        mt.x += (mt.drift + sim.windVec[0] * 0.015 + Math.sin(sim.time * 0.7 + mt.phase) * 0.005) * dt;
+        if (mt.y < -0.04) mt.y = 1.04;
+        if (mt.x < -0.04) mt.x = 1.04;
+        if (mt.x > 1.04) mt.x = -0.04;
+        const pulse = 0.45 + 0.55 * Math.sin(sim.time * 1.8 + mt.phase);
+        const mx = mt.x * w, my = mt.y * h;
+        const orb = ctx.createRadialGradient(mx, my, 0, mx, my, mt.r * 2.2);
+        if (isLight > 0.5) {
+          const r = Math.round(lerp(255, pol[0] * 255, 0.5));
+          const g = Math.round(lerp(248, pol[1] * 255, 0.5));
+          const b = Math.round(lerp(220, pol[2] * 255, 0.5));
+          orb.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${0.38 * pulse})`);
+          orb.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+        } else {
+          const r = Math.round(bio[0] * 255);
+          const g = Math.round(bio[1] * 255);
+          const b = Math.round(bio[2] * 255);
+          orb.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${0.46 * pulse})`);
+          orb.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+        }
+        ctx.fillStyle = orb;
+        ctx.beginPath();
+        ctx.arc(mx, my, mt.r * 2.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 7. Drifting Translucent Lilium Petals across Outer Sanctuary
+      const petBase = cultivar.baseCol;
+      const pr = Math.round(petBase[0] * 255);
+      const pg = Math.round(petBase[1] * 255);
+      const pb = Math.round(petBase[2] * 255);
+      for (const pt of this.petals) {
+        pt.y += pt.vy * dt;
+        pt.x += (pt.vx + sim.windVec[0] * 0.025 + Math.sin(sim.time * 0.9 + pt.phase) * 0.008) * dt;
+        pt.rot += pt.spin * dt;
+        if (pt.y > 1.05) { pt.y = -0.05; pt.x = Math.random(); }
+        if (pt.x > 1.05) pt.x = -0.05;
+        if (pt.x < -0.05) pt.x = 1.05;
+        ctx.save();
+        ctx.translate(pt.x * w, pt.y * h);
+        ctx.rotate(pt.rot);
+        ctx.fillStyle = isLight > 0.5
+          ? `rgba(${pr}, ${pg}, ${pb}, 0.45)`
+          : `rgba(${pr}, ${pg}, ${pb}, 0.22)`;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, pt.len, pt.len * 0.36, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+  }
+
+  // =========================================================================
   // 6. ORCHESTRATION, HARMONIOUS THEME ENGINE, DEDICATION & INTERACTION
   // =========================================================================
   const plant = new LiliumPlant();
   const lilyCanvas = document.getElementById("lilyCanvas");
   const switchCanvas = document.getElementById("timeSwitchCanvas");
+  const ambientCanvas = document.getElementById("ambientBackdrop");
   const chamber = new ChamberRenderer(lilyCanvas, plant);
   const timeSwitch = new TimeSwitchRenderer(switchCanvas);
+  const ambientBackdrop = new AmbientBackdropRenderer(ambientCanvas);
 
   const sim = {
-    uTarget: 0.40,
-    u: 0.16,
+    uTarget: 0.28,
+    u: 0.25,
     uVel: 0,
     wobble: 0,
     wobbleVel: 0,
     knobStretch: 1.0,
     time: 0,
-    autoCycle: false,
+    autoCycle: true,
 
     camYaw: 0.14,
     camPitch: 0.18,
@@ -3651,6 +3962,7 @@
     r.setProperty("--card-border", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.15)` : `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.24)`);
     r.setProperty("--pill-bg", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.07)` : "rgba(255,248,250,0.085)");
     r.setProperty("--pill-hover", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.13)` : "rgba(255,248,250,0.18)");
+    return { topC, botC };
   }
 
   function stepCultivarMorph(dt) {
@@ -3907,7 +4219,7 @@
   }, { passive: false });
 
   // Interactive Pointer Logic for Bottom Pill Time Switch
-  const swPtr = { active: false, dragging: false, startX: 0, grabOff: 0 };
+  const swPtr = { active: false, dragging: false, moved: false, startX: 0, grabOff: 0 };
 
   function clientToSwitchX(clientX) {
     const rect = switchCanvas.getBoundingClientRect();
@@ -3921,16 +4233,30 @@
     const sx = clientToSwitchX(e.clientX);
     const kx = lerp(SW_KNOB_MIN, SW_KNOB_MAX, sim.u);
     swPtr.active = true;
-    swPtr.dragging = false;
     swPtr.startX = e.clientX;
-    swPtr.grabOff = Math.abs(sx - kx) <= SW_KNOB_R + 4 ? sx - kx : 0;
-    if (Math.abs(sx - kx) <= SW_KNOB_R + 4) audio.playKnobTink(false);
+    swPtr.moved = false;
+    if (Math.abs(sx - kx) <= SW_KNOB_R + 4) {
+      swPtr.grabOff = sx - kx;
+      swPtr.dragging = false;
+      audio.playKnobTink(false);
+    } else {
+      // Pressing outside knob immediately moves dial live and lets user slide seamlessly
+      swPtr.grabOff = 0;
+      swPtr.dragging = true;
+      swPtr.moved = true;
+      sim.autoCycle = false;
+      updateAutoBtn();
+      sim.uTarget = clamp((sx - SW_KNOB_MIN) / (SW_KNOB_MAX - SW_KNOB_MIN), 0, 1);
+      switchCanvas.classList.add("dragging");
+      audio.playKnobTink(false);
+    }
   });
 
   switchCanvas.addEventListener("pointermove", (e) => {
     if (!swPtr.active) return;
-    if (!swPtr.dragging && Math.abs(e.clientX - swPtr.startX) > 4) {
+    if (!swPtr.dragging && Math.abs(e.clientX - swPtr.startX) > 1.5) {
       swPtr.dragging = true;
+      swPtr.moved = true;
       sim.autoCycle = false;
       updateAutoBtn();
       switchCanvas.classList.add("dragging");
@@ -3943,14 +4269,15 @@
 
   function endSwPtr(e) {
     if (!swPtr.active) return;
-    const wasDrag = swPtr.dragging;
+    const wasMoved = swPtr.moved;
     swPtr.active = false;
     swPtr.dragging = false;
+    swPtr.moved = false;
     switchCanvas.classList.remove("dragging");
-    if (!wasDrag) {
+    if (!wasMoved) {
       const sx = clientToSwitchX(e.clientX);
       const kx = lerp(SW_KNOB_MIN, SW_KNOB_MAX, sim.u);
-      if (Math.abs(sx - kx) <= SW_KNOB_R + 3) {
+      if (Math.abs(sx - kx) <= SW_KNOB_R + 4) {
         sim.wobbleVel += 6.2;
         audio.playKnobTink(true);
       } else {
@@ -4067,30 +4394,39 @@
     sim.time += dt;
 
     if (sim.autoCycle && !swPtr.dragging) {
-      sim.uTarget += dt * 0.032;
+      sim.uTarget += dt * 0.014;
       if (sim.uTarget > 1.0) sim.uTarget -= 1.0;
     }
 
     const prevVel = sim.uVel;
-    sim.uVel += ((sim.uTarget - sim.u) * 250 - sim.uVel * 24) * dt;
-    sim.u = clamp(sim.u + sim.uVel * dt, 0, 1);
+    if (swPtr.dragging) {
+      // Crisp near-1:1 live response while holding & dragging (no waiting until release)
+      const prevU = sim.u;
+      sim.u = lerp(sim.u, sim.uTarget, clamp(dt * 36, 0, 1));
+      sim.uVel = (sim.u - prevU) / Math.max(dt, 0.001);
+    } else {
+      sim.uVel += ((sim.uTarget - sim.u) * 320 - sim.uVel * 26) * dt;
+      sim.u = clamp(sim.u + sim.uVel * dt, 0, 1);
+    }
 
     const speed = Math.abs(sim.uVel);
     const decel = (speed - Math.abs(prevVel)) / Math.max(dt, 0.001);
     if (decel < -1.5 && speed > 0.04) {
       sim.wobbleVel += clamp(-decel * 0.045, 0, 2.2) * (sim.uVel >= 0 ? 1 : -1);
     }
-    sim.knobStretch = lerp(sim.knobStretch, 1.0 + clamp(speed * 0.22, 0, 0.25), clamp(dt * 18, 0, 1));
+    sim.knobStretch = lerp(sim.knobStretch, 1.0 + clamp(speed * 0.22, 0, 0.26), clamp(dt * 20, 0, 1));
     sim.wobbleVel += (-160 * sim.wobble - 6.8 * sim.wobbleVel) * dt;
     sim.wobble += sim.wobbleVel * dt;
 
     sim.camR = lerp(sim.camR, sim.camRTarget, clamp(dt * 5.0, 0, 1));
     sim.camTargetY = lerp(sim.camTargetY, sim.camTargetYGoal, clamp(dt * 5.0, 0, 1));
 
-    const ambWindX = Math.sin(sim.time * 0.85) * 0.14 + Math.sin(sim.time * 2.1) * 0.05;
-    const ambWindZ = Math.cos(sim.time * 0.72) * 0.10;
-    sim.windVec[0] = lerp(sim.windVec[0], ambWindX, clamp(dt * 2.4, 0, 1));
-    sim.windVec[1] = lerp(sim.windVec[1], ambWindZ, clamp(dt * 2.4, 0, 1));
+    // Lively natural conservatory breeze billows even at rest
+    const gust = 0.55 + 0.45 * Math.sin(sim.time * 0.37);
+    const ambWindX = (Math.sin(sim.time * 0.92) * 0.24 + Math.sin(sim.time * 2.15) * 0.08) * gust;
+    const ambWindZ = (Math.cos(sim.time * 0.78) * 0.16 + Math.cos(sim.time * 1.8) * 0.05) * gust;
+    sim.windVec[0] = lerp(sim.windVec[0], ambWindX, clamp(dt * 2.8, 0, 1));
+    sim.windVec[1] = lerp(sim.windVec[1], ambWindZ, clamp(dt * 2.8, 0, 1));
     sim.windEnergy = Math.hypot(sim.windVec[0], sim.windVec[1]);
 
     for (let i = sim.scentRings.length - 1; i >= 0; i--) {
@@ -4105,16 +4441,18 @@
 
     audio.setState(sim.u, sim.windEnergy, 0, swPtr.dragging ? speed * 1.4 : 0);
 
+    const { topC, botC } = updatePageThemeAndReadouts();
+    ambientBackdrop.draw(sim, sim.activeCultivar, topC, botC);
     chamber.draw(sim, sim.activeCultivar);
     timeSwitch.draw(sim, sim.activeCultivar);
-    updatePageThemeAndReadouts();
 
     requestAnimationFrame(frame);
   }
 
   updateAudioBtn();
   updateAutoBtn();
-  updatePageThemeAndReadouts();
+  const initTheme = updatePageThemeAndReadouts();
+  ambientBackdrop.draw(sim, sim.activeCultivar, initTheme.topC, initTheme.botC);
   requestAnimationFrame(frame);
 })();
 </script>
