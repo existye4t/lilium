@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta name="color-scheme" id="metaColorScheme" content="only light" />
+<meta name="darkreader-lock" />
 <title>Lilium — En Sevilen Çiçeğin Işık &amp; Sevgi Etüdü · No. 072</title>
 <meta name="description" content="Bazı çiçekler zamanla solmaz; sevilen birinin kalbinde her şafak yeniden açar. Tek dosya WebGL 2 + F Lidyen Web Audio API Beyaz Lilium hatıra etüdü." />
 <meta name="theme-color" id="metaThemeColor" content="#191421" />
@@ -23,15 +25,24 @@
     --bg-top: #16111c;
     --bg-bot: #211926;
     --ink: #f6efe8;
-    --ink-muted: #c2b3ba;
-    --ink-faint: rgba(246, 239, 232, 0.36);
-    --card-bg: rgba(255, 245, 248, 0.055);
-    --card-border: rgba(245, 218, 226, 0.14);
-    --pill-bg: rgba(255, 245, 248, 0.08);
-    --pill-hover: rgba(255, 245, 248, 0.16);
+    --ink-muted: #d6cbd0;
+    --ink-faint: rgba(246, 239, 232, 0.72);
+    --ink-hdr: #f6efe8;
+    --ink-hdr-muted: #d8ccd2;
+    --hdr-shadow: 0 1px 8px rgba(0, 0, 0, 0.42);
+    --ink-ftr: #f6efe8;
+    --ink-ftr-muted: #d8ccd2;
+    --ink-ftr-faint: rgba(246, 239, 232, 0.72);
+    --ftr-shadow: 0 1px 8px rgba(0, 0, 0, 0.40);
+    --card-bg: rgba(18, 16, 24, 0.66);
+    --card-border: rgba(246, 234, 216, 0.24);
+    --pill-bg: rgba(18, 16, 24, 0.66);
+    --pill-hover: rgba(34, 30, 44, 0.84);
+    --pill-active-bg: rgba(234, 184, 117, 0.26);
+    --pill-border: rgba(246, 234, 216, 0.26);
     --accent: #eab875;
-    --accent-soft: rgba(234, 184, 117, 0.20);
-    --chamber-glow: rgba(234, 184, 117, 0.12);
+    --accent-soft: rgba(234, 184, 117, 0.24);
+    --chamber-glow: rgba(234, 184, 117, 0.14);
     --overlay-bg: rgba(20, 14, 24, 0.48);
     --overlay-border: rgba(255, 240, 244, 0.16);
     --overlay-ink: #f9f3ee;
@@ -109,7 +120,8 @@
     font-size: 10px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--ink-muted);
+    color: var(--ink-hdr-muted);
+    text-shadow: var(--hdr-shadow);
     display: flex;
     align-items: center;
     gap: 7px;
@@ -123,6 +135,8 @@
 
   .study-title {
     margin: 0;
+    color: var(--ink-hdr);
+    text-shadow: var(--hdr-shadow);
     font-family: var(--serif);
     font-size: clamp(26px, 3.3vw, 35px);
     font-weight: 500;
@@ -133,7 +147,7 @@
   .study-title em {
     font-style: italic;
     font-weight: 400;
-    opacity: 0.82;
+    color: var(--ink-hdr-muted);
     font-size: 0.64em;
     margin-left: 8px;
     letter-spacing: 0.01em;
@@ -149,9 +163,9 @@
 
   .ctrl-btn {
     appearance: none;
-    border: 1px solid var(--card-border);
+    border: 1px solid var(--pill-border);
     background: var(--pill-bg);
-    color: var(--ink);
+    color: var(--ink-hdr);
     font-family: var(--mono);
     font-size: 10px;
     letter-spacing: 0.06em;
@@ -162,8 +176,9 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     transition: background 0.18s ease, border-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
   }
 
@@ -174,13 +189,13 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--ink-muted);
+    background: var(--ink-hdr-muted);
     transition: background 0.22s ease, box-shadow 0.22s ease;
   }
 
   .ctrl-btn.active {
     border-color: var(--accent);
-    background: var(--accent-soft);
+    background: var(--pill-active-bg);
   }
 
   .ctrl-btn.active .dot {
@@ -194,11 +209,12 @@
     gap: 6px;
     padding: 4px 10px 4px 9px;
     border-radius: 999px;
-    border: 1px solid var(--card-border);
+    border: 1px solid var(--pill-border);
     background: var(--pill-bg);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    color: var(--ink);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    color: var(--ink-hdr);
     font-family: var(--mono);
     font-size: 9.5px;
     letter-spacing: 0.04em;
@@ -299,14 +315,11 @@
 
   .herbarium-mat {
     position: relative;
-    background: linear-gradient(170deg, #faf6ec 0%, #f1e8d6 100%);
-    border: 1px solid rgba(128, 108, 82, 0.28);
+    background: #f5edd9;
+    border: 1px solid rgba(128, 108, 82, 0.34);
     border-radius: 5px;
-    padding: 8px 6px 7px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
+    padding: 0;
+    overflow: hidden;
     box-shadow: inset 0 1px 4px rgba(68, 52, 32, 0.10);
   }
 
@@ -321,50 +334,25 @@
     background: radial-gradient(circle at 35% 32%, #fff6da, #b88c42 75%);
     border: 1px solid rgba(86, 62, 26, 0.6);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+    z-index: 2;
   }
 
   .herbarium-tape {
     position: absolute;
     width: 24px;
     height: 7px;
-    background: rgba(235, 224, 198, 0.72);
-    border: 0.5px solid rgba(154, 134, 98, 0.32);
-    top: 4px;
+    background: rgba(235, 224, 198, 0.80);
+    border: 0.5px solid rgba(154, 134, 98, 0.36);
+    top: 5px;
+    z-index: 2;
   }
   .herbarium-tape.tl { left: 4px; transform: rotate(-28deg); }
   .herbarium-tape.tr { right: 4px; transform: rotate(28deg); }
 
-  .herbarium-svg {
+  canvas.herbarium-sheet {
     width: 100%;
-    aspect-ratio: 4 / 4.4;
+    aspect-ratio: 320 / 408;
     display: block;
-    filter: drop-shadow(0 2px 3px rgba(62, 46, 26, 0.14));
-  }
-
-  .herbarium-cap {
-    width: 100%;
-    border-top: 0.5px solid rgba(120, 98, 70, 0.24);
-    padding-top: 4px;
-    text-align: center;
-    color: #3f3224;
-  }
-
-  .herbarium-cap strong {
-    display: block;
-    font-family: var(--serif);
-    font-size: clamp(10.5px, 0.9vw, 12.5px);
-    font-weight: 600;
-    line-height: 1.1;
-  }
-
-  .herbarium-cap span {
-    display: block;
-    font-family: var(--mono);
-    font-size: 7.5px;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    opacity: 0.72;
-    margin-top: 1px;
   }
 
   .study-shell { z-index: 2; }
@@ -853,6 +841,8 @@
     display: flex;
     flex-direction: column;
     gap: 3px;
+    color: var(--ink-ftr);
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
@@ -862,7 +852,7 @@
     font-size: 9px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--ink-muted);
+    color: var(--ink-ftr-muted);
   }
 
   .readout-value {
@@ -874,6 +864,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--ink-ftr);
   }
 
   .study-footer {
@@ -884,11 +875,12 @@
     padding: 0 4px;
     font-family: var(--mono);
     font-size: 10px;
-    color: var(--ink-muted);
+    color: var(--ink-ftr-muted);
+    text-shadow: var(--ftr-shadow);
     flex-wrap: wrap;
   }
 
-  .study-spec { color: var(--ink-faint); }
+  .study-spec { color: var(--ink-ftr-faint); }
 
   @media (max-width: 720px) {
     .chamber-wrap { height: 54vh; min-height: 300px; }
@@ -4045,8 +4037,113 @@
   }
 
   // =========================================================================
-  // 5.5 FULL-VIEWPORT LIVING CONSERVATORY BACKDROP (2D ATMOSPHERE LAYER)
+  // 5.5 BOTANICAL PAINTERS & FULL-VIEWPORT LIVING CONSERVATORY BACKDROP
   // =========================================================================
+  function paintLiliumLeaf(ctx, len, wid, bend, dryMix, detail = 1) {
+    const tipY = bend * len;
+    const midY = bend * len * 0.35;
+
+    ctx.beginPath();
+    ctx.moveTo(0, -wid * 0.09);
+    ctx.bezierCurveTo(len * 0.18, midY - wid * 0.85, len * 0.44, midY - wid * 1.05, len * 0.72, tipY * 0.65 - wid * 0.44);
+    ctx.quadraticCurveTo(len * 0.90, tipY * 0.88 - wid * 0.14, len, tipY);
+    ctx.quadraticCurveTo(len * 0.88, tipY * 0.88 + wid * 0.16, len * 0.68, tipY * 0.65 + wid * 0.48);
+    ctx.bezierCurveTo(len * 0.42, midY + wid * 1.02, len * 0.18, midY + wid * 0.82, 0, wid * 0.09);
+    ctx.closePath();
+
+    const baseC = mix3([84, 102, 58], [134, 114, 62], dryMix);
+    const midC = mix3([112, 128, 72], [174, 146, 78], dryMix);
+    const tipC = mix3([136, 134, 70], [138, 92, 46], clamp(dryMix * 1.15, 0, 1));
+    const lg = ctx.createLinearGradient(0, 0, len, tipY);
+    lg.addColorStop(0, `rgb(${Math.round(baseC[0])},${Math.round(baseC[1])},${Math.round(baseC[2])})`);
+    lg.addColorStop(0.55, `rgb(${Math.round(midC[0])},${Math.round(midC[1])},${Math.round(midC[2])})`);
+    lg.addColorStop(1, `rgb(${Math.round(tipC[0])},${Math.round(tipC[1])},${Math.round(tipC[2])})`);
+    ctx.fillStyle = lg;
+    ctx.fill();
+
+    ctx.strokeStyle = `rgba(${Math.round(baseC[0] * 0.56)}, ${Math.round(baseC[1] * 0.56)}, ${Math.round(baseC[2] * 0.52)}, ${detail > 0.7 ? 0.68 : 0.42})`;
+    ctx.lineWidth = Math.max(0.7, len * 0.012);
+    ctx.stroke();
+
+    // Parallel longitudinal monocot Lilium veins + subtle midrib fold shadow
+    ctx.save();
+    ctx.clip();
+    ctx.fillStyle = `rgba(38, 28, 12, ${detail > 0.7 ? 0.11 : 0.08})`;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.quadraticCurveTo(len * 0.48, midY, len, tipY);
+    ctx.lineTo(len, tipY + wid * 1.4);
+    ctx.lineTo(0, wid * 1.4);
+    ctx.closePath();
+    ctx.fill();
+
+    // Central midrib
+    ctx.strokeStyle = dryMix > 0.5
+      ? `rgba(236, 218, 168, ${detail > 0.7 ? 0.65 : 0.45})`
+      : `rgba(210, 222, 174, ${detail > 0.7 ? 0.65 : 0.45})`;
+    ctx.lineWidth = Math.max(0.65, len * 0.014);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.quadraticCurveTo(len * 0.46, midY, len * 0.96, tipY * 0.96);
+    ctx.stroke();
+
+    if (detail > 0.5) {
+      const ratios = detail > 1 ? [-0.66, -0.34, 0.34, 0.66] : [-0.46, 0.46];
+      ctx.strokeStyle = `rgba(232, 220, 174, ${detail > 1 ? 0.44 : 0.32})`;
+      ctx.lineWidth = Math.max(0.45, len * 0.0075);
+      for (const r of ratios) {
+        ctx.beginPath();
+        ctx.moveTo(len * 0.05, wid * r * 0.12);
+        ctx.bezierCurveTo(len * 0.32, midY + wid * r * 0.92, len * 0.66, tipY * 0.65 + wid * r * 0.62, len * 0.96, tipY * 0.96);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
+  function paintLiliumTepal(ctx, len, wid, bend, colBase, colEdge, nectarAlpha = 0.55) {
+    const tipY = bend * len;
+    const midY = bend * len * 0.42;
+
+    ctx.beginPath();
+    ctx.moveTo(0, -wid * 0.12);
+    ctx.bezierCurveTo(len * 0.22, midY - wid * 0.92, len * 0.54, midY - wid * 1.06, len * 0.80, tipY * 0.76 - wid * 0.42);
+    ctx.quadraticCurveTo(len * 0.93, tipY * 0.92 - wid * 0.12, len, tipY);
+    ctx.quadraticCurveTo(len * 0.92, tipY * 0.92 + wid * 0.14, len * 0.78, tipY * 0.76 + wid * 0.45);
+    ctx.bezierCurveTo(len * 0.50, midY + wid * 1.06, len * 0.22, midY + wid * 0.88, 0, wid * 0.12);
+    ctx.closePath();
+
+    const pg = ctx.createLinearGradient(0, 0, len, tipY);
+    pg.addColorStop(0, colBase);
+    pg.addColorStop(0.55, colEdge);
+    pg.addColorStop(1, "#fffefb");
+    ctx.fillStyle = pg;
+    ctx.fill();
+
+    ctx.strokeStyle = "rgba(138, 118, 90, 0.58)";
+    ctx.lineWidth = Math.max(0.75, len * 0.011);
+    ctx.stroke();
+
+    ctx.save();
+    ctx.clip();
+    if (nectarAlpha > 0) {
+      const ng = ctx.createLinearGradient(0, 0, len * 0.36, midY * 0.7);
+      ng.addColorStop(0, `rgba(186, 198, 114, ${nectarAlpha})`);
+      ng.addColorStop(1, "rgba(186, 198, 114, 0)");
+      ctx.fillStyle = ng;
+      ctx.fillRect(-wid, -wid * 1.5, len * 0.45, wid * 3);
+    }
+    ctx.strokeStyle = "rgba(176, 154, 116, 0.52)";
+    ctx.lineWidth = Math.max(0.55, len * 0.0085);
+    for (const r of [-0.52, -0.24, 0, 0.24, 0.52]) {
+      ctx.beginPath();
+      ctx.moveTo(len * 0.04, wid * r * 0.16);
+      ctx.quadraticCurveTo(len * 0.46, midY + wid * r * 0.78, len * 0.95, tipY * 0.95);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
   class AmbientBackdropRenderer {
     constructor(canvas) {
       this.canvas = canvas;
@@ -4067,14 +4164,18 @@
         drift: (hash2(i, 59) - 0.5) * 0.014,
         phase: hash2(i, 61) * Math.PI * 2,
       }));
-      this.petals = Array.from({ length: 14 }, (_, i) => ({
+      this.foliage = Array.from({ length: 18 }, (_, i) => ({
+        kind: i % 2 === 0 ? "leaf" : "petal",
         x: hash2(i, 71),
         y: hash2(i, 73),
-        len: 7 + hash2(i, 79) * 11,
-        vx: 0.008 + hash2(i, 83) * 0.012,
-        vy: 0.014 + hash2(i, 89) * 0.018,
+        len: (i % 2 === 0 ? 15 : 13) + hash2(i, 79) * 14,
+        wid: 0.25 + hash2(i, 113) * 0.07,
+        bend: (hash2(i, 127) - 0.5) * 0.26,
+        dryMix: 0.42 + hash2(i, 131) * 0.52,
+        vx: 0.007 + hash2(i, 83) * 0.011,
+        vy: 0.012 + hash2(i, 89) * 0.016,
         rot: hash2(i, 97) * Math.PI * 2,
-        spin: (hash2(i, 101) - 0.5) * 0.8,
+        spin: (hash2(i, 101) - 0.5) * 0.65,
         phase: hash2(i, 103) * Math.PI * 2,
       }));
       this.meteor = { active: false, x: 0.2, y: 0.15, vx: 0.42, vy: 0.22, life: 0, timer: 2.2 };
@@ -4251,27 +4352,32 @@
         ctx.fill();
       }
 
-      // 7. Drifting Translucent Lilium Petals across Outer Sanctuary
+      // 7. Drifting Realistic Dried Lilium Lanceolate Leaves & Translucent Petals
       const petBase = cultivar.baseCol;
       const pr = Math.round(petBase[0] * 255);
       const pg = Math.round(petBase[1] * 255);
       const pb = Math.round(petBase[2] * 255);
-      for (const pt of this.petals) {
+      for (const pt of this.foliage) {
         pt.y += pt.vy * dt;
         pt.x += (pt.vx + sim.windVec[0] * 0.025 + Math.sin(sim.time * 0.9 + pt.phase) * 0.008) * dt;
         pt.rot += pt.spin * dt;
-        if (pt.y > 1.05) { pt.y = -0.05; pt.x = Math.random(); }
-        if (pt.x > 1.05) pt.x = -0.05;
-        if (pt.x < -0.05) pt.x = 1.05;
+        if (pt.y > 1.06) { pt.y = -0.06; pt.x = Math.random(); }
+        if (pt.x > 1.06) pt.x = -0.06;
+        if (pt.x < -0.06) pt.x = 1.06;
         ctx.save();
         ctx.translate(pt.x * w, pt.y * h);
         ctx.rotate(pt.rot);
-        ctx.fillStyle = isLight > 0.5
-          ? `rgba(${pr}, ${pg}, ${pb}, 0.45)`
-          : `rgba(${pr}, ${pg}, ${pb}, 0.22)`;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, pt.len, pt.len * 0.36, 0, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.scale(1, 0.58 + 0.42 * Math.cos(sim.time * 1.45 + pt.phase));
+        ctx.globalAlpha = isLight > 0.5 ? 0.68 : 0.44;
+        if (pt.kind === "leaf") {
+          ctx.translate(-pt.len * 0.5, 0);
+          paintLiliumLeaf(ctx, pt.len, pt.len * pt.wid, pt.bend, pt.dryMix, 0.8);
+        } else {
+          ctx.translate(-pt.len * 0.5, 0);
+          const edgeTint = `rgba(${pr}, ${pg}, ${pb}, 0.85)`;
+          const baseTint = `rgba(${Math.round(pr * 0.90)}, ${Math.round(pg * 0.88)}, ${Math.round(pb * 0.78)}, 0.85)`;
+          paintLiliumTepal(ctx, pt.len, pt.len * (pt.wid + 0.08), pt.bend, baseTint, edgeTint, 0.25);
+        }
         ctx.restore();
       }
     }
@@ -4342,6 +4448,11 @@
   }
 
   const metaThemeEl = document.getElementById("metaThemeColor");
+  const metaColorSchemeEl = document.getElementById("metaColorScheme");
+
+  function lumOf(c) {
+    return (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]) / 255;
+  }
 
   function updatePageThemeAndReadouts() {
     const u = sim.u;
@@ -4376,41 +4487,66 @@
     // Cultivar + Diurnal OR User-Selected Studio Wall Backdrop
     let topC;
     let botC;
-    let isLight;
     if (sim.bgChoice === "auto") {
       const dayT = smoothstep(0.16, 0.62, dayAmt);
       topC = mix3(ac.uiNightTop, ac.uiDayTop, dayT);
       botC = mix3(ac.uiNightBot, ac.uiDayBot, dayT);
       topC = mix3(topC, ac.uiDawnTop, clamp(dawnAmt * 0.64, 0, 1));
       botC = mix3(botC, ac.uiDawnBot, clamp(dawnAmt * 0.68, 0, 1));
-      isLight = smoothstep(0.38, 0.58, dayAmt);
     } else {
       const rgb = hexToRgb(sim.bgChoice);
       topC = [clamp(rgb[0] + 10, 0, 255), clamp(rgb[1] + 9, 0, 255), clamp(rgb[2] + 8, 0, 255)];
       botC = [clamp(rgb[0] - 14, 0, 255), clamp(rgb[1] - 14, 0, 255), clamp(rgb[2] - 12, 0, 255)];
-      const relLum = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255;
-      isLight = smoothstep(0.36, 0.56, relLum);
     }
 
-    const ink = mix3([248, 244, 240], ac.uiInkLight, isLight);
-    const muted = mix3([206, 194, 198], [76, 70, 74], isLight);
-    const acc = mix3(ac.uiAccentNight, ac.uiAccentDay, isLight);
+    // Actual pixel luminance per screen region prevents low-contrast dawn/dusk or mid-grey washes
+    const topLum = lumOf(topC);
+    const botLum = lumOf(botC);
+    const headerLum = lerp(topLum, botLum, 0.14);
+    const footerLum = lerp(topLum, botLum, 0.86);
+    const hdrLight = smoothstep(0.45, 0.51, headerLum);
+    const ftrLight = smoothstep(0.45, 0.51, footerLum);
+    const isLight = smoothstep(0.44, 0.52, headerLum * 0.52 + footerLum * 0.48);
+
+    const inkHdr = mix3([252, 249, 245], ac.uiInkLight, hdrLight);
+    const inkHdrMuted = mix3([232, 224, 228], [52, 56, 52], hdrLight);
+    const inkFtr = mix3([252, 249, 245], ac.uiInkLight, ftrLight);
+    const inkFtrMuted = mix3([228, 220, 224], [52, 56, 52], ftrLight);
+    const acc = mix3(ac.uiAccentNight, [clamp(ac.uiAccentDay[0] * 0.84, 0, 255), clamp(ac.uiAccentDay[1] * 0.84, 0, 255), clamp(ac.uiAccentDay[2] * 0.84, 0, 255)], hdrLight);
 
     const topRgb = `rgb(${Math.round(topC[0])},${Math.round(topC[1])},${Math.round(topC[2])})`;
     const r = document.documentElement.style;
+    r.colorScheme = isLight > 0.5 ? "only light" : "only dark";
+    if (metaColorSchemeEl) metaColorSchemeEl.setAttribute("content", isLight > 0.5 ? "only light" : "only dark");
+    if (metaThemeEl) metaThemeEl.setAttribute("content", topRgb);
+
     r.setProperty("--bg-top", topRgb);
     r.setProperty("--bg-bot", `rgb(${Math.round(botC[0])},${Math.round(botC[1])},${Math.round(botC[2])})`);
-    if (metaThemeEl) metaThemeEl.setAttribute("content", topRgb);
-    r.setProperty("--ink", `rgb(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])})`);
-    r.setProperty("--ink-muted", `rgb(${Math.round(muted[0])},${Math.round(muted[1])},${Math.round(muted[2])})`);
-    r.setProperty("--ink-faint", `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.48)`);
+    r.setProperty("--ink", `rgb(${Math.round(inkHdr[0])},${Math.round(inkHdr[1])},${Math.round(inkHdr[2])})`);
+    r.setProperty("--ink-muted", `rgb(${Math.round(inkHdrMuted[0])},${Math.round(inkHdrMuted[1])},${Math.round(inkHdrMuted[2])})`);
+    r.setProperty("--ink-faint", hdrLight > 0.5 ? "rgba(32,36,32,0.72)" : "rgba(246,239,232,0.72)");
+
+    r.setProperty("--ink-hdr", `rgb(${Math.round(inkHdr[0])},${Math.round(inkHdr[1])},${Math.round(inkHdr[2])})`);
+    r.setProperty("--ink-hdr-muted", `rgb(${Math.round(inkHdrMuted[0])},${Math.round(inkHdrMuted[1])},${Math.round(inkHdrMuted[2])})`);
+    r.setProperty("--hdr-shadow", hdrLight > 0.5 ? "0 1px 0 rgba(255,255,255,0.62)" : "0 1px 8px rgba(0,0,0,0.48)");
+
+    r.setProperty("--ink-ftr", `rgb(${Math.round(inkFtr[0])},${Math.round(inkFtr[1])},${Math.round(inkFtr[2])})`);
+    r.setProperty("--ink-ftr-muted", `rgb(${Math.round(inkFtrMuted[0])},${Math.round(inkFtrMuted[1])},${Math.round(inkFtrMuted[2])})`);
+    r.setProperty("--ink-ftr-faint", ftrLight > 0.5 ? "rgba(32,36,32,0.76)" : "rgba(246,239,232,0.76)");
+    r.setProperty("--ftr-shadow", ftrLight > 0.5 ? "0 1px 0 rgba(255,255,255,0.58)" : "0 1px 8px rgba(0,0,0,0.44)");
+
     r.setProperty("--accent", `rgb(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])})`);
-    r.setProperty("--accent-soft", `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.18)`);
+    r.setProperty("--accent-soft", `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.22)`);
     r.setProperty("--chamber-glow", `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.16)`);
-    r.setProperty("--card-bg", isLight > 0.5 ? "rgba(255,254,251,0.72)" : "rgba(255,248,250,0.065)");
-    r.setProperty("--card-border", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.16)` : `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.24)`);
-    r.setProperty("--pill-bg", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.08)` : "rgba(255,248,250,0.085)");
-    r.setProperty("--pill-hover", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.15)` : "rgba(255,248,250,0.18)");
+
+    r.setProperty("--pill-bg", hdrLight > 0.5 ? "rgba(255,253,249,0.82)" : "rgba(18,16,24,0.66)");
+    r.setProperty("--pill-hover", hdrLight > 0.5 ? "rgba(255,255,255,0.96)" : "rgba(32,28,44,0.84)");
+    r.setProperty("--pill-active-bg", hdrLight > 0.5 ? "rgba(247,236,214,0.95)" : `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.24)`);
+    r.setProperty("--pill-border", hdrLight > 0.5 ? `rgba(${Math.round(inkHdr[0])},${Math.round(inkHdr[1])},${Math.round(inkHdr[2])},0.22)` : `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.34)`);
+
+    r.setProperty("--card-bg", ftrLight > 0.5 ? "rgba(255,253,249,0.84)" : "rgba(18,16,24,0.68)");
+    r.setProperty("--card-border", ftrLight > 0.5 ? `rgba(${Math.round(inkFtr[0])},${Math.round(inkFtr[1])},${Math.round(inkFtr[2])},0.20)` : `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.28)`);
+
     return { topC, botC, isLight };
   }
 
@@ -4866,131 +5002,272 @@
   // =========================================================================
   // 6B. FRAMED DRIED LILIUM HERBARIUM WALL & BACKGROUND COLOR ATELIER
   // =========================================================================
+  function drawSheetStem(ctx, x0, y0, cx, cy, x1, y1, w0 = 4.2) {
+    ctx.save();
+    ctx.shadowColor = "rgba(52, 36, 16, 0.25)";
+    ctx.shadowBlur = 5;
+    ctx.shadowOffsetX = 1.5;
+    ctx.shadowOffsetY = 3.5;
+    const g = ctx.createLinearGradient(x0, y0, x1, y1);
+    g.addColorStop(0, "#635334");
+    g.addColorStop(0.55, "#7c7349");
+    g.addColorStop(1, "#8d8657");
+    ctx.strokeStyle = g;
+    ctx.lineWidth = w0;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.quadraticCurveTo(cx, cy, x1, y1);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawSheetLeaf(ctx, x, y, angle, len, wid, bend, dryMix) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.shadowColor = "rgba(48, 34, 16, 0.22)";
+    ctx.shadowBlur = 6;
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 4;
+    paintLiliumLeaf(ctx, len, wid, bend, dryMix, 1.5);
+    ctx.restore();
+  }
+
+  function drawSheetTepal(ctx, x, y, angle, len, wid, bend, nectar = 0.5) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.shadowColor = "rgba(52, 38, 18, 0.20)";
+    ctx.shadowBlur = 6;
+    ctx.shadowOffsetX = 1.5;
+    ctx.shadowOffsetY = 3.5;
+    paintLiliumTepal(ctx, len, wid, bend, "#ece3cf", "#fbf7ee", nectar);
+    ctx.restore();
+  }
+
+  function drawSheetStamen(ctx, x0, y0, cx, cy, x1, y1, tilt = 0) {
+    ctx.save();
+    ctx.strokeStyle = "#8a764c";
+    ctx.lineWidth = 2.0;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.quadraticCurveTo(cx, cy, x1, y1);
+    ctx.stroke();
+
+    ctx.translate(x1, y1);
+    ctx.rotate(tilt);
+    ctx.shadowColor = "rgba(52, 32, 12, 0.24)";
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetY = 2.5;
+    const ag = ctx.createLinearGradient(-12, 0, 12, 0);
+    ag.addColorStop(0, "#7c4217");
+    ag.addColorStop(0.5, "#cc8636");
+    ag.addColorStop(1, "#6f3912");
+    ctx.fillStyle = ag;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 12.5, 4.3, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawArchivalTapeStrip(ctx, x, y, angle, w = 42, h = 11) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.fillStyle = "rgba(229, 214, 182, 0.82)";
+    ctx.strokeStyle = "rgba(156, 134, 96, 0.45)";
+    ctx.lineWidth = 0.8;
+    ctx.fillRect(-w * 0.5, -h * 0.5, w, h);
+    ctx.strokeRect(-w * 0.5, -h * 0.5, w, h);
+    ctx.restore();
+  }
+
   const DRIED_SPECIMENS = [
     {
-      title: "Kurutulmuş Taç Yaprak",
-      latin: "PETALUM CANDIDUM · I",
-      svg: (uid) => `
-        <defs>
-          <linearGradient id="ptG${uid}" x1="15%" y1="90%" x2="85%" y2="10%">
-            <stop offset="0%" stop-color="#d8ccb3" />
-            <stop offset="55%" stop-color="#f5eedf" />
-            <stop offset="100%" stop-color="#fffcf4" />
-          </linearGradient>
-        </defs>
-        <path d="M58 116 Q59 96 63 82" stroke="#8b7450" stroke-width="2.1" fill="none" stroke-linecap="round"/>
-        <path d="M62 84 C36 66 32 30 78 15 C87 48 80 74 62 84 Z" fill="url(#ptG${uid})" stroke="#8e7757" stroke-width="0.95"/>
-        <path d="M62 83 C58 59 64 36 77 16" stroke="#a68d66" stroke-width="0.85" fill="none" opacity="0.72"/>
-        <path d="M62 76 C49 59 48 39 67 24 M64 78 C71 61 75 43 76 26" stroke="#b59d76" stroke-width="0.55" fill="none" opacity="0.55"/>
-        <circle cx="62" cy="84" r="2.2" fill="#9a7e53" opacity="0.65"/>`,
+      title: "Kurutulmuş Lilium Dalı",
+      latin: "CAULIS & FOLIA · I",
+      draw: (ctx) => {
+        drawSheetStem(ctx, 150, 306, 158, 175, 166, 44, 4.6);
+        const leaves = [
+          [153, 272, -2.52, 92, 18, 0.14, 0.62],
+          [154, 256, -0.58, 96, 19, -0.14, 0.48],
+          [156, 224, -2.42, 102, 20, 0.12, 0.36],
+          [158, 204, -0.66, 94, 18, -0.15, 0.58],
+          [159, 170, -2.35, 86, 17, 0.12, 0.42],
+          [161, 148, -0.74, 82, 16, -0.13, 0.32],
+          [162, 114, -2.22, 68, 13.5, 0.10, 0.72],
+          [164, 94,  -0.88, 62, 12.5, -0.11, 0.52],
+          [165, 62,  -1.64, 44, 10, 0.04, 0.64],
+        ];
+        for (const lf of leaves) drawSheetLeaf(ctx, lf[0], lf[1], lf[2], lf[3], lf[4], lf[5], lf[6]);
+        drawArchivalTapeStrip(ctx, 152, 286, -0.12, 46, 11);
+        drawArchivalTapeStrip(ctx, 162, 130, 0.08, 36, 9);
+      },
     },
     {
-      title: "Tam Basılmış Çiçek",
-      latin: "FLOS LILIUM · II",
-      svg: (uid) => `
-        <defs>
-          <radialGradient id="flG${uid}" cx="50%" cy="48%" r="48%">
-            <stop offset="0%" stop-color="#e3d5b2" />
-            <stop offset="55%" stop-color="#f7f0e0" />
-            <stop offset="100%" stop-color="#e9dec8" />
-          </radialGradient>
-        </defs>
-        <path d="M60 120 Q59 94 60 72" stroke="#786b47" stroke-width="2" fill="none" stroke-linecap="round"/>
-        ${[0, 60, 120, 180, 240, 300].map((deg) => `
-          <g transform="translate(60 58) rotate(${deg})">
-            <path d="M0 0 C-10 -15 -11 -35 0 -46 C11 -35 10 -15 0 0 Z" fill="url(#flG${uid})" stroke="#8c7656" stroke-width="0.8"/>
-            <line x1="0" y1="-3" x2="0" y2="-40" stroke="#a68f68" stroke-width="0.55" opacity="0.65"/>
-          </g>`).join("")}
-        ${[-32, -14, 12, 34].map((ang) => `
-          <g transform="translate(60 58) rotate(${ang})">
-            <path d="M0 0 Q3 -12 1 -22" stroke="#88734d" stroke-width="0.75" fill="none"/>
-            <ellipse cx="1" cy="-24" rx="2.6" ry="1.2" transform="rotate(-18 1 -24)" fill="#a86d32"/>
-          </g>`).join("")}
-        <circle cx="60" cy="58" r="2.6" fill="#c7b57c" stroke="#7d6a46" stroke-width="0.6"/>`,
+      title: "Kurutulmuş Yaprak Demeti",
+      latin: "FOLIA LILIUM · II",
+      draw: (ctx) => {
+        drawSheetStem(ctx, 128, 304, 148, 266, 162, 232, 4.2);
+        drawSheetLeaf(ctx, 152, 246, -2.20, 144, 26, 0.16, 0.76);
+        drawSheetLeaf(ctx, 155, 242, -1.78, 174, 29, 0.08, 0.42);
+        drawSheetLeaf(ctx, 158, 240, -1.30, 168, 28, -0.09, 0.30);
+        drawSheetLeaf(ctx, 161, 244, -0.84, 136, 24, -0.16, 0.84);
+        drawArchivalTapeStrip(ctx, 142, 276, 0.24, 46, 11);
+      },
     },
     {
-      title: "Polen & Stamen",
-      latin: "ANTHERA & STAMEN · III",
-      svg: (uid) => `
-        <defs>
-          <linearGradient id="anG${uid}" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#875228" />
-            <stop offset="50%" stop-color="#c9853b" />
-            <stop offset="100%" stop-color="#7c4820" />
-          </linearGradient>
-        </defs>
-        <path d="M59 118 Q60 98 60 88" stroke="#766341" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-        <path d="M60 90 C46 70 33 52 29 33" stroke="#968158" stroke-width="1.05" fill="none"/>
-        <path d="M60 90 C54 66 47 45 47 26" stroke="#968158" stroke-width="1.05" fill="none"/>
-        <path d="M60 90 C61 65 62 42 63 22" stroke="#786b45" stroke-width="1.3" fill="none"/>
-        <path d="M60 90 C69 68 77 48 80 28" stroke="#968158" stroke-width="1.05" fill="none"/>
-        <path d="M60 90 C74 73 87 56 93 39" stroke="#968158" stroke-width="1.05" fill="none"/>
-        <ellipse cx="29" cy="31" rx="6" ry="2.2" transform="rotate(-32 29 31)" fill="url(#anG${uid})"/>
-        <ellipse cx="47" cy="24" rx="6.2" ry="2.3" transform="rotate(-14 47 24)" fill="url(#anG${uid})"/>
-        <circle cx="63" cy="20" r="2.8" fill="#a89e64" stroke="#6f623c" stroke-width="0.6"/>
-        <ellipse cx="81" cy="26" rx="6.2" ry="2.3" transform="rotate(18 81 26)" fill="url(#anG${uid})"/>
-        <ellipse cx="94" cy="37" rx="5.8" ry="2.1" transform="rotate(34 94 37)" fill="url(#anG${uid})"/>
-        ${[[24,42],[37,24],[52,32],[75,20],[88,46],[67,38]].map(([px, py]) =>
-          `<circle cx="${px}" cy="${py}" r="0.9" fill="#c98e39" opacity="0.72"/>`).join("")}`,
+      title: "Tam Basılmış Beyaz Lilium",
+      latin: "FLOS CANDIDUM · III",
+      draw: (ctx) => {
+        drawSheetStem(ctx, 158, 306, 156, 224, 160, 150, 4.2);
+        drawSheetLeaf(ctx, 157, 264, -2.38, 76, 15, 0.12, 0.48);
+        drawSheetLeaf(ctx, 158, 238, -0.70, 72, 14, -0.12, 0.56);
+        // 3 outer tepals + 3 inner fuller tepals
+        for (const deg of [0, 120, 240]) {
+          drawSheetTepal(ctx, 160, 146, (deg - 90) * Math.PI / 180, 108, 24, 0.04, 0.52);
+        }
+        for (const deg of [60, 180, 300]) {
+          drawSheetTepal(ctx, 160, 146, (deg - 90) * Math.PI / 180, 102, 27, -0.03, 0.62);
+        }
+        for (const [cx, cy, x1, y1, tilt] of [
+          [140, 126, 126, 98, -0.45],
+          [150, 114, 144, 86, -0.18],
+          [172, 118, 182, 90, 0.22],
+          [184, 132, 198, 106, 0.48],
+          [148, 168, 132, 192, 0.35],
+        ]) {
+          drawSheetStamen(ctx, 160, 146, cx, cy, x1, y1, tilt);
+        }
+        ctx.fillStyle = "#b8bf78";
+        ctx.strokeStyle = "#6c693c";
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.arc(160, 146, 5.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        drawArchivalTapeStrip(ctx, 158, 286, -0.06, 42, 10);
+      },
     },
     {
-      title: "İkili Taç Yaprak",
-      latin: "DUO PETALA · IV",
-      svg: (uid) => `
-        <defs>
-          <linearGradient id="dpG${uid}" x1="20%" y1="85%" x2="80%" y2="15%">
-            <stop offset="0%" stop-color="#ded1b7" />
-            <stop offset="60%" stop-color="#f7f1e3" />
-            <stop offset="100%" stop-color="#fffef9" />
-          </linearGradient>
-        </defs>
-        <path d="M58 106 C30 86 24 44 48 18 C64 46 66 78 58 106 Z" fill="url(#dpG${uid})" stroke="#8e7859" stroke-width="0.85" opacity="0.9"/>
-        <path d="M58 106 C49 74 47 45 48 18" stroke="#ad946b" stroke-width="0.65" fill="none" opacity="0.6"/>
-        <path d="M62 106 C53 72 64 38 92 22 C94 56 84 88 62 106 Z" fill="url(#dpG${uid})" stroke="#8c7554" stroke-width="0.95"/>
-        <path d="M62 106 C70 76 79 49 92 22" stroke="#aa9168" stroke-width="0.75" fill="none" opacity="0.72"/>
-        <path d="M52 99 L68 97 M53 102 L67 100" stroke="#7b6142" stroke-width="1.2" opacity="0.78"/>`,
-    },
-    {
-      title: "Basılmış Yaprak Dalı",
-      latin: "CAULIS & FOLIA · V",
-      svg: (uid) => `
-        <defs>
-          <linearGradient id="lfG${uid}" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#616f4f" />
-            <stop offset="100%" stop-color="#8b966e" />
-          </linearGradient>
-        </defs>
-        <path d="M60 120 Q58 70 61 18" stroke="#635c42" stroke-width="2.1" fill="none" stroke-linecap="round"/>
-        <path d="M59 95 C38 89 24 72 19 56 C38 61 52 75 59 95 Z" fill="url(#lfG${uid})" stroke="#525d42" stroke-width="0.8"/>
-        <path d="M60 76 C80 71 95 55 102 39 C84 44 68 58 60 76 Z" fill="url(#lfG${uid})" stroke="#525d42" stroke-width="0.8"/>
-        <path d="M59 58 C41 51 30 37 26 23 C42 29 53 41 59 58 Z" fill="url(#lfG${uid})" stroke="#525d42" stroke-width="0.8"/>
-        <path d="M60 40 C74 36 86 25 91 14 C77 18 66 28 60 40 Z" fill="url(#lfG${uid})" stroke="#525d42" stroke-width="0.8"/>
-        <path d="M59 95 Q38 75 19 56 M60 76 Q81 58 102 39 M59 58 Q42 40 26 23" stroke="#9fa87d" stroke-width="0.5" fill="none" opacity="0.65"/>`,
+      title: "Polen & Taç Yaprak",
+      latin: "PETALUM & ANTHERA · IV",
+      draw: (ctx) => {
+        drawSheetStem(ctx, 118, 302, 128, 250, 140, 210, 3.8);
+        drawSheetLeaf(ctx, 132, 256, -2.35, 84, 16, 0.13, 0.58);
+        drawSheetTepal(ctx, 138, 216, -1.06, 178, 38, -0.10, 0.60);
+        // Delicate spread stamens & scattered golden pollen specks
+        const sts = [
+          [158, 188, 144, 116, -0.38],
+          [174, 176, 172, 92, -0.10],
+          [194, 182, 206, 108, 0.22],
+          [206, 196, 232, 134, 0.48],
+        ];
+        for (const s of sts) drawSheetStamen(ctx, 144, 218, s[0], s[1], s[2], s[3], s[4]);
+        ctx.fillStyle = "#c98524";
+        for (let k = 0; k < 22; k++) {
+          const px = 128 + hash2(k, 11) * 116;
+          const py = 86 + hash2(k, 23) * 86;
+          ctx.beginPath();
+          ctx.arc(px, py, 1.3 + hash2(k, 31) * 1.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        drawArchivalTapeStrip(ctx, 128, 282, 0.16, 40, 10);
+      },
     },
     {
       title: "Açılmamış Tomurcuk",
-      latin: "GEMMA ALBA · VI",
-      svg: (uid) => `
-        <defs>
-          <linearGradient id="bdG${uid}" x1="20%" y1="90%" x2="80%" y2="10%">
-            <stop offset="0%" stop-color="#b9b793" />
-            <stop offset="45%" stop-color="#ece5cf" />
-            <stop offset="100%" stop-color="#fffdf4" />
-          </linearGradient>
-        </defs>
-        <path d="M56 120 Q60 98 63 82" stroke="#6c694a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-        <path d="M60 99 C44 93 35 81 32 70 C45 74 54 84 60 99 Z" fill="#7c8861" stroke="#535d42" stroke-width="0.75"/>
-        <path d="M63 84 C49 66 53 33 73 16 C81 40 77 68 63 84 Z" fill="url(#bdG${uid})" stroke="#8b7757" stroke-width="0.9"/>
-        <path d="M63 84 C64 58 68 35 73 16" stroke="#9f8964" stroke-width="0.7" fill="none" opacity="0.72"/>`,
+      latin: "GEMMA ALBA · V",
+      draw: (ctx) => {
+        drawSheetStem(ctx, 146, 306, 152, 230, 162, 172, 4.4);
+        drawSheetLeaf(ctx, 150, 266, -2.35, 96, 18, 0.14, 0.54);
+        drawSheetLeaf(ctx, 155, 224, -0.68, 98, 19, -0.15, 0.42);
+        drawSheetLeaf(ctx, 160, 182, -2.14, 72, 14, 0.11, 0.66);
+        drawSheetTepal(ctx, 162, 174, -1.42, 134, 24, -0.06, 0.72);
+        drawSheetTepal(ctx, 162, 174, -1.36, 128, 17, 0.05, 0.55);
+        drawArchivalTapeStrip(ctx, 150, 286, -0.10, 44, 10);
+      },
+    },
+    {
+      title: "İkili Taç Yaprak İzi",
+      latin: "DUO PETALA · VI",
+      draw: (ctx) => {
+        drawSheetTepal(ctx, 154, 272, -1.84, 198, 40, 0.08, 0.52);
+        drawSheetTepal(ctx, 164, 272, -1.16, 196, 40, -0.09, 0.58);
+        ctx.strokeStyle = "#7a5f3f";
+        ctx.lineWidth = 2.0;
+        ctx.beginPath();
+        ctx.moveTo(140, 256);
+        ctx.lineTo(178, 252);
+        ctx.moveTo(142, 262);
+        ctx.lineTo(176, 258);
+        ctx.stroke();
+      },
     },
   ];
+
+  function paintHerbariumSheetCanvas(canvas, spec, slotIdx) {
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+
+    // 1. Archival Cotton-Rag Paper Base
+    const bg = ctx.createLinearGradient(0, 0, w, h);
+    bg.addColorStop(0, "#fcf8ee");
+    bg.addColorStop(0.55, "#f5ebd6");
+    bg.addColorStop(1, "#ebdcbf");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, w, h);
+
+    // Soft botanical pressing stain aura
+    const stain = ctx.createRadialGradient(w * 0.5, h * 0.44, 18, w * 0.5, h * 0.44, w * 0.46);
+    stain.addColorStop(0, "rgba(182, 154, 104, 0.14)");
+    stain.addColorStop(1, "rgba(182, 154, 104, 0)");
+    ctx.fillStyle = stain;
+    ctx.fillRect(0, 0, w, h);
+
+    // Subtle flax paper fiber flecks
+    for (let i = 0; i < 65; i++) {
+      ctx.fillStyle = i % 2 === 0 ? "rgba(138, 112, 74, 0.10)" : "rgba(255, 252, 244, 0.35)";
+      ctx.fillRect(hash2(i, 401 + slotIdx) * w, hash2(i, 503 + slotIdx) * h, 1.5, 1.2);
+    }
+
+    // Inner engraved hairline frame
+    ctx.strokeStyle = "rgba(136, 110, 74, 0.22)";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(12, 12, w - 24, h - 24);
+
+    // 2. Botanical Pressed Specimen Painting
+    ctx.save();
+    spec.draw(ctx);
+    ctx.restore();
+
+    // 3. Archival Plate Footer Typography (pixel-locked against browser extension inversion)
+    ctx.strokeStyle = "rgba(124, 98, 64, 0.34)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(26, 336);
+    ctx.lineTo(w - 26, 336);
+    ctx.stroke();
+
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#261b0f";
+    ctx.font = "700 22px Georgia, 'Palatino Linotype', serif";
+    ctx.fillText(spec.title, w * 0.5, 361);
+
+    ctx.fillStyle = "#56432d";
+    ctx.font = "600 12.8px ui-monospace, Menlo, Consolas, monospace";
+    ctx.fillText(`${spec.latin} · TUŞ ${slotIdx + 1}`, w * 0.5, 386);
+  }
 
   const SLOT_LABELS = ["Sol Üst", "Sol Alt", "Sağ Üst", "Sağ Alt"];
   const DEFAULT_HERBARIUM = [
     { pinned: true, specIdx: 0 },
-    { pinned: true, specIdx: 4 },
     { pinned: true, specIdx: 1 },
     { pinned: true, specIdx: 2 },
+    { pinned: true, specIdx: 3 },
   ];
 
   let herbariumState = (() => {
@@ -5024,14 +5301,16 @@
             <span class="herbarium-pin"></span>
             <span class="herbarium-tape tl"></span>
             <span class="herbarium-tape tr"></span>
-            <svg class="herbarium-svg" viewBox="0 0 120 132" aria-hidden="true">${spec.svg(i)}</svg>
-            <div class="herbarium-cap">
-              <strong>${spec.title}</strong>
-              <span>${spec.latin} &middot; Tuş ${i + 1}</span>
-            </div>
+            <canvas class="herbarium-sheet" width="320" height="408" aria-hidden="true"></canvas>
           </div>
         </div>`;
     }).join("");
+
+    specimenStage.querySelectorAll(".herbarium-frame[data-slot]").forEach((el) => {
+      const idx = Number(el.dataset.slot);
+      const cvs = el.querySelector("canvas.herbarium-sheet");
+      if (cvs) paintHerbariumSheetCanvas(cvs, DRIED_SPECIMENS[herbariumState[idx].specIdx], idx);
+    });
 
     slotGrid.innerHTML = herbariumState.map((slot, i) => {
       const spec = DRIED_SPECIMENS[slot.specIdx];
