@@ -174,6 +174,191 @@
     box-shadow: 0 0 8px var(--accent);
   }
 
+  .volume-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--card-border);
+    background: var(--pill-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.04em;
+  }
+
+  .volume-pill .vol-icon {
+    color: var(--accent);
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  input[type="range"]#volumeSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 68px;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(150, 145, 140, 0.34);
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type="range"]#volumeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 1.5px solid rgba(255, 252, 248, 0.92);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+    cursor: pointer;
+  }
+
+  input[type="range"]#volumeSlider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 1.5px solid rgba(255, 252, 248, 0.92);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+    cursor: pointer;
+  }
+
+  .volume-pill .vol-val {
+    min-width: 28px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.86;
+  }
+
+  /* Pinned Herbarium Frames in Outer Conservatory Margins */
+  .specimen-stage {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .herbarium-frame {
+    position: absolute;
+    width: clamp(114px, 9.0vw, 166px);
+    padding: 9px;
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(247, 242, 232, 0.94), rgba(226, 215, 198, 0.92));
+    border: 1.5px solid rgba(154, 130, 96, 0.55);
+    box-shadow:
+      0 18px 42px rgba(0, 0, 0, 0.26),
+      0 2px 6px rgba(0, 0, 0, 0.14),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+    transform: rotate(var(--tilt, -2deg)) scale(1);
+    transform-origin: center center;
+    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.24s ease, box-shadow 0.24s ease;
+    pointer-events: auto;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .herbarium-frame:hover {
+    transform: rotate(0deg) scale(1.045);
+    box-shadow:
+      0 24px 52px rgba(0, 0, 0, 0.32),
+      0 0 0 2px var(--accent);
+    z-index: 3;
+  }
+
+  .herbarium-frame.is-hidden {
+    opacity: 0;
+    transform: rotate(var(--tilt, -2deg)) scale(0.86);
+    pointer-events: none;
+  }
+
+  .herbarium-frame.slot-0 { top: 9%; left: max(14px, calc((100vw - min(94vw, 1100px)) * 0.25 - clamp(57px, 4.5vw, 83px))); --tilt: -2.6deg; }
+  .herbarium-frame.slot-1 { bottom: 9%; left: max(18px, calc((100vw - min(94vw, 1100px)) * 0.25 - clamp(57px, 4.5vw, 83px))); --tilt: 2.2deg; }
+  .herbarium-frame.slot-2 { top: 10%; right: max(14px, calc((100vw - min(94vw, 1100px)) * 0.25 - clamp(57px, 4.5vw, 83px))); --tilt: 2.4deg; }
+  .herbarium-frame.slot-3 { bottom: 8%; right: max(18px, calc((100vw - min(94vw, 1100px)) * 0.25 - clamp(57px, 4.5vw, 83px))); --tilt: -2.1deg; }
+
+  .herbarium-mat {
+    position: relative;
+    background: linear-gradient(170deg, #faf6ec 0%, #f1e8d6 100%);
+    border: 1px solid rgba(128, 108, 82, 0.28);
+    border-radius: 5px;
+    padding: 8px 6px 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    box-shadow: inset 0 1px 4px rgba(68, 52, 32, 0.10);
+  }
+
+  .herbarium-pin {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 32%, #fff6da, #b88c42 75%);
+    border: 1px solid rgba(86, 62, 26, 0.6);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  }
+
+  .herbarium-tape {
+    position: absolute;
+    width: 24px;
+    height: 7px;
+    background: rgba(235, 224, 198, 0.72);
+    border: 0.5px solid rgba(154, 134, 98, 0.32);
+    top: 4px;
+  }
+  .herbarium-tape.tl { left: 4px; transform: rotate(-28deg); }
+  .herbarium-tape.tr { right: 4px; transform: rotate(28deg); }
+
+  .herbarium-svg {
+    width: 100%;
+    aspect-ratio: 4 / 4.4;
+    display: block;
+    filter: drop-shadow(0 2px 3px rgba(62, 46, 26, 0.14));
+  }
+
+  .herbarium-cap {
+    width: 100%;
+    border-top: 0.5px solid rgba(120, 98, 70, 0.24);
+    padding-top: 4px;
+    text-align: center;
+    color: #3f3224;
+  }
+
+  .herbarium-cap strong {
+    display: block;
+    font-family: var(--serif);
+    font-size: clamp(10.5px, 0.9vw, 12.5px);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .herbarium-cap span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 7.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    opacity: 0.72;
+    margin-top: 1px;
+  }
+
+  .study-shell { z-index: 2; }
+
+  @media (max-width: 1320px) {
+    .specimen-stage { display: none; }
+  }
+
   /* Main 3D Sanctuary Chamber */
   .chamber-wrap {
     position: relative;
@@ -461,6 +646,165 @@
     margin-top: 2px;
   }
 
+  /* Framing & Background Color Atelier Popover */
+  .decor-panel {
+    position: absolute;
+    left: 16px;
+    bottom: 88px;
+    width: min(410px, calc(100% - 32px));
+    max-height: calc(100% - 142px);
+    overflow-y: auto;
+    padding: 11px 13px;
+    border-radius: 16px;
+    background: rgba(20, 17, 25, 0.92);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 240, 244, 0.22);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45);
+    color: #f9f2ec;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 12;
+  }
+
+  .decor-panel.open { display: flex; }
+
+  .decor-section-title {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(249, 242, 236, 0.68);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .slot-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .slot-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 240, 244, 0.16);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .slot-card.pinned {
+    border-color: rgba(244, 210, 147, 0.55);
+    background: rgba(244, 210, 147, 0.12);
+  }
+
+  .slot-toggle {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    padding: 0;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .slot-toggle strong {
+    display: block;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #f4d293;
+  }
+
+  .slot-toggle span {
+    display: block;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.92;
+  }
+
+  .slot-cycle {
+    appearance: none;
+    border: 1px solid rgba(255, 240, 244, 0.22);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fffaf6;
+    border-radius: 7px;
+    font-size: 11px;
+    padding: 4px 6px;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .slot-cycle:hover { background: rgba(255, 255, 255, 0.20); }
+
+  .bg-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .bg-chip {
+    appearance: none;
+    border: 1px solid rgba(255, 240, 244, 0.20);
+    background: rgba(255, 255, 255, 0.06);
+    color: #f9f2ec;
+    border-radius: 999px;
+    padding: 4px 9px 4px 6px;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+
+  .bg-chip .c-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+  }
+
+  .bg-chip.active {
+    background: rgba(255, 248, 240, 0.94);
+    color: #211a18;
+    font-weight: 600;
+  }
+
+  .custom-color-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 7px 2px 4px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 240, 244, 0.22);
+    background: rgba(255, 255, 255, 0.07);
+    font-family: var(--mono);
+    font-size: 9.5px;
+    cursor: pointer;
+  }
+
+  .custom-color-wrap input[type="color"] {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
   /* Tactile Pill Switch (Material Studies Signature Homage) */
   .switch-stage {
     width: 100%;
@@ -549,6 +893,7 @@
 </head>
 <body>
   <canvas id="ambientBackdrop" aria-hidden="true"></canvas>
+  <div id="specimenStage" class="specimen-stage" aria-label="Çerçeveli Kurumuş Lilium Koleksiyonu"></div>
   <main class="study-shell">
     <header class="study-header">
       <div class="study-meta">
@@ -563,6 +908,10 @@
           <span class="dot"></span>
           <span>İthaf Notu</span>
         </button>
+        <button id="decorBtn" class="ctrl-btn" type="button" title="Kurutulmuş Lilium çerçeveleri ve arka plan rengi">
+          <span class="dot"></span>
+          <span>Çerçeve &amp; Fon</span>
+        </button>
         <button id="zoomBtn" class="ctrl-btn" type="button" title="Çiçeğin kalbine yakınlaş">
           <span class="dot"></span>
           <span>Yakın Plan</span>
@@ -575,6 +924,11 @@
           <span class="dot"></span>
           <span id="audioBtnText">Ses: Başlat</span>
         </button>
+        <div class="volume-pill" title="Ses Düzeyi">
+          <span class="vol-icon" aria-hidden="true">&#9835;</span>
+          <input id="volumeSlider" type="range" min="0" max="100" value="78" aria-label="Ses düzeyi" />
+          <span class="vol-val" id="volumeVal">78%</span>
+        </div>
       </div>
     </header>
 
@@ -630,6 +984,39 @@
         <div class="note-actions">
           <button class="mini-pill" id="shareNoteBtn" type="button" title="İthaf notuyla paylaşılabilir bağlantı kopyala">Bağlantıyı Kopyala</button>
           <button class="mini-pill" id="noteCloseBtn" type="button">Kapat</button>
+        </div>
+      </div>
+
+      <div class="decor-panel" id="decorPanel" role="dialog" aria-label="Çerçeveli Kurumuş Lilium ve Arka Plan Ayarları">
+        <div class="decor-section-title">
+          <span>Kurumuş Lilium Çerçeveleri</span>
+          <span>Tuşlar: 1–4</span>
+        </div>
+        <div class="slot-grid" id="slotGrid"></div>
+        <div class="note-actions" style="justify-content:flex-start;">
+          <button class="mini-pill" id="pinAllBtn" type="button">Hepsini Sabitle</button>
+          <button class="mini-pill" id="shuffleSpecBtn" type="button">Parçaları Değiştir</button>
+          <button class="mini-pill" id="hideAllSpecBtn" type="button">Gizle</button>
+        </div>
+        <div class="decor-section-title">
+          <span>Arka Arayüz Rengi</span>
+          <span>Kısayol: R</span>
+        </div>
+        <div class="bg-swatches" id="bgSwatches">
+          <button class="bg-chip active" data-bg="auto" type="button"><span class="c-dot" style="background:linear-gradient(135deg,#e7b5a8,#2d3247)"></span>Saate Göre</button>
+          <button class="bg-chip" data-bg="#f3efe7" type="button"><span class="c-dot" style="background:#f3efe7"></span>Beyaz İnci</button>
+          <button class="bg-chip" data-bg="#cad4c7" type="button"><span class="c-dot" style="background:#cad4c7"></span>Adaçayı Sisi</button>
+          <button class="bg-chip" data-bg="#edd7d4" type="button"><span class="c-dot" style="background:#edd7d4"></span>Şafak Pudrası</button>
+          <button class="bg-chip" data-bg="#e6dbc7" type="button"><span class="c-dot" style="background:#e6dbc7"></span>Parşömen</button>
+          <button class="bg-chip" data-bg="#171525" type="button"><span class="c-dot" style="background:#171525"></span>Gece Kadifesi</button>
+          <button class="bg-chip" data-bg="#1b2a25" type="button"><span class="c-dot" style="background:#1b2a25"></span>Zümrüt Sera</button>
+          <label class="custom-color-wrap" title="Arka plan için özel renk seç">
+            <input id="bgCustomInput" type="color" value="#f3efe7" />
+            <span>Özel</span>
+          </label>
+        </div>
+        <div class="note-actions">
+          <button class="mini-pill" id="decorCloseBtn" type="button">Kapat</button>
         </div>
       </div>
     </section>
@@ -814,6 +1201,7 @@
       this.ctx = null;
       this.ready = false;
       this.muted = false;
+      this.volume = 0.78;
       this.u = 0.22;
 
       // 74 BPM heartfelt botanical nocturne (8 bars = 128 sixteenth steps)
@@ -867,7 +1255,7 @@
       this.comp.release.value = 0.25;
 
       this.outGain = this.ctx.createGain();
-      this.outGain.gain.value = this.muted ? 0 : 1;
+      this.outGain.gain.value = (this.muted || this.volume <= 0.001) ? 0 : Math.pow(this.volume, 1.35);
       this.comp.connect(this.outGain);
       this.outGain.connect(this.ctx.destination);
 
@@ -955,16 +1343,26 @@
       return "Yıldız Ninnisi · Çelesta";
     }
 
+    setVolume(vol01) {
+      this.volume = clamp(vol01, 0, 1);
+      if (this.outGain && this.ctx) {
+        const g = (this.muted || this.volume <= 0.001) ? 0 : Math.pow(this.volume, 1.35);
+        this.outGain.gain.setTargetAtTime(g, this.ctx.currentTime, 0.025);
+      }
+    }
+
     toggleMute() {
       if (!this.ctx) {
         this.init();
         this.muted = false;
       } else {
         this.muted = !this.muted;
+        if (!this.muted && this.volume <= 0.01) this.volume = 0.55;
         if (this.ctx.state === "suspended") this.ctx.resume();
       }
       if (this.outGain) {
-        this.outGain.gain.setTargetAtTime(this.muted ? 0 : 1, this.ctx.currentTime, 0.04);
+        const g = (this.muted || this.volume <= 0.001) ? 0 : Math.pow(this.volume, 1.35);
+        this.outGain.gain.setTargetAtTime(g, this.ctx.currentTime, 0.04);
       }
       return !this.muted;
     }
@@ -3669,7 +4067,7 @@
       this._lastTime = 0;
     }
 
-    draw(sim, cultivar, topC, botC) {
+    draw(sim, cultivar, theme) {
       const ctx = this.ctx;
       if (!ctx) return;
       const w = window.innerWidth;
@@ -3684,10 +4082,12 @@
       this._lastTime = sim.time;
 
       const u = sim.u;
+      const { topC, botC, isLight } = theme;
       const dayAmt = Math.sin(clamp(u, 0, 1) * Math.PI);
-      const isLight = smoothstep(0.38, 0.58, dayAmt);
       const dawnAmt = clamp(expBell(u, 0.24, 0.16) + expBell(u, 0.78, 0.16), 0, 1);
-      const nightMask = clamp(1 - smoothstep(0.14, 0.48, dayAmt), 0, 1);
+      const nightMask = sim.bgChoice === "auto"
+        ? clamp(1 - smoothstep(0.14, 0.48, dayAmt), 0, 1)
+        : clamp(1 - isLight, 0, 1);
 
       // 1. Living sky gradient synchronized at 0ms lag
       const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
@@ -3883,6 +4283,13 @@
     knobStretch: 1.0,
     time: 0,
     autoCycle: true,
+    bgChoice: (() => {
+      try {
+        const v = localStorage.getItem("lilium_bg_v1");
+        if (v && (v === "auto" || /^#[0-9a-fA-F]{6}$/.test(v))) return v;
+      } catch (_) {}
+      return "auto";
+    })(),
 
     camYaw: 0.14,
     camPitch: 0.18,
@@ -3906,6 +4313,19 @@
   }
 
   const audio = new BotanicalAudio((strength) => spawnScentRing(strength, 0.5, 0.52));
+  try {
+    const savedVol = parseFloat(localStorage.getItem("lilium_vol_v1") || "0.78");
+    if (Number.isFinite(savedVol)) audio.setVolume(savedVol);
+  } catch (_) {}
+
+  function hexToRgb(hex) {
+    const clean = String(hex).replace("#", "");
+    return [
+      parseInt(clean.slice(0, 2), 16),
+      parseInt(clean.slice(2, 4), 16),
+      parseInt(clean.slice(4, 6), 16),
+    ];
+  }
 
   function updatePageThemeAndReadouts() {
     const u = sim.u;
@@ -3937,16 +4357,27 @@
       ? audio.getMovementName()
       : `${lightWord} · ${plant.dewdrops.length} Çiy · ${ecoSuffix}`;
 
-    // Cultivar + Diurnal harmonious page backdrop & high-contrast accent calculation
-    const dayT = smoothstep(0.16, 0.62, dayAmt);
-    let topC = mix3(ac.uiNightTop, ac.uiDayTop, dayT);
-    let botC = mix3(ac.uiNightBot, ac.uiDayBot, dayT);
-    topC = mix3(topC, ac.uiDawnTop, clamp(dawnAmt * 0.64, 0, 1));
-    botC = mix3(botC, ac.uiDawnBot, clamp(dawnAmt * 0.68, 0, 1));
+    // Cultivar + Diurnal OR User-Selected Studio Wall Backdrop
+    let topC;
+    let botC;
+    let isLight;
+    if (sim.bgChoice === "auto") {
+      const dayT = smoothstep(0.16, 0.62, dayAmt);
+      topC = mix3(ac.uiNightTop, ac.uiDayTop, dayT);
+      botC = mix3(ac.uiNightBot, ac.uiDayBot, dayT);
+      topC = mix3(topC, ac.uiDawnTop, clamp(dawnAmt * 0.64, 0, 1));
+      botC = mix3(botC, ac.uiDawnBot, clamp(dawnAmt * 0.68, 0, 1));
+      isLight = smoothstep(0.38, 0.58, dayAmt);
+    } else {
+      const rgb = hexToRgb(sim.bgChoice);
+      topC = [clamp(rgb[0] + 10, 0, 255), clamp(rgb[1] + 9, 0, 255), clamp(rgb[2] + 8, 0, 255)];
+      botC = [clamp(rgb[0] - 14, 0, 255), clamp(rgb[1] - 14, 0, 255), clamp(rgb[2] - 12, 0, 255)];
+      const relLum = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255;
+      isLight = smoothstep(0.36, 0.56, relLum);
+    }
 
-    const isLight = smoothstep(0.38, 0.58, dayAmt);
     const ink = mix3([248, 244, 240], ac.uiInkLight, isLight);
-    const muted = mix3([206, 194, 198], [92, 84, 88], isLight);
+    const muted = mix3([206, 194, 198], [76, 70, 74], isLight);
     const acc = mix3(ac.uiAccentNight, ac.uiAccentDay, isLight);
 
     const r = document.documentElement.style;
@@ -3954,15 +4385,15 @@
     r.setProperty("--bg-bot", `rgb(${Math.round(botC[0])},${Math.round(botC[1])},${Math.round(botC[2])})`);
     r.setProperty("--ink", `rgb(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])})`);
     r.setProperty("--ink-muted", `rgb(${Math.round(muted[0])},${Math.round(muted[1])},${Math.round(muted[2])})`);
-    r.setProperty("--ink-faint", `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.42)`);
+    r.setProperty("--ink-faint", `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.48)`);
     r.setProperty("--accent", `rgb(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])})`);
     r.setProperty("--accent-soft", `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.18)`);
     r.setProperty("--chamber-glow", `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.16)`);
-    r.setProperty("--card-bg", isLight > 0.5 ? "rgba(255,254,251,0.68)" : "rgba(255,248,250,0.065)");
-    r.setProperty("--card-border", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.15)` : `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.24)`);
-    r.setProperty("--pill-bg", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.07)` : "rgba(255,248,250,0.085)");
-    r.setProperty("--pill-hover", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.13)` : "rgba(255,248,250,0.18)");
-    return { topC, botC };
+    r.setProperty("--card-bg", isLight > 0.5 ? "rgba(255,254,251,0.72)" : "rgba(255,248,250,0.065)");
+    r.setProperty("--card-border", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.16)` : `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.24)`);
+    r.setProperty("--pill-bg", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.08)` : "rgba(255,248,250,0.085)");
+    r.setProperty("--pill-hover", isLight > 0.5 ? `rgba(${Math.round(ink[0])},${Math.round(ink[1])},${Math.round(ink[2])},0.15)` : "rgba(255,248,250,0.18)");
+    return { topC, botC, isLight };
   }
 
   function stepCultivarMorph(dt) {
@@ -4023,8 +4454,22 @@
     try { localStorage.setItem("lilium_dedication_v1", JSON.stringify({ to: toVal, quote: quoteVal })); } catch (_) {}
   }
 
+  const decorBtn = document.getElementById("decorBtn");
+  const decorPanel = document.getElementById("decorPanel");
+
+  function toggleDecorPanel(force) {
+    const isOpen = force !== undefined ? force : !decorPanel.classList.contains("open");
+    if (isOpen && noteEditor.classList.contains("open")) {
+      noteEditor.classList.remove("open");
+      noteBtn.classList.remove("active");
+    }
+    decorPanel.classList.toggle("open", isOpen);
+    decorBtn.classList.toggle("active", isOpen);
+  }
+
   function toggleNoteEditor(force) {
     const isOpen = force !== undefined ? force : !noteEditor.classList.contains("open");
+    if (isOpen && decorPanel.classList.contains("open")) toggleDecorPanel(false);
     noteEditor.classList.toggle("open", isOpen);
     noteBtn.classList.toggle("active", isOpen);
   }
@@ -4136,6 +4581,7 @@
 
   lilyCanvas.addEventListener("pointerdown", (e) => {
     if (noteEditor.classList.contains("open")) toggleNoteEditor(false);
+    if (decorPanel.classList.contains("open")) toggleDecorPanel(false);
     audio.init();
     updateAudioBtn();
     lilyCanvas.setPointerCapture(e.pointerId);
@@ -4292,17 +4738,26 @@
   switchCanvas.addEventListener("pointerup", endSwPtr);
   switchCanvas.addEventListener("pointercancel", endSwPtr);
 
-  // Controls
+  // Controls & Bidirectional Volume Sync
   const autoCycleBtn = document.getElementById("autoCycleBtn");
   const audioBtn = document.getElementById("audioBtn");
   const audioBtnText = document.getElementById("audioBtnText");
   const zoomBtn = document.getElementById("zoomBtn");
+  const volumeSlider = document.getElementById("volumeSlider");
+  const volumeVal = document.getElementById("volumeVal");
+
+  function syncVolumeUI() {
+    const pct = audio.muted ? 0 : Math.round(audio.volume * 100);
+    volumeSlider.value = String(pct);
+    volumeVal.textContent = `${pct}%`;
+  }
 
   function updateAutoBtn() { autoCycleBtn.classList.toggle("active", sim.autoCycle); }
   function updateAudioBtn() {
     const on = audio.ready && !audio.muted;
     audioBtn.classList.toggle("active", on);
     audioBtnText.textContent = !audio.ready ? "Ses: Başlat" : audio.muted ? "Ses: Kapalı" : "Ses: Açık";
+    syncVolumeUI();
   }
 
   zoomBtn.addEventListener("click", () => {
@@ -4320,8 +4775,27 @@
   });
 
   audioBtn.addEventListener("click", () => {
-    if (!audio.ready) audio.init();
-    else audio.toggleMute();
+    if (!audio.ready) {
+      audio.init();
+    } else {
+      audio.toggleMute();
+      if (!audio.muted && audio.volume < 0.03) audio.setVolume(0.65);
+    }
+    updateAudioBtn();
+  });
+
+  volumeSlider.addEventListener("input", () => {
+    const pct = clamp(Number(volumeSlider.value) || 0, 0, 100);
+    const vol = pct / 100;
+    if (vol > 0.005) {
+      if (!audio.ready) audio.init();
+      audio.muted = false;
+      audio.setVolume(vol);
+      try { localStorage.setItem("lilium_vol_v1", vol.toFixed(2)); } catch (_) {}
+    } else {
+      audio.muted = true;
+      audio.setVolume(0);
+    }
     updateAudioBtn();
   });
 
@@ -4371,8 +4845,307 @@
     audio.playScentWave();
   });
 
+  // =========================================================================
+  // 6B. FRAMED DRIED LILIUM HERBARIUM WALL & BACKGROUND COLOR ATELIER
+  // =========================================================================
+  const DRIED_SPECIMENS = [
+    {
+      title: "Kurutulmuş Taç Yaprak",
+      latin: "PETALUM CANDIDUM · I",
+      svg: (uid) => `
+        <defs>
+          <linearGradient id="ptG${uid}" x1="15%" y1="90%" x2="85%" y2="10%">
+            <stop offset="0%" stop-color="#d8ccb3" />
+            <stop offset="55%" stop-color="#f5eedf" />
+            <stop offset="100%" stop-color="#fffcf4" />
+          </linearGradient>
+        </defs>
+        <path d="M58 116 Q59 96 63 82" stroke="#8b7450" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+        <path d="M62 84 C36 66 32 30 78 15 C87 48 80 74 62 84 Z" fill="url(#ptG${uid})" stroke="#8e7757" stroke-width="0.95"/>
+        <path d="M62 83 C58 59 64 36 77 16" stroke="#a68d66" stroke-width="0.85" fill="none" opacity="0.72"/>
+        <path d="M62 76 C49 59 48 39 67 24 M64 78 C71 61 75 43 76 26" stroke="#b59d76" stroke-width="0.55" fill="none" opacity="0.55"/>
+        <circle cx="62" cy="84" r="2.2" fill="#9a7e53" opacity="0.65"/>`,
+    },
+    {
+      title: "Tam Basılmış Çiçek",
+      latin: "FLOS LILIUM · II",
+      svg: (uid) => `
+        <defs>
+          <radialGradient id="flG${uid}" cx="50%" cy="48%" r="48%">
+            <stop offset="0%" stop-color="#e3d5b2" />
+            <stop offset="55%" stop-color="#f7f0e0" />
+            <stop offset="100%" stop-color="#e9dec8" />
+          </radialGradient>
+        </defs>
+        <path d="M60 120 Q59 94 60 72" stroke="#786b47" stroke-width="2" fill="none" stroke-linecap="round"/>
+        ${[0, 60, 120, 180, 240, 300].map((deg) => `
+          <g transform="translate(60 58) rotate(${deg})">
+            <path d="M0 0 C-10 -15 -11 -35 0 -46 C11 -35 10 -15 0 0 Z" fill="url(#flG${uid})" stroke="#8c7656" stroke-width="0.8"/>
+            <line x1="0" y1="-3" x2="0" y2="-40" stroke="#a68f68" stroke-width="0.55" opacity="0.65"/>
+          </g>`).join("")}
+        ${[-32, -14, 12, 34].map((ang) => `
+          <g transform="translate(60 58) rotate(${ang})">
+            <path d="M0 0 Q3 -12 1 -22" stroke="#88734d" stroke-width="0.75" fill="none"/>
+            <ellipse cx="1" cy="-24" rx="2.6" ry="1.2" transform="rotate(-18 1 -24)" fill="#a86d32"/>
+          </g>`).join("")}
+        <circle cx="60" cy="58" r="2.6" fill="#c7b57c" stroke="#7d6a46" stroke-width="0.6"/>`,
+    },
+    {
+      title: "Polen & Stamen",
+      latin: "ANTHERA & STAMEN · III",
+      svg: (uid) => `
+        <defs>
+          <linearGradient id="anG${uid}" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#875228" />
+            <stop offset="50%" stop-color="#c9853b" />
+            <stop offset="100%" stop-color="#7c4820" />
+          </linearGradient>
+        </defs>
+        <path d="M59 118 Q60 98 60 88" stroke="#766341" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M60 90 C46 70 33 52 29 33" stroke="#968158" stroke-width="1.05" fill="none"/>
+        <path d="M60 90 C54 66 47 45 47 26" stroke="#968158" stroke-width="1.05" fill="none"/>
+        <path d="M60 90 C61 65 62 42 63 22" stroke="#786b45" stroke-width="1.3" fill="none"/>
+        <path d="M60 90 C69 68 77 48 80 28" stroke="#968158" stroke-width="1.05" fill="none"/>
+        <path d="M60 90 C74 73 87 56 93 39" stroke="#968158" stroke-width="1.05" fill="none"/>
+        <ellipse cx="29" cy="31" rx="6" ry="2.2" transform="rotate(-32 29 31)" fill="url(#anG${uid})"/>
+        <ellipse cx="47" cy="24" rx="6.2" ry="2.3" transform="rotate(-14 47 24)" fill="url(#anG${uid})"/>
+        <circle cx="63" cy="20" r="2.8" fill="#a89e64" stroke="#6f623c" stroke-width="0.6"/>
+        <ellipse cx="81" cy="26" rx="6.2" ry="2.3" transform="rotate(18 81 26)" fill="url(#anG${uid})"/>
+        <ellipse cx="94" cy="37" rx="5.8" ry="2.1" transform="rotate(34 94 37)" fill="url(#anG${uid})"/>
+        ${[[24,42],[37,24],[52,32],[75,20],[88,46],[67,38]].map(([px, py]) =>
+          `<circle cx="${px}" cy="${py}" r="0.9" fill="#c98e39" opacity="0.72"/>`).join("")}`,
+    },
+    {
+      title: "İkili Taç Yaprak",
+      latin: "DUO PETALA · IV",
+      svg: (uid) => `
+        <defs>
+          <linearGradient id="dpG${uid}" x1="20%" y1="85%" x2="80%" y2="15%">
+            <stop offset="0%" stop-color="#ded1b7" />
+            <stop offset="60%" stop-color="#f7f1e3" />
+            <stop offset="100%" stop-color="#fffef9" />
+          </linearGradient>
+        </defs>
+        <path d="M58 106 C30 86 24 44 48 18 C64 46 66 78 58 106 Z" fill="url(#dpG${uid})" stroke="#8e7859" stroke-width="0.85" opacity="0.9"/>
+        <path d="M58 106 C49 74 47 45 48 18" stroke="#ad946b" stroke-width="0.65" fill="none" opacity="0.6"/>
+        <path d="M62 106 C53 72 64 38 92 22 C94 56 84 88 62 106 Z" fill="url(#dpG${uid})" stroke="#8c7554" stroke-width="0.95"/>
+        <path d="M62 106 C70 76 79 49 92 22" stroke="#aa9168" stroke-width="0.75" fill="none" opacity="0.72"/>
+        <path d="M52 99 L68 97 M53 102 L67 100" stroke="#7b6142" stroke-width="1.2" opacity="0.78"/>`,
+    },
+    {
+      title: "Basılmış Yaprak Dalı",
+      latin: "CAULIS & FOLIA · V",
+      svg: (uid) => `
+        <defs>
+          <linearGradient id="lfG${uid}" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#616f4f" />
+            <stop offset="100%" stop-color="#8b966e" />
+          </linearGradient>
+        </defs>
+        <path d="M60 120 Q58 70 61 18" stroke="#635c42" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+        <path d="M59 95 C38 89 24 72 19 56 C38 61 52 75 59 95 Z" fill="url(#lfG${uid})" stroke="#525d42" stroke-width="0.8"/>
+        <path d="M60 76 C80 71 95 55 102 39 C84 44 68 58 60 76 Z" fill="url(#lfG${uid})" stroke="#525d42" stroke-width="0.8"/>
+        <path d="M59 58 C41 51 30 37 26 23 C42 29 53 41 59 58 Z" fill="url(#lfG${uid})" stroke="#525d42" stroke-width="0.8"/>
+        <path d="M60 40 C74 36 86 25 91 14 C77 18 66 28 60 40 Z" fill="url(#lfG${uid})" stroke="#525d42" stroke-width="0.8"/>
+        <path d="M59 95 Q38 75 19 56 M60 76 Q81 58 102 39 M59 58 Q42 40 26 23" stroke="#9fa87d" stroke-width="0.5" fill="none" opacity="0.65"/>`,
+    },
+    {
+      title: "Açılmamış Tomurcuk",
+      latin: "GEMMA ALBA · VI",
+      svg: (uid) => `
+        <defs>
+          <linearGradient id="bdG${uid}" x1="20%" y1="90%" x2="80%" y2="10%">
+            <stop offset="0%" stop-color="#b9b793" />
+            <stop offset="45%" stop-color="#ece5cf" />
+            <stop offset="100%" stop-color="#fffdf4" />
+          </linearGradient>
+        </defs>
+        <path d="M56 120 Q60 98 63 82" stroke="#6c694a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M60 99 C44 93 35 81 32 70 C45 74 54 84 60 99 Z" fill="#7c8861" stroke="#535d42" stroke-width="0.75"/>
+        <path d="M63 84 C49 66 53 33 73 16 C81 40 77 68 63 84 Z" fill="url(#bdG${uid})" stroke="#8b7757" stroke-width="0.9"/>
+        <path d="M63 84 C64 58 68 35 73 16" stroke="#9f8964" stroke-width="0.7" fill="none" opacity="0.72"/>`,
+    },
+  ];
+
+  const SLOT_LABELS = ["Sol Üst", "Sol Alt", "Sağ Üst", "Sağ Alt"];
+  const DEFAULT_HERBARIUM = [
+    { pinned: true, specIdx: 0 },
+    { pinned: true, specIdx: 4 },
+    { pinned: true, specIdx: 1 },
+    { pinned: true, specIdx: 2 },
+  ];
+
+  let herbariumState = (() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("lilium_frames_v1") || "null");
+      if (Array.isArray(saved) && saved.length === 4) {
+        return saved.map((s, i) => ({
+          pinned: typeof s.pinned === "boolean" ? s.pinned : DEFAULT_HERBARIUM[i].pinned,
+          specIdx: Number.isInteger(s.specIdx)
+            ? ((s.specIdx % DRIED_SPECIMENS.length) + DRIED_SPECIMENS.length) % DRIED_SPECIMENS.length
+            : DEFAULT_HERBARIUM[i].specIdx,
+        }));
+      }
+    } catch (_) {}
+    return DEFAULT_HERBARIUM.map((s) => ({ ...s }));
+  })();
+
+  function saveHerbarium() {
+    try { localStorage.setItem("lilium_frames_v1", JSON.stringify(herbariumState)); } catch (_) {}
+  }
+
+  const specimenStage = document.getElementById("specimenStage");
+  const slotGrid = document.getElementById("slotGrid");
+
+  function renderHerbarium() {
+    specimenStage.innerHTML = herbariumState.map((slot, i) => {
+      const spec = DRIED_SPECIMENS[slot.specIdx];
+      return `
+        <div class="herbarium-frame slot-${i}${slot.pinned ? "" : " is-hidden"}" data-slot="${i}" role="button" tabindex="${slot.pinned ? "0" : "-1"}" aria-label="${SLOT_LABELS[i]} çerçeve: ${spec.title} (Değiştirmek için tıkla, sabitlemek/kaldırmak için ${i + 1})" title="${SLOT_LABELS[i]} · Parçayı değiştirmek için tıkla (${i + 1}: sabitle/kaldır)">
+          <div class="herbarium-mat">
+            <span class="herbarium-pin"></span>
+            <span class="herbarium-tape tl"></span>
+            <span class="herbarium-tape tr"></span>
+            <svg class="herbarium-svg" viewBox="0 0 120 132" aria-hidden="true">${spec.svg(i)}</svg>
+            <div class="herbarium-cap">
+              <strong>${spec.title}</strong>
+              <span>${spec.latin} &middot; Tuş ${i + 1}</span>
+            </div>
+          </div>
+        </div>`;
+    }).join("");
+
+    slotGrid.innerHTML = herbariumState.map((slot, i) => {
+      const spec = DRIED_SPECIMENS[slot.specIdx];
+      return `
+        <div class="slot-card${slot.pinned ? " pinned" : ""}" data-slot="${i}">
+          <button class="slot-toggle" type="button" data-action="toggle" data-slot="${i}" title="Tuş ${i + 1} ile duvara sabitle veya kaldır">
+            <strong>Tuş ${i + 1} · ${SLOT_LABELS[i]}</strong>
+            <span>${slot.pinned ? spec.title : "Gizli (Sabitle)"}</span>
+          </button>
+          <button class="slot-cycle" type="button" data-action="cycle" data-slot="${i}" title="Çerçevedeki kurumuş Lilium parçasını değiştir">&#8635;</button>
+        </div>`;
+    }).join("");
+  }
+
+  function chimeFrameInteract(slotIdx) {
+    if (audio.ready && !audio.muted) audio.playPetalTouch((slotIdx + 1) % 6);
+    else audio.playKnobTink(true);
+    spawnScentRing(0.55, 0.5, 0.52);
+  }
+
+  function toggleSlotPin(slotIdx) {
+    herbariumState[slotIdx].pinned = !herbariumState[slotIdx].pinned;
+    saveHerbarium();
+    renderHerbarium();
+    chimeFrameInteract(slotIdx);
+  }
+
+  function cycleSlotSpecimen(slotIdx) {
+    herbariumState[slotIdx].pinned = true;
+    herbariumState[slotIdx].specIdx = (herbariumState[slotIdx].specIdx + 1) % DRIED_SPECIMENS.length;
+    saveHerbarium();
+    renderHerbarium();
+    chimeFrameInteract(slotIdx);
+  }
+
+  specimenStage.addEventListener("click", (e) => {
+    const frame = e.target.closest(".herbarium-frame[data-slot]");
+    if (!frame) return;
+    audio.init();
+    updateAudioBtn();
+    cycleSlotSpecimen(Number(frame.dataset.slot));
+  });
+
+  specimenStage.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const frame = e.target.closest(".herbarium-frame[data-slot]");
+    if (!frame) return;
+    e.preventDefault();
+    audio.init();
+    updateAudioBtn();
+    cycleSlotSpecimen(Number(frame.dataset.slot));
+  });
+
+  slotGrid.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-action][data-slot]");
+    if (!btn) return;
+    const idx = Number(btn.dataset.slot);
+    if (btn.dataset.action === "cycle") cycleSlotSpecimen(idx);
+    else toggleSlotPin(idx);
+  });
+
+  document.getElementById("pinAllBtn").addEventListener("click", () => {
+    herbariumState.forEach((s) => { s.pinned = true; });
+    saveHerbarium();
+    renderHerbarium();
+    chimeFrameInteract(0);
+  });
+
+  document.getElementById("shuffleSpecBtn").addEventListener("click", () => {
+    const order = DRIED_SPECIMENS.map((_, idx) => idx);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    herbariumState.forEach((s, i) => {
+      s.pinned = true;
+      s.specIdx = order[i];
+    });
+    saveHerbarium();
+    renderHerbarium();
+    chimeFrameInteract(2);
+  });
+
+  document.getElementById("hideAllSpecBtn").addEventListener("click", () => {
+    herbariumState.forEach((s) => { s.pinned = false; });
+    saveHerbarium();
+    renderHerbarium();
+  });
+
+  decorBtn.addEventListener("click", () => toggleDecorPanel());
+  document.getElementById("decorCloseBtn").addEventListener("click", () => toggleDecorPanel(false));
+
+  // Background Palette Selection & Persistence
+  const bgCustomInput = document.getElementById("bgCustomInput");
+  const bgChips = Array.from(document.querySelectorAll("#bgSwatches .bg-chip[data-bg]"));
+  const BG_ORDER = bgChips.map((b) => b.dataset.bg);
+
+  function syncBgControls() {
+    bgChips.forEach((chip) => {
+      chip.classList.toggle("active", chip.dataset.bg.toLowerCase() === sim.bgChoice.toLowerCase());
+    });
+    if (/^#[0-9a-fA-F]{6}$/.test(sim.bgChoice)) {
+      bgCustomInput.value = sim.bgChoice;
+    }
+  }
+
+  function applyBgChoice(val) {
+    sim.bgChoice = val;
+    try { localStorage.setItem("lilium_bg_v1", val); } catch (_) {}
+    syncBgControls();
+  }
+
+  bgChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      applyBgChoice(chip.dataset.bg);
+      chimeFrameInteract(1);
+    });
+  });
+
+  bgCustomInput.addEventListener("input", () => applyBgChoice(bgCustomInput.value));
+  bgCustomInput.addEventListener("change", () => applyBgChoice(bgCustomInput.value));
+
   window.addEventListener("keydown", (e) => {
-    if (document.activeElement && document.activeElement.tagName === "INPUT") return;
+    const ae = document.activeElement;
+    if (ae && (ae.tagName === "TEXTAREA" || (ae.tagName === "INPUT" && ae.type === "text"))) return;
+
+    if (e.key === "Escape") {
+      if (decorPanel.classList.contains("open")) toggleDecorPanel(false);
+      if (noteEditor.classList.contains("open")) toggleNoteEditor(false);
+      return;
+    }
+
     if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
       audio.init();
       updateAudioBtn();
@@ -4381,6 +5154,26 @@
       const step = e.shiftKey ? 0.08 : 0.025;
       sim.uTarget = clamp(sim.uTarget + (e.key === "ArrowRight" ? step : -step), 0, 1);
       e.preventDefault();
+      return;
+    }
+
+    if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+      const codeMatch = /^Digit([1-4])$/.exec(e.code || "");
+      const keyMatch = /^[1-4]$/.exec(e.key || "");
+      const slotNum = codeMatch ? Number(codeMatch[1]) : keyMatch ? Number(keyMatch[1]) : 0;
+      if (slotNum >= 1 && slotNum <= 4) {
+        e.preventDefault();
+        if (e.shiftKey) cycleSlotSpecimen(slotNum - 1);
+        else toggleSlotPin(slotNum - 1);
+        return;
+      }
+      if (e.code === "KeyR" || e.key.toLowerCase() === "r") {
+        e.preventDefault();
+        const curIdx = BG_ORDER.findIndex((c) => c.toLowerCase() === sim.bgChoice.toLowerCase());
+        const nextChoice = BG_ORDER[(curIdx + 1) % BG_ORDER.length];
+        applyBgChoice(nextChoice);
+        chimeFrameInteract(3);
+      }
     }
   });
 
@@ -4441,18 +5234,20 @@
 
     audio.setState(sim.u, sim.windEnergy, 0, swPtr.dragging ? speed * 1.4 : 0);
 
-    const { topC, botC } = updatePageThemeAndReadouts();
-    ambientBackdrop.draw(sim, sim.activeCultivar, topC, botC);
+    const theme = updatePageThemeAndReadouts();
+    ambientBackdrop.draw(sim, sim.activeCultivar, theme);
     chamber.draw(sim, sim.activeCultivar);
     timeSwitch.draw(sim, sim.activeCultivar);
 
     requestAnimationFrame(frame);
   }
 
+  renderHerbarium();
+  syncBgControls();
   updateAudioBtn();
   updateAutoBtn();
   const initTheme = updatePageThemeAndReadouts();
-  ambientBackdrop.draw(sim, sim.activeCultivar, initTheme.topC, initTheme.botC);
+  ambientBackdrop.draw(sim, sim.activeCultivar, initTheme);
   requestAnimationFrame(frame);
 })();
 </script>
