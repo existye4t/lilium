@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 370" width="880" height="370">
+  <defs>
+    <linearGradient id="bgCard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#191421" />
+      <stop offset="52%" stop-color="#1f1928" />
+      <stop offset="100%" stop-color="#141819" />
+    </linearGradient>
+    <linearGradient id="matPaper" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fbf7ed" />
+      <stop offset="100%" stop-color="#f1e6d2" />
+    </linearGradient>
+    <linearGradient id="ptCream" x1="15%" y1="90%" x2="85%" y2="10%">
+      <stop offset="0%" stop-color="#d8ccb3" />
+      <stop offset="55%" stop-color="#f6efe0" />
+      <stop offset="100%" stop-color="#fffdf6" />
+    </linearGradient>
+    <radialGradient id="flCream" cx="50%" cy="48%" r="48%">
+      <stop offset="0%" stop-color="#e3d5b2" />
+      <stop offset="55%" stop-color="#f7f0e0" />
+      <stop offset="100%" stop-color="#e9dec8" />
+    </radialGradient>
+    <linearGradient id="antherGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#875228" />
+      <stop offset="50%" stop-color="#cc883b" />
+      <stop offset="100%" stop-color="#7c4820" />
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#616f4f" />
+      <stop offset="100%" stop-color="#8b966e" />
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Dark Conservatory Card -->
+  <rect x="4" y="4" width="872" height="362" rx="18" fill="url(#bgCard)" stroke="#d9b879" stroke-opacity="0.32" stroke-width="1.2" />
+
+  <!-- Top Section Header -->
+  <text x="440" y="34" text-anchor="middle" fill="#e9c88a" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10.5" letter-spacing="2.4">HERBARIUM KOLEKSİYONU · TUŞLAR 1–4 İLE DUVARA SABİTLE</text>
+
+  <!-- 6 Framed Dried Lilium Specimens (x = 38 + idx*138, width = 114, height = 148) -->
+  <!-- Frame 1: Kurutulmuş Taç Yaprak -->
+  <g transform="translate(38 52) rotate(-1.5 57 74)">
+    <rect width="114" height="148" rx="8" fill="#dfd2bc" stroke="#9e8560" stroke-width="1.2" />
+    <rect x="7" y="7" width="100" height="134" rx="4" fill="url(#matPaper)" stroke="#b8a17d" stroke-width="0.7" />
+    <circle cx="57" cy="2" r="3.6" fill="#d9ab59" stroke="#6f5020" stroke-width="0.7" />
+    <rect x="11" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(-26 19 12.5)" />
+    <rect x="87" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(26 95 12.5)" />
+    <g transform="translate(15 14) scale(0.70)">
+      <path d="M58 116 Q59 96 63 82" stroke="#8b7450" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+      <path d="M62 84 C36 66 32 30 78 15 C87 48 80 74 62 84 Z" fill="url(#ptCream)" stroke="#8e7757" stroke-width="0.95"/>
+      <path d="M62 83 C58 59 64 36 77 16" stroke="#a68d66" stroke-width="0.85" fill="none" opacity="0.72"/>
+      <circle cx="62" cy="84" r="2.2" fill="#9a7e53" opacity="0.65"/>
+    </g>
+    <line x1="16" y1="114" x2="98" y2="114" stroke="#8f7550" stroke-opacity="0.28" stroke-width="0.7" />
+    <text x="57" y="126" text-anchor="middle" fill="#3c2f21" font-family="Georgia, serif" font-size="9.5" font-weight="bold">Taç Yaprak</text>
+    <text x="57" y="136" text-anchor="middle" fill="#6f5c45" font-family="ui-monospace, monospace" font-size="6.8" letter-spacing="0.7">PETALUM · I</text>
+  </g>
+
+  <!-- Frame 2: Tam Basılmış Çiçek -->
+  <g transform="translate(176 52) rotate(1.4 57 74)">
+    <rect width="114" height="148" rx="8" fill="#dfd2bc" stroke="#9e8560" stroke-width="1.2" />
+    <rect x="7" y="7" width="100" height="134" rx="4" fill="url(#matPaper)" stroke="#b8a17d" stroke-width="0.7" />
+    <circle cx="57" cy="2" r="3.6" fill="#d9ab59" stroke="#6f5020" stroke-width="0.7" />
+    <rect x="11" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(-26 19 12.5)" />
+    <rect x="87" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(26 95 12.5)" />
+    <g transform="translate(15 16) scale(0.70)">
+      <path d="M60 120 Q59 94 60 72" stroke="#786b47" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <g transform="translate(60 58) rotate(0)"><path d="M0 0 C-10 -15 -11 -35 0 -46 C11 -35 10 -15 0 0 Z" fill="url(#flCream)" stroke="#8c7656" stroke-width="0.85"/></g>
+      <g transform="translate(60 58) rotate(60)"><path d="M0 0 C-10 -15 -11 -35 0 -46 C11 -35 10 -15 0 0 Z" fill="url(#flCream)" stroke="#8c7656" stroke-width="0.85"/></g>
+      <g transform="translate(60 58) rotate(120)"><path d="M0 0 C-10 -15 -11 -35 0 -46 C11 -35 10 -15 0 0 Z" fill="url(#flCream)" stroke="#8c7656" stroke-width="0.85"/></g>
+      <g transform="translate(60 58) rotate(180)"><path d="M0 0 C-10 -15 -11 -35 0 -46 C11 -35 10 -15 0 0 Z" fill="url(#flCream)" stroke="#8c7656" stroke-width="0.85"/></g>
+      <g transform="translate(60 58) rotate(240)"><path d="M0 0 C-10 -15 -11 -35 0 -46 C11 -35 10 -15 0 0 Z" fill="url(#flCream)" stroke="#8c7656" stroke-width="0.85"/></g>
+      <g transform="translate(60 58) rotate(300)"><path d="M0 0 C-10 -15 -11 -35 0 -46 C11 -35 10 -15 0 0 Z" fill="url(#flCream)" stroke="#8c7656" stroke-width="0.85"/></g>
+      <circle cx="60" cy="58" r="2.8" fill="#c7b57c" stroke="#7d6a46" stroke-width="0.7"/>
+    </g>
+    <line x1="16" y1="114" x2="98" y2="114" stroke="#8f7550" stroke-opacity="0.28" stroke-width="0.7" />
+    <text x="57" y="126" text-anchor="middle" fill="#3c2f21" font-family="Georgia, serif" font-size="9.5" font-weight="bold">Tam Çiçek</text>
+    <text x="57" y="136" text-anchor="middle" fill="#6f5c45" font-family="ui-monospace, monospace" font-size="6.8" letter-spacing="0.7">FLOS LILIUM · II</text>
+  </g>
+
+  <!-- Frame 3: Polen & Stamen -->
+  <g transform="translate(314 52) rotate(-1.2 57 74)">
+    <rect width="114" height="148" rx="8" fill="#dfd2bc" stroke="#9e8560" stroke-width="1.2" />
+    <rect x="7" y="7" width="100" height="134" rx="4" fill="url(#matPaper)" stroke="#b8a17d" stroke-width="0.7" />
+    <circle cx="57" cy="2" r="3.6" fill="#d9ab59" stroke="#6f5020" stroke-width="0.7" />
+    <rect x="11" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(-26 19 12.5)" />
+    <rect x="87" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(26 95 12.5)" />
+    <g transform="translate(15 15) scale(0.70)">
+      <path d="M59 118 Q60 98 60 88" stroke="#766341" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M60 90 C46 70 33 52 29 33 M60 90 C54 66 47 45 47 26 M60 90 C61 65 62 42 63 22 M60 90 C69 68 77 48 80 28 M60 90 C74 73 87 56 93 39" stroke="#968158" stroke-width="1.1" fill="none"/>
+      <ellipse cx="29" cy="31" rx="6" ry="2.2" transform="rotate(-32 29 31)" fill="url(#antherGrad)"/>
+      <ellipse cx="47" cy="24" rx="6.2" ry="2.3" transform="rotate(-14 47 24)" fill="url(#antherGrad)"/>
+      <circle cx="63" cy="20" r="2.8" fill="#a89e64" stroke="#6f623c" stroke-width="0.6"/>
+      <ellipse cx="81" cy="26" rx="6.2" ry="2.3" transform="rotate(18 81 26)" fill="url(#antherGrad)"/>
+      <ellipse cx="94" cy="37" rx="5.8" ry="2.1" transform="rotate(34 94 37)" fill="url(#antherGrad)"/>
+    </g>
+    <line x1="16" y1="114" x2="98" y2="114" stroke="#8f7550" stroke-opacity="0.28" stroke-width="0.7" />
+    <text x="57" y="126" text-anchor="middle" fill="#3c2f21" font-family="Georgia, serif" font-size="9.5" font-weight="bold">Polen &amp; Stamen</text>
+    <text x="57" y="136" text-anchor="middle" fill="#6f5c45" font-family="ui-monospace, monospace" font-size="6.8" letter-spacing="0.7">ANTHERA · III</text>
+  </g>
+
+  <!-- Frame 4: İkili Taç Yaprak -->
+  <g transform="translate(452 52) rotate(1.3 57 74)">
+    <rect width="114" height="148" rx="8" fill="#dfd2bc" stroke="#9e8560" stroke-width="1.2" />
+    <rect x="7" y="7" width="100" height="134" rx="4" fill="url(#matPaper)" stroke="#b8a17d" stroke-width="0.7" />
+    <circle cx="57" cy="2" r="3.6" fill="#d9ab59" stroke="#6f5020" stroke-width="0.7" />
+    <rect x="11" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(-26 19 12.5)" />
+    <rect x="87" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(26 95 12.5)" />
+    <g transform="translate(15 15) scale(0.70)">
+      <path d="M58 106 C30 86 24 44 48 18 C64 46 66 78 58 106 Z" fill="url(#ptCream)" stroke="#8e7859" stroke-width="0.9"/>
+      <path d="M62 106 C53 72 64 38 92 22 C94 56 84 88 62 106 Z" fill="url(#ptCream)" stroke="#8c7554" stroke-width="0.95"/>
+      <path d="M52 99 L68 97 M53 102 L67 100" stroke="#7b6142" stroke-width="1.3"/>
+    </g>
+    <line x1="16" y1="114" x2="98" y2="114" stroke="#8f7550" stroke-opacity="0.28" stroke-width="0.7" />
+    <text x="57" y="126" text-anchor="middle" fill="#3c2f21" font-family="Georgia, serif" font-size="9.5" font-weight="bold">İkili Yaprak</text>
+    <text x="57" y="136" text-anchor="middle" fill="#6f5c45" font-family="ui-monospace, monospace" font-size="6.8" letter-spacing="0.7">DUO PETALA · IV</text>
+  </g>
+
+  <!-- Frame 5: Basılmış Yaprak Dalı -->
+  <g transform="translate(590 52) rotate(-1.5 57 74)">
+    <rect width="114" height="148" rx="8" fill="#dfd2bc" stroke="#9e8560" stroke-width="1.2" />
+    <rect x="7" y="7" width="100" height="134" rx="4" fill="url(#matPaper)" stroke="#b8a17d" stroke-width="0.7" />
+    <circle cx="57" cy="2" r="3.6" fill="#d9ab59" stroke="#6f5020" stroke-width="0.7" />
+    <rect x="11" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(-26 19 12.5)" />
+    <rect x="87" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(26 95 12.5)" />
+    <g transform="translate(15 15) scale(0.70)">
+      <path d="M60 120 Q58 70 61 18" stroke="#635c42" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+      <path d="M59 95 C38 89 24 72 19 56 C38 61 52 75 59 95 Z" fill="url(#leafGrad)" stroke="#525d42" stroke-width="0.8"/>
+      <path d="M60 76 C80 71 95 55 102 39 C84 44 68 58 60 76 Z" fill="url(#leafGrad)" stroke="#525d42" stroke-width="0.8"/>
+      <path d="M59 58 C41 51 30 37 26 23 C42 29 53 41 59 58 Z" fill="url(#leafGrad)" stroke="#525d42" stroke-width="0.8"/>
+      <path d="M60 40 C74 36 86 25 91 14 C77 18 66 28 60 40 Z" fill="url(#leafGrad)" stroke="#525d42" stroke-width="0.8"/>
+    </g>
+    <line x1="16" y1="114" x2="98" y2="114" stroke="#8f7550" stroke-opacity="0.28" stroke-width="0.7" />
+    <text x="57" y="126" text-anchor="middle" fill="#3c2f21" font-family="Georgia, serif" font-size="9.5" font-weight="bold">Yaprak Dalı</text>
+    <text x="57" y="136" text-anchor="middle" fill="#6f5c45" font-family="ui-monospace, monospace" font-size="6.8" letter-spacing="0.7">CAULIS · V</text>
+  </g>
+
+  <!-- Frame 6: Açılmamış Tomurcuk -->
+  <g transform="translate(728 52) rotate(1.4 57 74)">
+    <rect width="114" height="148" rx="8" fill="#dfd2bc" stroke="#9e8560" stroke-width="1.2" />
+    <rect x="7" y="7" width="100" height="134" rx="4" fill="url(#matPaper)" stroke="#b8a17d" stroke-width="0.7" />
+    <circle cx="57" cy="2" r="3.6" fill="#d9ab59" stroke="#6f5020" stroke-width="0.7" />
+    <rect x="11" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(-26 19 12.5)" />
+    <rect x="87" y="10" width="16" height="5" fill="#e5d9be" opacity="0.8" transform="rotate(26 95 12.5)" />
+    <g transform="translate(15 15) scale(0.70)">
+      <path d="M56 120 Q60 98 63 82" stroke="#6c694a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M60 99 C44 93 35 81 32 70 C45 74 54 84 60 99 Z" fill="#7c8861" stroke="#535d42" stroke-width="0.75"/>
+      <path d="M63 84 C49 66 53 33 73 16 C81 40 77 68 63 84 Z" fill="url(#ptCream)" stroke="#8b7757" stroke-width="0.95"/>
+    </g>
+    <line x1="16" y1="114" x2="98" y2="114" stroke="#8f7550" stroke-opacity="0.28" stroke-width="0.7" />
+    <text x="57" y="126" text-anchor="middle" fill="#3c2f21" font-family="Georgia, serif" font-size="9.5" font-weight="bold">Tomurcuk</text>
+    <text x="57" y="136" text-anchor="middle" fill="#6f5c45" font-family="ui-monospace, monospace" font-size="6.8" letter-spacing="0.7">GEMMA ALBA · VI</text>
+  </g>
+
+  <!-- Subtle Horizontal Hairline -->
+  <line x1="38" y1="224" x2="842" y2="224" stroke="#e8c88c" stroke-opacity="0.18" stroke-width="1" />
+
+  <!-- Bottom Row: Wall Finishes & Cultivar Medallions -->
+  <text x="235" y="250" text-anchor="middle" fill="#e9c88a" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10" letter-spacing="1.8">DÖRT LILIUM ÇEŞİDİ</text>
+  <text x="645" y="250" text-anchor="middle" fill="#e9c88a" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10" letter-spacing="1.8">SEÇİLEBİLİR DUVAR RENKLERİ (TUŞ: R)</text>
+  <line x1="440" y1="238" x2="440" y2="342" stroke="#e8c88c" stroke-opacity="0.16" stroke-width="1" />
+
+  <!-- 4 Cultivars (left half) -->
+  <g transform="translate(65 274)">
+    <circle cx="24" cy="20" r="18" fill="#ffffff" stroke="#e7c382" stroke-width="1.5" />
+    <text x="24" y="54" text-anchor="middle" fill="#f7f1ea" font-family="Georgia, serif" font-size="11">Candidum</text>
+    <text x="24" y="67" text-anchor="middle" fill="#c7babf" font-family="ui-monospace, monospace" font-size="8">Saf Sevgi</text>
+  </g>
+  <g transform="translate(158 274)">
+    <circle cx="24" cy="20" r="18" fill="#df4b7c" stroke="#f5b3c8" stroke-width="1.5" />
+    <text x="24" y="54" text-anchor="middle" fill="#f7f1ea" font-family="Georgia, serif" font-size="11">Stargazer</text>
+    <text x="24" y="67" text-anchor="middle" fill="#c7babf" font-family="ui-monospace, monospace" font-size="8">Bağlılık</text>
+  </g>
+  <g transform="translate(251 274)">
+    <circle cx="24" cy="20" r="18" fill="#f2c35a" stroke="#fff0b8" stroke-width="1.5" />
+    <text x="24" y="54" text-anchor="middle" fill="#f7f1ea" font-family="Georgia, serif" font-size="11">Auratum</text>
+    <text x="24" y="67" text-anchor="middle" fill="#c7babf" font-family="ui-monospace, monospace" font-size="8">Altın Hatıra</text>
+  </g>
+  <g transform="translate(344 274)">
+    <circle cx="24" cy="20" r="18" fill="#7d79d8" stroke="#c3c0ff" stroke-width="1.5" />
+    <text x="24" y="54" text-anchor="middle" fill="#f7f1ea" font-family="Georgia, serif" font-size="11">Nocturne</text>
+    <text x="24" y="67" text-anchor="middle" fill="#c7babf" font-family="ui-monospace, monospace" font-size="8">Ay Işığı</text>
+  </g>
+
+  <!-- 6 Wall Palettes (right half) -->
+  <g transform="translate(462 276)">
+    <circle cx="18" cy="18" r="15" fill="#f3efe7" stroke="#d9c6a3" stroke-width="1.4" />
+    <text x="18" y="49" text-anchor="middle" fill="#f7f1ea" font-family="ui-monospace, monospace" font-size="8">Beyaz İnci</text>
+    <text x="18" y="61" text-anchor="middle" fill="#c7babf" font-family="ui-monospace, monospace" font-size="7">#F3EFE7</text>
+  </g>
+  <g transform="translate(527 276)">
+    <circle cx="18" cy="18" r="15" fill="#cad4c7" stroke="#eef5ec" stroke-width="1.4" />
+    <text x="18" y="49" text-anchor="middle" fill="#f7f1ea" font-family="ui-monospace, monospace" font-size="8">Adaçayı</text>
+    <text x="18" y="61" text-anchor="middle" fill="#c7babf" font-family="ui-monospace, monospace" font-size="7">#CAD4C7</text>
+  </g>
+  <g transform="translate(592 276)">
+    <circle cx="18" cy="18" r="15" fill="#edd7d4" stroke="#fff0ed" stroke-width="1.4" />
+    <text x="18" y="49" text-anchor="middle" fill="#f7f1ea" font-family="ui-monospace, monospace" font-size="8">Şafak</text>
+    <text x="18" y="61" text-anchor="middle" fill="#c7babf" font-family="ui-monospace, monospace" font-size="7">#EDD7D4</text>
+  </g>
+  <g transform="translate(657 276)">
+    <circle cx="18" cy="18" r="15" fill="#e6dbc7" stroke="#faf3e6" stroke-width="1.4" />
+    <text x="18" y="49" text-anchor="middle" fill="#f7f1ea" font-family="ui-monospace, monospace" font-size="8">Parşömen</text>
+    <text x="18" y="61" text-anchor="middle" fill="#c7babf" font-family="ui-monospace, monospace" font-size="7">#E6DBC7</text>
+  </g>
+  <g transform="translate(722 276)">
+    <circle cx="18" cy="18" r="15" fill="#171525" stroke="#9992cf" stroke-width="1.4" />
+    <text x="18" y="49" text-anchor="middle" fill="#f7f1ea" font-family="ui-monospace, monospace" font-size="8">Gece</text>
+    <text x="18" y="61" text-anchor="middle" fill="#c7babf" font-family="ui-monospace, monospace" font-size="7">#171525</text>
+  </g>
+  <g transform="translate(787 276)">
+    <circle cx="18" cy="18" r="15" fill="#1b2a25" stroke="#8ac4ab" stroke-width="1.4" />
+    <text x="18" y="49" text-anchor="middle" fill="#f7f1ea" font-family="ui-monospace, monospace" font-size="8">Zümrüt</text>
+    <text x="18" y="61" text-anchor="middle" fill="#c7babf" font-family="ui-monospace, monospace" font-size="7">#1B2A25</text>
+  </g>
+</svg>

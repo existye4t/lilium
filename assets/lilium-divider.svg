@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 36" width="860" height="36">
+  <defs>
+    <linearGradient id="lineL" gradientUnits="userSpaceOnUse" x1="20" y1="18" x2="394" y2="18">
+      <stop offset="0%" stop-color="#d8b679" stop-opacity="0" />
+      <stop offset="55%" stop-color="#d8b679" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#d8b679" stop-opacity="0.85" />
+    </linearGradient>
+    <linearGradient id="lineR" gradientUnits="userSpaceOnUse" x1="466" y1="18" x2="840" y2="18">
+      <stop offset="0%" stop-color="#d8b679" stop-opacity="0.85" />
+      <stop offset="45%" stop-color="#d8b679" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#d8b679" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <line x1="20" y1="18" x2="394" y2="18" stroke="url(#lineL)" stroke-width="1.2" />
+  <line x1="466" y1="18" x2="840" y2="18" stroke="url(#lineR)" stroke-width="1.2" />
+  <circle cx="404" cy="18" r="1.8" fill="#d8b679" opacity="0.82" />
+  <circle cx="456" cy="18" r="1.8" fill="#d8b679" opacity="0.82" />
+  <g transform="translate(430 18)">
+    <path d="M0 0 C-3.5 -5 -3.5 -10 0 -14 C3.5 -10 3.5 -5 0 0 Z" fill="#f7f2e7" stroke="#caa15b" stroke-width="0.95" />
+    <path d="M0 0 C-7 -4 -12 -2 -14 2 C-9 4 -4 3 0 0 Z" fill="#f2ead9" stroke="#caa15b" stroke-width="0.95" />
+    <path d="M0 0 C7 -4 12 -2 14 2 C9 4 4 3 0 0 Z" fill="#f2ead9" stroke="#caa15b" stroke-width="0.95" />
+    <path d="M0 0 C-4 5 -3 10 0 13 C3 10 4 5 0 0 Z" fill="#ebe1ce" stroke="#caa15b" stroke-width="0.9" />
+    <circle cx="0" cy="0" r="2.2" fill="#e5b865" />
+  </g>
+</svg>
