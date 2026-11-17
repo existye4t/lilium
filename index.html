@@ -3784,7 +3784,7 @@
         if (d.u >= 0.96) {
           this.fallingDrops.push({ x: d.world[0], y: d.world[1], z: d.world[2], vy: -0.35, r: d.r });
           this.dewdrops.splice(i, 1);
-          audio.playDewDropPlink(0);
+          if (audio.isRunning()) audio.playDewDropPlink(0);
         }
       }
 
@@ -3841,7 +3841,7 @@
           wp.y = -1.268;
           if (Math.hypot(wp.x, wp.z) < 0.80) {
             this.spawnWaterRipple(wp.x, wp.z, 0.7);
-            audio.playDewDropPlink(0);
+            if (audio.isRunning()) audio.playDewDropPlink(0);
           }
         }
         wp.life -= dt * (wp.splashed ? 0.38 : 0.11);
@@ -6571,8 +6571,12 @@
     toggleCalmHud();
   });
 
+  let lastAudioUnlockTs = 0;
   audioBtn.addEventListener("click", () => {
     if (!audio.ready || !audio.isRunning()) {
+      lastAudioUnlockTs = performance.now();
+      audio.unlock(true);
+    } else if (!audio.muted && (performance.now() - lastAudioUnlockTs) < 450) {
       audio.unlock(true);
     } else {
       const unmuted = audio.toggleMute();
@@ -6606,24 +6610,26 @@
     if (tgt && tgt.closest("#audioBtn")) return;
     if (!audio.ready) {
       if (tgt && tgt.closest("#lilyCanvas, #timeSwitchCanvas, .cultivar-pill, .mini-pill, .herbarium-frame, .ctrl-btn, .volume-pill, #githubLink")) {
+        lastAudioUnlockTs = performance.now();
         audio.unlock(false);
       }
     } else if (!audio.muted && !audio.isRunning()) {
+      lastAudioUnlockTs = performance.now();
       audio.resumeIfNeeded();
     }
   };
-  document.addEventListener("touchend", handleGlobalAudioGesture, { capture: true, passive: true });
-  document.addEventListener("click", handleGlobalAudioGesture, { capture: true, passive: true });
-  document.addEventListener("visibilitychange", () => {
+  window.addEventListener("touchend", handleGlobalAudioGesture, { capture: true, passive: true });
+  window.addEventListener("pointerup", handleGlobalAudioGesture, { capture: true, passive: true });
+  window.addEventListener("click", handleGlobalAudioGesture, { capture: true, passive: true });
+  window.addEventListener("keydown", handleGlobalAudioGesture, { capture: true, passive: true });
+  const handleAudioReturn = () => {
     if (!document.hidden && audio.ready && !audio.muted && !audio.isRunning()) {
       audio.resumeIfNeeded();
     }
-  });
-  window.addEventListener("pageshow", () => {
-    if (audio.ready && !audio.muted && !audio.isRunning()) {
-      audio.resumeIfNeeded();
-    }
-  });
+  };
+  document.addEventListener("visibilitychange", handleAudioReturn);
+  window.addEventListener("pageshow", handleAudioReturn);
+  window.addEventListener("focus", handleAudioReturn);
 
   document.querySelectorAll(".cultivar-pill").forEach((btn) => {
     btn.addEventListener("click", () => {
