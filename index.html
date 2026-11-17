@@ -93,7 +93,7 @@
   .study-shell {
     position: relative;
     z-index: 1;
-    width: min(94vw, 1100px);
+    width: min(94vw, 1150px);
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -167,17 +167,15 @@
     background: var(--pill-bg);
     color: var(--ink-hdr);
     font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.06em;
+    font-size: 9.5px;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    padding: 6px 11px;
+    padding: 5.5px 10px;
     border-radius: 999px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     transition: background 0.18s ease, border-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
   }
@@ -211,8 +209,6 @@
     border-radius: 999px;
     border: 1px solid var(--pill-border);
     background: var(--pill-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     color: var(--ink-hdr);
     font-family: var(--mono);
@@ -442,9 +438,7 @@
     gap: 4px;
     padding: 4px;
     border-radius: 999px;
-    background: var(--overlay-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(18, 14, 24, 0.72);
     border: 1px solid var(--overlay-border);
     flex-wrap: wrap;
   }
@@ -492,41 +486,48 @@
   .cultivar-whisper {
     padding: 3px 10px;
     border-radius: 999px;
-    background: rgba(18, 13, 22, 0.36);
-    border: 1px solid rgba(255, 240, 245, 0.10);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(18, 13, 22, 0.62);
+    border: 1px solid rgba(255, 240, 245, 0.14);
     font-family: var(--serif);
     font-style: italic;
     font-size: 13px;
-    color: rgba(252, 244, 240, 0.88);
+    color: rgba(252, 244, 240, 0.92);
     letter-spacing: 0.01em;
     pointer-events: none;
+    transition: border-color 0.25s ease, background 0.25s ease;
   }
 
   .action-bar {
     display: inline-flex;
-    gap: 6px;
+    gap: 5px;
     pointer-events: auto;
     flex-wrap: wrap;
     justify-content: flex-end;
+    max-width: min(470px, 52%);
   }
 
   .mini-pill {
     appearance: none;
     border: 1px solid var(--overlay-border);
-    background: var(--overlay-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(18, 14, 24, 0.70);
     color: var(--overlay-ink);
     font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.04em;
-    padding: 6px 11px;
+    font-size: 9.5px;
+    letter-spacing: 0.03em;
+    padding: 5.5px 10px;
     border-radius: 999px;
     cursor: pointer;
     outline: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     transition: background 0.16s ease, border-color 0.16s ease, transform 0.1s ease;
+  }
+
+  .mini-pill.active-star {
+    border-color: rgba(244, 210, 147, 0.62);
+    background: rgba(34, 26, 38, 0.86);
+    color: #f8e5bd;
   }
 
   .mini-pill:focus-visible, .ctrl-btn:focus-visible, .cultivar-pill:focus-visible {
@@ -556,18 +557,39 @@
     max-width: min(70%, 465px);
     padding: 9px 14px;
     border-radius: 14px;
-    background: rgba(20, 18, 26, 0.56);
+    background: rgba(20, 18, 26, 0.72);
     border: 1px solid rgba(255, 248, 244, 0.16);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     color: rgba(255, 252, 248, 0.96);
     pointer-events: auto;
     cursor: pointer;
     transition: background 0.2s ease, border-color 0.2s ease;
   }
 
+  .dedication-plaque.special-day {
+    border-color: rgba(244, 210, 147, 0.62);
+    box-shadow: 0 0 24px rgba(244, 210, 147, 0.18);
+  }
+
+  .special-day-badge {
+    display: none;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(244, 210, 147, 0.18);
+    border: 1px solid rgba(244, 210, 147, 0.44);
+    color: #f9dfb0;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .dedication-plaque.special-day .special-day-badge { display: inline-flex; }
+
   .dedication-plaque:hover {
-    background: rgba(20, 18, 26, 0.70);
+    background: rgba(20, 18, 26, 0.84);
     border-color: rgba(255, 248, 244, 0.30);
   }
 
@@ -591,16 +613,66 @@
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
   }
 
+  .chamber-bottom-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .petal-seq-hud {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.04em;
+    color: rgba(255, 246, 228, 0.90);
+    background: rgba(18, 13, 24, 0.72);
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(244, 210, 147, 0.28);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.28s ease, transform 0.28s ease;
+    white-space: nowrap;
+  }
+
+  .petal-seq-hud.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .petal-seq-dots {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .petal-seq-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 1px solid rgba(244, 210, 147, 0.55);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .petal-seq-dot.lit {
+    background: #f4d293;
+    border-color: #fff2d6;
+    transform: scale(1.25);
+    box-shadow: 0 0 8px rgba(244, 210, 147, 0.75);
+  }
+
   .chamber-hint {
     font-family: var(--mono);
     font-size: 9.5px;
     letter-spacing: 0.05em;
-    color: rgba(252, 244, 240, 0.62);
-    background: rgba(16, 11, 20, 0.30);
+    color: rgba(252, 244, 240, 0.70);
+    background: rgba(16, 11, 20, 0.62);
     padding: 4px 10px;
     border-radius: 999px;
-    border: 1px solid rgba(255, 240, 244, 0.09);
-    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 240, 244, 0.11);
     white-space: nowrap;
   }
 
@@ -609,12 +681,14 @@
     position: absolute;
     left: 16px;
     bottom: 74px;
-    width: min(360px, calc(100% - 32px));
+    width: min(375px, calc(100% - 32px));
+    max-height: calc(100% - 134px);
+    overflow-y: auto;
     padding: 13px 14px;
     border-radius: 16px;
-    background: rgba(22, 16, 26, 0.88);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    background: rgba(22, 16, 26, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 232, 238, 0.22);
     box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45);
     color: #f9f2ec;
@@ -625,6 +699,13 @@
   }
 
   .note-editor.open { display: flex; }
+
+  .note-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px;
+    align-items: center;
+  }
 
   .note-editor label {
     font-family: var(--mono);
@@ -690,8 +771,8 @@
     padding: 11px 13px;
     border-radius: 16px;
     background: rgba(20, 17, 25, 0.92);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 240, 244, 0.22);
     box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45);
     color: #f9f2ec;
@@ -702,6 +783,388 @@
   }
 
   .decor-panel.open { display: flex; }
+
+  /* Feature 1: Serene Breathing & Focus Sanctuary HUD */
+  .calm-hud {
+    position: absolute;
+    right: 16px;
+    bottom: 58px;
+    width: min(300px, calc(100% - 32px));
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(18, 15, 24, 0.90);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(244, 210, 147, 0.26);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.44);
+    color: #f9f2ec;
+    display: none;
+    flex-direction: column;
+    gap: 9px;
+    z-index: 12;
+  }
+  .calm-hud.open { display: flex; }
+
+  .calm-top {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+  }
+
+  .breath-ring-wrap {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .breath-ring-outer {
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(244, 210, 147, 0.35);
+    background: radial-gradient(circle, rgba(244, 210, 147, 0.22), rgba(244, 210, 147, 0.04));
+    transform: scale(0.74);
+    transition: transform 0.28s linear, border-color 0.3s ease;
+  }
+
+  .breath-ring-dot {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff3da;
+    font-variant-numeric: tabular-nums;
+    position: relative;
+    z-index: 1;
+  }
+
+  .calm-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .calm-phase-label {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15px;
+    color: #fff6e6;
+    line-height: 1.15;
+  }
+
+  .calm-timer-readout {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(244, 210, 147, 0.90);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .calm-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .calm-dur-btn.active {
+    background: rgba(244, 210, 147, 0.92);
+    color: #201a16;
+    border-color: rgba(244, 210, 147, 0.95);
+    font-weight: 600;
+  }
+
+  /* Feature 2: Public & Private Memory Stars Wish Garden Drawer */
+  .wish-drawer {
+    position: absolute;
+    right: 16px;
+    top: 78px;
+    bottom: 52px;
+    width: min(390px, calc(100% - 32px));
+    padding: 12px 13px;
+    border-radius: 16px;
+    background: rgba(18, 15, 25, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 236, 240, 0.22);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.50);
+    color: #f9f2ec;
+    display: none;
+    flex-direction: column;
+    gap: 7px;
+    z-index: 14;
+  }
+  .wish-drawer.open { display: flex; }
+
+  .wish-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .wish-head-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #f4d293;
+  }
+
+  .wish-tabs {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .wish-tab {
+    appearance: none;
+    border: 1px solid rgba(255, 240, 244, 0.16);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(249, 242, 236, 0.78);
+    font-family: var(--mono);
+    font-size: 9.5px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .wish-tab.active {
+    background: rgba(244, 210, 147, 0.92);
+    color: #211a16;
+    font-weight: 600;
+    border-color: rgba(244, 210, 147, 0.95);
+  }
+
+  .wish-form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 9px 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 240, 244, 0.12);
+  }
+
+  .wish-form input,
+  .wish-form textarea {
+    width: 100%;
+    padding: 6px 9px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 236, 240, 0.18);
+    background: rgba(255, 255, 255, 0.07);
+    color: #fffaf6;
+    font-family: var(--sans);
+    font-size: 12px;
+    outline: none;
+    resize: none;
+  }
+
+  .wish-form input:focus,
+  .wish-form textarea:focus {
+    border-color: #f4d293;
+  }
+
+  .wish-options-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .vis-toggle {
+    display: inline-flex;
+    border-radius: 999px;
+    padding: 2px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 240, 244, 0.16);
+  }
+
+  .vis-btn {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: rgba(249, 242, 236, 0.78);
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 3.5px 8px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .vis-btn.active {
+    background: rgba(255, 250, 242, 0.95);
+    color: #211a16;
+    font-weight: 600;
+  }
+
+  .star-colors {
+    display: inline-flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .star-col-btn {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+
+  .star-col-btn.active {
+    transform: scale(1.22);
+    border-color: #ffffff;
+    box-shadow: 0 0 8px currentColor;
+  }
+
+  .wish-publish-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .wish-status-msg {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: rgba(244, 210, 147, 0.88);
+    min-height: 12px;
+  }
+
+  .wish-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-right: 2px;
+  }
+
+  .wish-item {
+    padding: 8px 10px;
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.055);
+    border: 1px solid rgba(255, 240, 244, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    cursor: pointer;
+    transition: background 0.16s ease, border-color 0.16s ease;
+  }
+
+  .wish-item:hover {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(244, 210, 147, 0.42);
+  }
+
+  .wish-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: rgba(249, 242, 236, 0.68);
+  }
+
+  .wish-badge-vis {
+    padding: 1.5px 6px;
+    border-radius: 999px;
+    font-size: 8.5px;
+    border: 1px solid rgba(255, 240, 244, 0.18);
+  }
+
+  .wish-badge-vis.pub {
+    color: #b8ecc6;
+    border-color: rgba(184, 236, 198, 0.38);
+    background: rgba(184, 236, 198, 0.08);
+  }
+
+  .wish-badge-vis.priv {
+    color: #f4d293;
+    border-color: rgba(244, 210, 147, 0.38);
+    background: rgba(244, 210, 147, 0.08);
+  }
+
+  .wish-item-text {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.28;
+    color: rgba(255, 251, 246, 0.94);
+    margin: 0;
+  }
+
+  .wish-item-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  .wish-mini-act {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: rgba(249, 242, 236, 0.68);
+    font-family: var(--mono);
+    font-size: 8.5px;
+    cursor: pointer;
+    padding: 2px 4px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .wish-mini-act:hover { color: #f4d293; }
+
+  /* Floating 3D Memory Star Tooltip inside Chamber */
+  .star-tooltip {
+    position: absolute;
+    max-width: 240px;
+    padding: 8px 11px;
+    border-radius: 12px;
+    background: rgba(18, 15, 24, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(244, 210, 147, 0.45);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.42);
+    color: #fff8ee;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transform: translate(-50%, -115%) scale(0.95);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .star-tooltip.visible {
+    opacity: 1;
+    transform: translate(-50%, -115%) scale(1);
+  }
+
+  .star-tooltip-head {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #f4d293;
+    margin-bottom: 3px;
+  }
+
+  .star-tooltip-body {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.25;
+  }
 
   .decor-section-title {
     font-family: var(--mono);
@@ -874,8 +1337,6 @@
     gap: 3px;
     color: var(--ink-ftr);
     box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
   }
 
   .readout-label {
@@ -935,8 +1396,6 @@
     font-family: var(--mono);
     font-size: 10px;
     letter-spacing: 0.03em;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     transition:
@@ -1099,6 +1558,9 @@
   @media (max-width: 720px) {
     .chamber-wrap { height: 54vh; min-height: 300px; }
     .chamber-hint { display: none; }
+    .action-bar { max-width: 100%; justify-content: flex-start; }
+    .wish-drawer { top: 10px; bottom: 10px; right: 10px; left: 10px; width: auto; }
+    .calm-hud { right: 10px; left: 10px; width: auto; bottom: 12px; }
     .dedication-plaque { max-width: 100%; }
     .switch-stage { height: 74px; }
     .readouts { grid-template-columns: 1fr; gap: 6px; }
@@ -1125,7 +1587,7 @@
         <h1 class="study-title">Lilium <em>En Sevilen Çiçeğin Işık &amp; Sevgi Etüdü</em></h1>
       </div>
       <div class="toolbar">
-        <button id="noteBtn" class="ctrl-btn" type="button" title="Sevgi ithaf notunu düzenle">
+        <button id="noteBtn" class="ctrl-btn" type="button" title="Sevgi ithaf notu ve özel gün">
           <span class="dot"></span>
           <span>İthaf Notu</span>
         </button>
@@ -1140,6 +1602,14 @@
         <button id="autoCycleBtn" class="ctrl-btn" type="button" title="Şafaktan geceye açılış döngüsünü oynat">
           <span class="dot"></span>
           <span>Otomatik Akış</span>
+        </button>
+        <button id="liveClockBtn" class="ctrl-btn" type="button" title="Şu anki gerçek saate göre gün ışığını ayarla">
+          <span class="dot"></span>
+          <span>Gerçek Saat</span>
+        </button>
+        <button id="calmBtn" class="ctrl-btn" type="button" title="Çiçekle nefes al &amp; sükûnet sayacı">
+          <span class="dot"></span>
+          <span>Sükûnet</span>
         </button>
         <button id="audioBtn" class="ctrl-btn" type="button" title="F Lidyen akustik peyzajı aç/kapat">
           <span class="dot"></span>
@@ -1180,15 +1650,34 @@
           <button id="breezeBtn" class="mini-pill" type="button" title="Ilık esinti ve polen ışıltısı gönder">Esinti</button>
           <button id="wishBtn" class="mini-pill" type="button" title="Süzülen dilek taç yaprakları bırak">Dilek Yaprağı</button>
           <button id="scentBtn" class="mini-pill" type="button" title="Koku ve ışık halkası yay">Koku Dalgası</button>
+          <button id="starsBtn" class="mini-pill active-star" type="button" title="Herkese açık veya sana özel anı yıldızı bırak">&#10022; Anı Yıldızları <span id="starCountBadge"></span></button>
+          <button id="postcardBtn" class="mini-pill" type="button" title="Bu anı çerçeveli hatıra kartpostalı olarak indir">Kartpostal</button>
         </div>
       </div>
 
+      <div id="starTooltip" class="star-tooltip" role="status" aria-live="polite">
+        <div class="star-tooltip-head" id="starTooltipHead">Anı Yıldızı</div>
+        <div class="star-tooltip-body" id="starTooltipBody"></div>
+      </div>
+
       <div class="chamber-bottom">
-        <div class="dedication-plaque" id="dedicationPlaque" title="Notu kişiselleştirmek için tıkla">
+        <div class="dedication-plaque" id="dedicationPlaque" title="Notu ve özel günü kişiselleştirmek için tıkla">
+          <span class="special-day-badge" id="specialDayBadge">&#10022; Özel Hatıra Günü Işığı</span>
           <span class="dedication-for" id="dedicationTo">En Güzel Hatıraya</span>
           <p class="dedication-quote" id="dedicationQuote">&ldquo;Bazı çiçekler zamanla solmaz; sevilen birinin kalbinde her şafak yeniden açar.&rdquo;</p>
         </div>
-        <div class="chamber-hint">Sürükle: Döndür &middot; Tekerlek: Yakınlaş &middot; Yaprağa dokun: Ses</div>
+        <div class="chamber-bottom-right">
+          <div class="petal-seq-hud" id="petalSeqHud">
+            <span id="petalNoteLabel">&#9834; Yaprak 1</span>
+            <span class="petal-seq-dots">
+              <span class="petal-seq-dot"></span>
+              <span class="petal-seq-dot"></span>
+              <span class="petal-seq-dot"></span>
+              <span class="petal-seq-dot"></span>
+            </span>
+          </div>
+          <div class="chamber-hint">Sürükle: Döndür &middot; Yaprağa/Yıldıza dokun: Nota &amp; Anı</div>
+        </div>
       </div>
 
       <div class="note-editor" id="noteEditor" role="dialog" aria-label="Sevgi İthafı Düzenleyici">
@@ -1196,6 +1685,11 @@
         <input id="noteToInput" type="text" maxlength="46" placeholder="Örn: Canım, En Değerlime..." />
         <label for="noteTextInput">Kalbinden Geçen Not</label>
         <input id="noteTextInput" type="text" maxlength="110" placeholder="Kısa bir sevgi sözü..." />
+        <label for="noteDateInput">Özel Hatıra Günü (GG/AA · İsteğe Bağlı)</label>
+        <div class="note-row">
+          <input id="noteDateInput" type="text" maxlength="5" placeholder="Örn: 17/11 (Bugün altınsa açar)" />
+          <button class="preset-chip" id="previewSpecialBtn" type="button" title="Özel gün altın ışığını şimdi önizle">Önizle</button>
+        </div>
         <div class="note-presets">
           <button class="preset-chip" type="button" data-quote="Bazı çiçekler zamanla solmaz; sevilen birinin kalbinde her şafak yeniden açar.">Her şafak açar</button>
           <button class="preset-chip" type="button" data-quote="Gözlerin değdiğinde her taç yaprak ışıkla doluyor.">Işıkla doluyor</button>
@@ -1203,9 +1697,70 @@
           <button class="preset-chip" type="button" data-quote="Gece ne kadar derin olursa olsun, senin çiçeğin yolunu aydınlatır.">Yolunu aydınlatır</button>
         </div>
         <div class="note-actions">
+          <button class="mini-pill" id="postcardFromNoteBtn" type="button" title="Kartpostal PNG indir">Kartpostal İndir</button>
           <button class="mini-pill" id="shareNoteBtn" type="button" title="İthaf notuyla paylaşılabilir bağlantı kopyala">Bağlantıyı Kopyala</button>
           <button class="mini-pill" id="noteCloseBtn" type="button">Kapat</button>
         </div>
+      </div>
+
+      <div class="calm-hud" id="calmHud" role="dialog" aria-label="Sükûnet ve Nefes Rehberi">
+        <div class="wish-head">
+          <span class="wish-head-title">&#10047; Çiçekle Sükûnet &amp; Nefes</span>
+          <button class="mini-pill" id="calmCloseBtn" type="button" style="padding:3px 8px;">Kapat</button>
+        </div>
+        <div class="calm-top">
+          <div class="breath-ring-wrap">
+            <div class="breath-ring-outer" id="breathRing"></div>
+            <span class="breath-ring-dot" id="breathSec">4</span>
+          </div>
+          <div class="calm-meta">
+            <span class="calm-phase-label" id="calmPhaseLabel">Çiçekle nefes almaya hazır</span>
+            <span class="calm-timer-readout" id="calmTimerReadout">10:00 &middot; Sakin Akış</span>
+          </div>
+        </div>
+        <div class="calm-controls">
+          <button class="wish-tab calm-dur-btn active" data-mins="10" type="button">10 dk</button>
+          <button class="wish-tab calm-dur-btn" data-mins="25" type="button">25 dk</button>
+          <button class="wish-tab calm-dur-btn" data-mins="0" type="button">&#8734; Akış</button>
+          <button class="wish-tab active" id="calmBreathToggle" type="button">Nefes 4-4-6</button>
+          <button class="mini-pill" id="calmStartBtn" type="button" style="margin-left:auto;">Başlat</button>
+        </div>
+      </div>
+
+      <div class="wish-drawer" id="wishDrawer" role="dialog" aria-label="Anı Yıldızları ve Dilek Bahçesi">
+        <div class="wish-head">
+          <span class="wish-head-title">&#10022; Anı Yıldızları &amp; Dilekler</span>
+          <div style="display:flex;gap:5px;">
+            <button class="mini-pill" id="refreshPublicWishesBtn" type="button" style="padding:3px 8px;" title="GitHub ortak dileklerini yenile">Yenile</button>
+            <button class="mini-pill" id="wishCloseBtn" type="button" style="padding:3px 8px;">Kapat</button>
+          </div>
+        </div>
+        <div class="wish-tabs" role="tablist">
+          <button class="wish-tab active" data-wish-filter="all" type="button">Tümü</button>
+          <button class="wish-tab" data-wish-filter="public" type="button">Herkese Açık</button>
+          <button class="wish-tab" data-wish-filter="private" type="button">Bana Özel</button>
+        </div>
+        <form class="wish-form" id="wishForm">
+          <input id="wishAuthorInput" type="text" maxlength="32" placeholder="İsim veya rumuz (Örn: Bir Seven)" />
+          <textarea id="wishTextInput" rows="2" maxlength="180" placeholder="Kalbinden geçen bir dilek veya hatıra yaz..."></textarea>
+          <div class="wish-options-row">
+            <div class="vis-toggle" role="group" aria-label="Dilek Görünürlüğü">
+              <button class="vis-btn active" data-vis="public" id="visPublicBtn" type="button">Herkese Açık</button>
+              <button class="vis-btn" data-vis="private" id="visPrivateBtn" type="button">Bana Özel</button>
+            </div>
+            <div class="star-colors" role="group" aria-label="Yıldız Rengi">
+              <button class="star-col-btn active" data-col="gold" type="button" title="Altın Kehribar" style="background:#f5cf7a;color:#f5cf7a;"></button>
+              <button class="star-col-btn" data-col="white" type="button" title="Beyaz İnci" style="background:#f7fbff;color:#f7fbff;"></button>
+              <button class="star-col-btn" data-col="rose" type="button" title="Gül Şafağı" style="background:#f58fb2;color:#f58fb2;"></button>
+              <button class="star-col-btn" data-col="lavender" type="button" title="Gece Lavantası" style="background:#b7b0ff;color:#b7b0ff;"></button>
+            </div>
+          </div>
+          <div class="wish-publish-row">
+            <span class="wish-status-msg" id="wishStatusMsg">Herkese açık dilekler ortak bahçe yıldızı olur.</span>
+            <button class="mini-pill active-star" id="submitWishBtn" type="submit">Yıldızı Bırak &#10022;</button>
+          </div>
+        </form>
+        <div class="wish-list" id="wishList"></div>
       </div>
 
       <div class="decor-panel" id="decorPanel" role="dialog" aria-label="Çerçeveli Kurumuş Lilium ve Arka Plan Ayarları">
@@ -2302,6 +2857,57 @@
         o.stop(t + 0.10);
       }
     }
+
+    // Feature 4: 6-Petal Musical Scale (F4, G4, A4, B4, C5, E5 - F Lydian)
+    playPetalInstrument(petalIdx) {
+      if (!this._canPlaySfx()) return;
+      const LYDIAN_NOTES = [65, 67, 69, 71, 72, 76];
+      const idx = ((petalIdx % 6) + 6) % 6;
+      const f = noteFreq(LYDIAN_NOTES[idx]);
+      const t = this.ctx.currentTime + 0.01;
+      const pan = (idx - 2.5) * 0.22;
+      this._playGlassHarmonic(f, t, 0.125, pan);
+      this._playHarp(f, t + 0.008, 0.072, 1.55, pan);
+      this._playCelesta(f * 2.0, t + 0.035, 0.036);
+    }
+
+    playSecretRefrain() {
+      if (!this._canPlaySfx()) return;
+      const t = this.ctx.currentTime + 0.015;
+      const refrain = [
+        [65, 0.00, 0.09],
+        [69, 0.12, 0.09],
+        [72, 0.24, 0.09],
+        [76, 0.36, 0.10],
+        [79, 0.50, 0.10],
+        [83, 0.66, 0.09],
+        [84, 0.84, 0.12],
+        [88, 1.06, 0.11],
+      ];
+      for (let i = 0; i < refrain.length; i++) {
+        const [midi, off, amp] = refrain[i];
+        const f = noteFreq(midi);
+        const pan = ((i % 5) - 2) * 0.22;
+        this._playHarp(f, t + off, amp, 1.9, pan);
+        this._playGlassHarmonic(f, t + off + 0.015, amp * 0.72, -pan * 0.7);
+        this._playCelesta(f, t + off + 0.03, amp * 0.45);
+      }
+    }
+
+    // Feature 1: Breathing & Sükûnet Sanctuary Meditative Chime
+    playCalmChime(isComplete = false) {
+      if (!this._canPlaySfx()) return;
+      const t = this.ctx.currentTime + 0.01;
+      if (isComplete) {
+        [65, 72, 76, 79, 84].forEach((m, i) => {
+          this._playGlassHarmonic(noteFreq(m), t + i * 0.14, 0.085, (i - 2) * 0.22);
+          this._playCelesta(noteFreq(m + 12), t + i * 0.14 + 0.04, 0.042);
+        });
+      } else {
+        this._playGlassHarmonic(noteFreq(65), t, 0.055, -0.15);
+        this._playGlassHarmonic(noteFreq(72), t + 0.04, 0.042, 0.15);
+      }
+    }
   }
 
   // =========================================================================
@@ -2381,6 +2987,11 @@
       this.pollen = [];
       this.wishPetals = [];
       this.memoryOrbs = [];
+      this.pinnedStars = [];
+      this.breathOpenBias = 0;
+      this._pt = [0, 0, 0];
+      this._nm = [0, 0, 0];
+      this._st = [0, 0, 0];
       this._dewReleaseTimer = 2.6;
       this._ambientPetalTimer = 4.2;
 
@@ -2698,21 +3309,26 @@
       this._computeNormalsRange(this.waterVStart, this.waterSegsU, this.waterSegsV);
     }
 
-    _stemPoint(t) {
-      const y = lerp(-0.82, 0.52, t);
+    _stemPoint(t, out = null) {
+      const target = out || [0, 0, 0];
       const sway = t * t;
-      const x = Math.sin(t * 2.5) * 0.072 + this.stemSwayX * sway;
-      const z = Math.cos(t * 1.9) * 0.042 + this.stemSwayZ * sway;
-      return [x, y, z];
+      target[0] = Math.sin(t * 2.5) * 0.072 + this.stemSwayX * sway;
+      target[1] = lerp(-0.82, 0.52, t);
+      target[2] = Math.cos(t * 1.9) * 0.042 + this.stemSwayZ * sway;
+      return target;
+    }
+
+    _writeRaw(vIdx, px, py, pz, nx, ny, nz, u, vCoord, m0, m1, m2, m3) {
+      const o = vIdx * 12;
+      const v = this.verts;
+      v[o + 0] = px; v[o + 1] = py; v[o + 2] = pz;
+      v[o + 3] = nx; v[o + 4] = ny; v[o + 5] = nz;
+      v[o + 6] = u;  v[o + 7] = vCoord;
+      v[o + 8] = m0; v[o + 9] = m1; v[o + 10] = m2; v[o + 11] = m3;
     }
 
     _writeVert(vIdx, p, n, uv, meta) {
-      const o = vIdx * 12;
-      const v = this.verts;
-      v[o + 0] = p[0]; v[o + 1] = p[1]; v[o + 2] = p[2];
-      v[o + 3] = n[0]; v[o + 4] = n[1]; v[o + 5] = n[2];
-      v[o + 6] = uv[0]; v[o + 7] = uv[1];
-      v[o + 8] = meta[0]; v[o + 9] = meta[1]; v[o + 10] = meta[2]; v[o + 11] = meta[3];
+      this._writeRaw(vIdx, p[0], p[1], p[2], n[0], n[1], n[2], uv[0], uv[1], meta[0], meta[1], meta[2], meta[3]);
     }
 
     _computeNormalsRange(startV, nx, ny) {
@@ -2742,7 +3358,7 @@
       }
     }
 
-    _bloomLocalToWorld(bIdx, lx, ly, lz) {
+    _bloomLocalToWorld(bIdx, lx, ly, lz, out = null) {
       const sp = this.blooms[bIdx];
       const cp = Math.cos(sp.pitch);
       const spitch = Math.sin(sp.pitch);
@@ -2752,14 +3368,14 @@
 
       const cy = Math.cos(sp.yaw);
       const sy = Math.sin(sp.yaw);
-      return [
-        x1 * cy + z1 * sy + sp.worldPos[0],
-        y1 + sp.worldPos[1],
-        -x1 * sy + z1 * cy + sp.worldPos[2],
-      ];
+      const target = out || [0, 0, 0];
+      target[0] = x1 * cy + z1 * sy + sp.worldPos[0];
+      target[1] = y1 + sp.worldPos[1];
+      target[2] = -x1 * sy + z1 * cy + sp.worldPos[2];
+      return target;
     }
 
-    _bloomNormalToWorld(bIdx, nx, ny, nz) {
+    _bloomNormalToWorld(bIdx, nx, ny, nz, out = null) {
       const sp = this.blooms[bIdx];
       const cp = Math.cos(sp.pitch);
       const spitch = Math.sin(sp.pitch);
@@ -2772,14 +3388,18 @@
       const wx = x1 * cy + z1 * sy;
       const wz = -x1 * sy + z1 * cy;
       const len = Math.hypot(wx, y1, wz) || 1;
-      return [wx / len, y1 / len, wz / len];
+      const target = out || [0, 0, 0];
+      target[0] = wx / len;
+      target[1] = y1 / len;
+      target[2] = wz / len;
+      return target;
     }
 
-    _evalTepalPoint(bloomIdx, petalIdx, u, vCoord, cultivar, time) {
+    _evalTepalPoint(bloomIdx, petalIdx, u, vCoord, cultivar, time, out = null) {
       const sp = this.blooms[bloomIdx];
       const sc = sp.scale * 0.78;
       const maxOpen = sp.isApical ? 0.24 : 1.08;
-      const open = clamp(sp.openAmt + sp.openBoost, 0.02, maxOpen);
+      const open = clamp(sp.openAmt + sp.openBoost + this.breathOpenBias * (sp.isApical ? 0.25 : 1.0), 0.02, maxOpen);
       const isInner = (petalIdx % 2 === 1);
       const phi = petalIdx * (Math.PI / 3) + bloomIdx * 0.42;
       const pState = sp.petals[petalIdx];
@@ -2811,12 +3431,12 @@
       const lz = sP * rTot + tZ * lat;
       const ly = axial + ruffle;
 
-      return this._bloomLocalToWorld(bloomIdx, lx, ly, lz);
+      return this._bloomLocalToWorld(bloomIdx, lx, ly, lz, out);
     }
 
-    _evalLeafPoint(leafIdx, u, vCoord, time) {
+    _evalLeafPoint(leafIdx, u, vCoord, time, out = null) {
       const lf = this.leaves[leafIdx];
-      const base = this._stemPoint(lf.stemT);
+      const base = this._stemPoint(lf.stemT, this._st);
       const cA = Math.cos(lf.angle);
       const sA = Math.sin(lf.angle);
 
@@ -2826,11 +3446,11 @@
       const lat = vCoord * w;
       const cup = (1 - Math.abs(vCoord)) * 0.016 * Math.sin(u * Math.PI);
 
-      return [
-        base[0] + cA * arch - sA * lat,
-        base[1] + 0.12 * u + droop + cup,
-        base[2] + sA * arch + cA * lat,
-      ];
+      const target = out || [0, 0, 0];
+      target[0] = base[0] + cA * arch - sA * lat;
+      target[1] = base[1] + 0.12 * u + droop + cup;
+      target[2] = base[2] + sA * arch + cA * lat;
+      return target;
     }
 
     updateAndBuildGeometry(uCycle, cultivar, time, windVec, dt) {
@@ -2854,13 +3474,11 @@
         bl.openAmt = clamp((masterOpen - bl.openDelay) / (1 - bl.openDelay * 0.65), 0.02, 1.0);
         bl.openBoost *= Math.pow(0.28, dt);
 
-        const base = this._stemPoint(bl.stemT);
+        const base = this._stemPoint(bl.stemT, this._st);
         const pedLen = bl.isApical ? 0.09 : b === 0 ? 0.14 : 0.28;
-        bl.worldPos = [
-          base[0] + Math.sin(bl.yaw) * pedLen * 0.72,
-          base[1] + (bl.isApical ? 0.09 : b === 0 ? 0.11 : 0.07),
-          base[2] + Math.cos(bl.yaw) * pedLen * 0.72,
-        ];
+        bl.worldPos[0] = base[0] + Math.sin(bl.yaw) * pedLen * 0.72;
+        bl.worldPos[1] = base[1] + (bl.isApical ? 0.09 : b === 0 ? 0.11 : 0.07);
+        bl.worldPos[2] = base[2] + Math.cos(bl.yaw) * pedLen * 0.72;
 
         for (let k = 0; k < 6; k++) {
           const p = bl.petals[k];
@@ -2868,26 +3486,26 @@
           const pWind = (windX * Math.cos(phi + bl.yaw) + windZ * Math.sin(phi)) * 0.48;
           p.flexVel += (pWind - 38 * p.flex - 4.6 * p.flexVel) * dt;
           p.flex += p.flexVel * dt;
-          p.tipWorld = this._evalTepalPoint(b, k, 0.94, 0, cultivar, time);
+          this._evalTepalPoint(b, k, 0.94, 0, cultivar, time, p.tipWorld);
         }
       }
 
       const wetness = clamp(0.26 + 0.55 * (1 - smoothstep(0.25, 0.65, uCycle)) + this.dewdrops.length * 0.011, 0.2, 1.0);
 
-      // 1. Main Stem
+      // 1. Main Stem (zero per-vertex allocations)
       for (let iy = 0; iy <= this.stemSegsV; iy++) {
         const t = iy / this.stemSegsV;
-        const p = this._stemPoint(t);
+        const p = this._stemPoint(t, this._pt);
         const r = lerp(0.046, 0.024, t);
         for (let ix = 0; ix <= this.stemSegsU; ix++) {
           const a = (ix / this.stemSegsU) * Math.PI * 2;
           const nx = Math.cos(a), nz = Math.sin(a);
-          this._writeVert(
+          this._writeRaw(
             this.stemVStart + iy * (this.stemSegsU + 1) + ix,
-            [p[0] + nx * r, p[1], p[2] + nz * r],
-            [nx, 0, nz],
-            [ix / this.stemSegsU, t],
-            [0, 0, 0, wetness]
+            p[0] + nx * r, p[1], p[2] + nz * r,
+            nx, 0, nz,
+            ix / this.stemSegsU, t,
+            0, 0, 0, wetness
           );
         }
       }
@@ -2895,7 +3513,7 @@
       // 2. Pedicels & Swollen Receptacles
       for (let b = 0; b < this.blooms.length; b++) {
         const bl = this.blooms[b];
-        const p0 = this._stemPoint(bl.stemT);
+        const p0 = this._stemPoint(bl.stemT, this._pt);
         const p1 = bl.worldPos;
         for (let iy = 0; iy <= this.pedSegsV; iy++) {
           const t = iy / this.pedSegsV;
@@ -2906,12 +3524,12 @@
           for (let ix = 0; ix <= this.pedSegsU; ix++) {
             const a = (ix / this.pedSegsU) * Math.PI * 2;
             const nx = Math.cos(a), nz = Math.sin(a);
-            this._writeVert(
+            this._writeRaw(
               this.pedVStart[b] + iy * (this.pedSegsU + 1) + ix,
-              [cx + nx * r, cy, cz + nz * r],
-              [nx, 0, nz],
-              [ix / this.pedSegsU, t],
-              [0, b, 0, wetness]
+              cx + nx * r, cy, cz + nz * r,
+              nx, 0, nz,
+              ix / this.pedSegsU, t,
+              0, b, 0, wetness
             );
           }
         }
@@ -2925,11 +3543,12 @@
           for (let ix = 0; ix <= this.recSegsU; ix++) {
             const a = (ix / this.recSegsU) * Math.PI * 2;
             const lx = Math.cos(a) * rad, lz = Math.sin(a) * rad;
-            const wp = this._bloomLocalToWorld(b, lx, ly, lz);
-            const wn = this._bloomNormalToWorld(b, Math.cos(a), 0.15, Math.sin(a));
-            this._writeVert(
+            const wp = this._bloomLocalToWorld(b, lx, ly, lz, this._pt);
+            const wn = this._bloomNormalToWorld(b, Math.cos(a), 0.15, Math.sin(a), this._nm);
+            this._writeRaw(
               this.recVStart[b] + iy * (this.recSegsU + 1) + ix,
-              wp, wn, [ix / this.recSegsU, t], [0.2, b, 0, wetness]
+              wp[0], wp[1], wp[2], wn[0], wn[1], wn[2],
+              ix / this.recSegsU, t, 0.2, b, 0, wetness
             );
           }
         }
@@ -2942,10 +3561,10 @@
           const u = iy / this.leafSegsV;
           for (let ix = 0; ix <= this.leafSegsU; ix++) {
             const vCoord = (ix / this.leafSegsU) * 2 - 1;
-            const pt = this._evalLeafPoint(l, u, vCoord, time);
-            this._writeVert(
+            const pt = this._evalLeafPoint(l, u, vCoord, time, this._pt);
+            this._writeRaw(
               vStart + iy * (this.leafSegsU + 1) + ix,
-              pt, [0, 1, 0], [u, vCoord], [1, 0, l, wetness]
+              pt[0], pt[1], pt[2], 0, 1, 0, u, vCoord, 1, 0, l, wetness
             );
           }
         }
@@ -2960,10 +3579,10 @@
             const u = iy / this.tepSegsV;
             for (let ix = 0; ix <= this.tepSegsU; ix++) {
               const vCoord = (ix / this.tepSegsU) * 2 - 1;
-              const pt = this._evalTepalPoint(b, k, u, vCoord, cultivar, time);
-              this._writeVert(
+              const pt = this._evalTepalPoint(b, k, u, vCoord, cultivar, time, this._pt);
+              this._writeRaw(
                 vStart + iy * (this.tepSegsU + 1) + ix,
-                pt, [0, 1, 0], [u, vCoord], [2, b, k, wetness]
+                pt[0], pt[1], pt[2], 0, 1, 0, u, vCoord, 2, b, k, wetness
               );
             }
           }
@@ -3981,10 +4600,13 @@
         bfA: gl.getUniformLocation(this.sprProg, "uButterflyA"),
         bfB: gl.getUniformLocation(this.sprProg, "uButterflyB"),
       };
+      this._ringArr = new Float32Array(16);
+      this._ripArr = new Float32Array(24);
+      this._dprCap = 1.5;
     }
 
     resize() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2.0);
+      const dpr = Math.min(window.devicePixelRatio || 1, this._dprCap);
       const rect = this.canvas.getBoundingClientRect();
       const w = Math.max(1, Math.round(rect.width * dpr));
       const h = Math.max(1, Math.round(rect.height * dpr));
@@ -3996,6 +4618,7 @@
     }
 
     draw(sim, cultivar) {
+      this._dprCap = sim.perfDprCap || 1.5;
       const dpr = this.resize();
       const gl = this.gl;
       const w = this.canvas.width;
@@ -4034,7 +4657,8 @@
       gl.uniform1f(this.bgLocs.cycle, sim.u);
       gl.uniform1f(this.bgLocs.time, sim.time);
       gl.uniform2f(this.bgLocs.sunScreen, sunScrX, sunScrY);
-      const ringArr = new Float32Array(16);
+      const ringArr = this._ringArr;
+      ringArr.fill(0);
       const rCount = Math.min(4, sim.scentRings.length);
       for (let i = 0; i < rCount; i++) {
         const rg = sim.scentRings[i];
@@ -4072,11 +4696,12 @@
       gl.uniform3fv(this.plantLocs.pollenCol, cultivar.pollenCol);
       gl.uniform1f(this.plantLocs.spotAmt, cultivar.spotAmt);
       gl.uniform1f(this.plantLocs.rayAmt, cultivar.rayAmt);
-      gl.uniform1f(this.plantLocs.bioGlow, cultivar.bioGlow);
+      gl.uniform1f(this.plantLocs.bioGlow, Math.min(1.35, cultivar.bioGlow + (sim.specialDayActive ? 0.24 : 0)));
       gl.uniform3fv(this.plantLocs.bioCol, cultivar.bioCol);
       gl.uniform3fv(this.plantLocs.potCol, cultivar.potCol);
 
-      const ripArr = new Float32Array(24);
+      const ripArr = this._ripArr;
+      ripArr.fill(0);
       const ripCount = Math.min(6, this.plant.waterRipples.length);
       for (let i = 0; i < ripCount; i++) {
         const rp = this.plant.waterRipples[i];
@@ -4093,7 +4718,7 @@
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.plantIBO);
       gl.drawElements(gl.TRIANGLES, this.plant.indices.length, gl.UNSIGNED_SHORT, 0);
 
-      // 3. Refractive Dewdrops, Memory Light Orbs, Fireflies & Golden Pollen
+      // 3. Refractive Dewdrops, Memory Light Orbs, Pinned Wish Stars, Fireflies & Golden Pollen
       let spCount = 0;
       const pushSprite = (x, y, z, size, r, g, b, kind) => {
         if (spCount >= 420) return;
@@ -4114,6 +4739,22 @@
         const fade = clamp(m.life * 2.4, 0, 1);
         const shimmer = 0.8 + 0.2 * Math.sin(sim.time * 4.2 + m.phase);
         pushSprite(m.x, m.y, m.z, 0.044 * m.size * fade, 1.0 * fade * shimmer, 0.92 * fade * shimmer, 0.70 * fade * shimmer, 2.0);
+      }
+      for (const st of this.plant.pinnedStars) {
+        const ang = st.angle + sim.time * st.speed;
+        const sx = Math.cos(ang) * st.rad;
+        const sz = Math.sin(ang) * st.rad * 0.72;
+        const sy = st.baseY + Math.sin(sim.time * 1.15 + st.phase) * 0.09;
+        st.worldPos = [sx, sy, sz];
+        st.screenPos = projectToScreen(st.worldPos, vp, cssW, cssH);
+        const shimmer = 0.78 + 0.22 * Math.sin(sim.time * 2.8 + st.phase);
+        const isSel = sim.hoveredStarId === st.id;
+        pushSprite(
+          sx, sy, sz,
+          (isSel ? 0.088 : 0.062) * (0.9 + 0.2 * shimmer),
+          st.rgb[0] * shimmer, st.rgb[1] * shimmer, st.rgb[2] * shimmer,
+          2.0
+        );
       }
       for (const p of this.plant.pollen) {
         pushSprite(p.x, p.y, p.z, 0.018 * p.size * p.life, cultivar.pollenCol[0], cultivar.pollenCol[1], cultivar.pollenCol[2], 1.0);
@@ -4392,7 +5033,7 @@
     draw(sim, cultivar) {
       this.drawRibbon(sim, cultivar);
       const gl = this.gl;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       const rect = this.canvas.getBoundingClientRect();
       const w = Math.max(1, Math.round(rect.width * dpr));
       const h = Math.max(1, Math.round(rect.height * dpr));
@@ -4568,19 +5209,72 @@
       }));
       this.meteor = { active: false, x: 0.2, y: 0.15, vx: 0.42, vy: 0.22, life: 0, timer: 2.2 };
       this._lastTime = 0;
+      this._moteSprites = {};
+      this._foliageSprites = {};
+      this._lastPetalKey = "";
+    }
+
+    _getMoteSprite(r, g, b) {
+      const key = `${r},${g},${b}`;
+      if (this._moteSprites[key]) return this._moteSprites[key];
+      const sz = 44;
+      const cv = document.createElement("canvas");
+      cv.width = sz;
+      cv.height = sz;
+      const gctx = cv.getContext("2d");
+      const half = sz * 0.5;
+      const grad = gctx.createRadialGradient(half, half, 0, half, half, half);
+      grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.95)`);
+      grad.addColorStop(0.55, `rgba(${r}, ${g}, ${b}, 0.28)`);
+      grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+      gctx.fillStyle = grad;
+      gctx.fillRect(0, 0, sz, sz);
+      if (Object.keys(this._moteSprites).length > 16) this._moteSprites = {};
+      this._moteSprites[key] = cv;
+      return cv;
+    }
+
+    _getFoliageSprite(pt, pr, pg, pb) {
+      const bucketKey = pt.kind === "leaf"
+        ? `L:${Math.round(pt.dryMix * 4)}:${Math.round(pt.len)}:${Math.round(pt.bend * 10)}`
+        : `P:${Math.round(pr / 16)},${Math.round(pg / 16)},${Math.round(pb / 16)}:${Math.round(pt.len)}:${Math.round(pt.bend * 10)}`;
+      if (this._foliageSprites[bucketKey]) return this._foliageSprites[bucketKey];
+      const cw = Math.ceil(pt.len + 18);
+      const ch = Math.ceil(pt.len * 0.8 + 16);
+      const cv = document.createElement("canvas");
+      cv.width = cw;
+      cv.height = ch;
+      const sctx = cv.getContext("2d");
+      sctx.translate(8, ch * 0.5);
+      if (pt.kind === "leaf") {
+        paintLiliumLeaf(sctx, pt.len, pt.len * pt.wid, pt.bend, pt.dryMix, 0.8);
+      } else {
+        const edgeTint = `rgba(${pr}, ${pg}, ${pb}, 0.85)`;
+        const baseTint = `rgba(${Math.round(pr * 0.90)}, ${Math.round(pg * 0.88)}, ${Math.round(pb * 0.78)}, 0.85)`;
+        paintLiliumTepal(sctx, pt.len, pt.len * (pt.wid + 0.08), pt.bend, baseTint, edgeTint, 0.25);
+      }
+      if (Object.keys(this._foliageSprites).length > 64) this._foliageSprites = {};
+      this._foliageSprites[bucketKey] = cv;
+      return cv;
     }
 
     draw(sim, cultivar, theme) {
       const ctx = this.ctx;
       if (!ctx) return;
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      if (this.canvas.width !== w || this.canvas.height !== h) {
-        this.canvas.width = w;
-        this.canvas.height = h;
+      const cssW = window.innerWidth;
+      const cssH = window.innerHeight;
+      const scale = 0.52;
+      const cw = Math.max(1, Math.round(cssW * scale));
+      const ch = Math.max(1, Math.round(cssH * scale));
+      if (this.canvas.width !== cw || this.canvas.height !== ch) {
+        this.canvas.width = cw;
+        this.canvas.height = ch;
       }
+      const w = cssW;
+      const h = cssH;
       this.w = w;
       this.h = h;
+      ctx.setTransform(scale, 0, 0, scale, 0, 0);
       const dt = Math.min(0.05, Math.max(0.001, this._lastTime ? sim.time - this._lastTime : 0.016));
       this._lastTime = sim.time;
 
@@ -4710,8 +5404,13 @@
         }
       }
 
-      // 6. Continuously Floating Ambient Pollen Bokeh / Fireflies
+      // 6. Continuously Floating Ambient Pollen Bokeh / Fireflies (cached sprite stamps)
       const pol = cultivar.pollenCol;
+      const mR = isLight > 0.5 ? Math.round(lerp(255, pol[0] * 255, 0.5) / 12) * 12 : Math.round(bio[0] * 255 / 12) * 12;
+      const mG = isLight > 0.5 ? Math.round(lerp(248, pol[1] * 255, 0.5) / 12) * 12 : Math.round(bio[1] * 255 / 12) * 12;
+      const mB = isLight > 0.5 ? Math.round(lerp(220, pol[2] * 255, 0.5) / 12) * 12 : Math.round(bio[2] * 255 / 12) * 12;
+      const moteSprite = this._getMoteSprite(mR, mG, mB);
+      ctx.save();
       for (const mt of this.motes) {
         mt.y -= mt.speed * dt;
         mt.x += (mt.drift + sim.windVec[0] * 0.015 + Math.sin(sim.time * 0.7 + mt.phase) * 0.005) * dt;
@@ -4719,28 +5418,13 @@
         if (mt.x < -0.04) mt.x = 1.04;
         if (mt.x > 1.04) mt.x = -0.04;
         const pulse = 0.45 + 0.55 * Math.sin(sim.time * 1.8 + mt.phase);
-        const mx = mt.x * w, my = mt.y * h;
-        const orb = ctx.createRadialGradient(mx, my, 0, mx, my, mt.r * 2.2);
-        if (isLight > 0.5) {
-          const r = Math.round(lerp(255, pol[0] * 255, 0.5));
-          const g = Math.round(lerp(248, pol[1] * 255, 0.5));
-          const b = Math.round(lerp(220, pol[2] * 255, 0.5));
-          orb.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${0.38 * pulse})`);
-          orb.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
-        } else {
-          const r = Math.round(bio[0] * 255);
-          const g = Math.round(bio[1] * 255);
-          const b = Math.round(bio[2] * 255);
-          orb.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${0.46 * pulse})`);
-          orb.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
-        }
-        ctx.fillStyle = orb;
-        ctx.beginPath();
-        ctx.arc(mx, my, mt.r * 2.2, 0, Math.PI * 2);
-        ctx.fill();
+        const rad = mt.r * 2.3;
+        ctx.globalAlpha = (isLight > 0.5 ? 0.38 : 0.48) * pulse;
+        ctx.drawImage(moteSprite, mt.x * w - rad, mt.y * h - rad, rad * 2, rad * 2);
       }
+      ctx.restore();
 
-      // 7. Drifting Realistic Dried Lilium Lanceolate Leaves & Translucent Petals
+      // 7. Drifting Realistic Dried Lilium Lanceolate Leaves & Translucent Petals (cached sprite blits)
       const petBase = cultivar.baseCol;
       const pr = Math.round(petBase[0] * 255);
       const pg = Math.round(petBase[1] * 255);
@@ -4752,20 +5436,13 @@
         if (pt.y > 1.06) { pt.y = -0.06; pt.x = Math.random(); }
         if (pt.x > 1.06) pt.x = -0.06;
         if (pt.x < -0.06) pt.x = 1.06;
+        const sprite = this._getFoliageSprite(pt, pr, pg, pb);
         ctx.save();
         ctx.translate(pt.x * w, pt.y * h);
         ctx.rotate(pt.rot);
         ctx.scale(1, 0.58 + 0.42 * Math.cos(sim.time * 1.45 + pt.phase));
         ctx.globalAlpha = isLight > 0.5 ? 0.68 : 0.44;
-        if (pt.kind === "leaf") {
-          ctx.translate(-pt.len * 0.5, 0);
-          paintLiliumLeaf(ctx, pt.len, pt.len * pt.wid, pt.bend, pt.dryMix, 0.8);
-        } else {
-          ctx.translate(-pt.len * 0.5, 0);
-          const edgeTint = `rgba(${pr}, ${pg}, ${pb}, 0.85)`;
-          const baseTint = `rgba(${Math.round(pr * 0.90)}, ${Math.round(pg * 0.88)}, ${Math.round(pb * 0.78)}, 0.85)`;
-          paintLiliumTepal(ctx, pt.len, pt.len * (pt.wid + 0.08), pt.bend, baseTint, edgeTint, 0.25);
-        }
+        ctx.drawImage(sprite, -sprite.width * 0.5, -sprite.height * 0.5);
         ctx.restore();
       }
     }
@@ -4791,6 +5468,24 @@
     knobStretch: 1.0,
     time: 0,
     autoCycle: true,
+    liveClock: false,
+    specialDateStr: "",
+    previewSpecialDay: false,
+    specialDayActive: false,
+    hoveredStarId: null,
+    perfDprCap: 1.5,
+    _smoothDt: 0.016,
+    _themeCacheKey: "",
+    _lastThemeRes: null,
+    calm: {
+      active: false,
+      breathing: true,
+      durationSec: 600,
+      remainingSec: 600,
+      infinite: false,
+      breathTimer: 0,
+      prevPhase: -1,
+    },
     bgChoice: (() => {
       try {
         const v = localStorage.getItem("lilium_bg_v1");
@@ -4845,12 +5540,26 @@
     return (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]) / 255;
   }
 
+  const readoutPhaseEl = document.getElementById("readoutPhase");
+  const readoutCultivarEl = document.getElementById("readoutCultivar");
+  const readoutEcoEl = document.getElementById("readoutEco");
+  function setTxt(el, str) {
+    if (el && el.textContent !== str) el.textContent = str;
+  }
+
   function updatePageThemeAndReadouts() {
     const u = sim.u;
     const ac = sim.activeCultivar;
-    const totalMins = Math.round((240 + u * 1200) % 1440);
-    const hh = String(Math.floor(totalMins / 60)).padStart(2, "0");
-    const mm = String(totalMins % 60).padStart(2, "0");
+    let hh, mm;
+    if (sim.liveClock) {
+      const now = new Date();
+      hh = String(now.getHours()).padStart(2, "0");
+      mm = String(now.getMinutes()).padStart(2, "0");
+    } else {
+      const totalMins = Math.round((240 + u * 1200) % 1440);
+      hh = String(Math.floor(totalMins / 60)).padStart(2, "0");
+      mm = String(totalMins % 60).padStart(2, "0");
+    }
 
     let phase = "Tomurcuk";
     if (u >= 0.16 && u < 0.42) phase = "Şafak Açılışı";
@@ -4869,11 +5578,11 @@
 
     const ecoSuffix = (u >= 0.22 && u < 0.76) ? "Kelebek" : "Ateş Böceği";
 
-    document.getElementById("readoutPhase").textContent = `${hh}:${mm} · ${phase}`;
-    document.getElementById("readoutCultivar").textContent = `${CULTIVARS[sim.targetCultivarIdx].name} · ${CULTIVARS[sim.targetCultivarIdx].meaning}`;
-    document.getElementById("readoutEco").textContent = (audio.ready && !audio.muted && audio.isRunning())
+    setTxt(readoutPhaseEl, `${hh}:${mm} · ${phase}${sim.liveClock ? " (Canlı)" : ""}`);
+    setTxt(readoutCultivarEl, `${CULTIVARS[sim.targetCultivarIdx].name} · ${CULTIVARS[sim.targetCultivarIdx].meaning}`);
+    setTxt(readoutEcoEl, (audio.ready && !audio.muted && audio.isRunning())
       ? audio.getMovementName()
-      : `${lightWord} · ${plant.dewdrops.length} Çiy · ${ecoSuffix}`;
+      : `${lightWord} · ${plant.dewdrops.length} Çiy · ${ecoSuffix}`);
 
     // Cultivar + Diurnal OR User-Selected Studio Wall Backdrop
     let topC;
@@ -4890,7 +5599,6 @@
       botC = [clamp(rgb[0] - 14, 0, 255), clamp(rgb[1] - 14, 0, 255), clamp(rgb[2] - 12, 0, 255)];
     }
 
-    // Actual pixel luminance per screen region prevents low-contrast dawn/dusk or mid-grey washes
     const topLum = lumOf(topC);
     const botLum = lumOf(botC);
     const headerLum = lerp(topLum, botLum, 0.14);
@@ -4899,46 +5607,60 @@
     const ftrLight = smoothstep(0.45, 0.51, footerLum);
     const isLight = smoothstep(0.44, 0.52, headerLum * 0.52 + footerLum * 0.48);
 
-    const inkHdr = mix3([252, 249, 245], ac.uiInkLight, hdrLight);
-    const inkHdrMuted = mix3([232, 224, 228], [52, 56, 52], hdrLight);
-    const inkFtr = mix3([252, 249, 245], ac.uiInkLight, ftrLight);
-    const inkFtrMuted = mix3([228, 220, 224], [52, 56, 52], ftrLight);
+    const tR = Math.round(topC[0]), tG = Math.round(topC[1]), tB = Math.round(topC[2]);
+    const bR = Math.round(botC[0]), bG = Math.round(botC[1]), bB = Math.round(botC[2]);
+    const hBucket = Math.round(hdrLight * 20);
+    const fBucket = Math.round(ftrLight * 20);
     const acc = mix3(ac.uiAccentNight, [clamp(ac.uiAccentDay[0] * 0.84, 0, 255), clamp(ac.uiAccentDay[1] * 0.84, 0, 255), clamp(ac.uiAccentDay[2] * 0.84, 0, 255)], hdrLight);
+    const aR = Math.round(acc[0]), aG = Math.round(acc[1]), aB = Math.round(acc[2]);
 
-    const topRgb = `rgb(${Math.round(topC[0])},${Math.round(topC[1])},${Math.round(topC[2])})`;
-    const r = document.documentElement.style;
-    r.colorScheme = isLight > 0.5 ? "only light" : "only dark";
-    if (metaColorSchemeEl) metaColorSchemeEl.setAttribute("content", isLight > 0.5 ? "only light" : "only dark");
-    if (metaThemeEl) metaThemeEl.setAttribute("content", topRgb);
+    const themeKey = `${tR},${tG},${tB}|${bR},${bG},${bB}|${hBucket}|${fBucket}|${aR},${aG},${aB}`;
+    if (themeKey !== sim._themeCacheKey) {
+      sim._themeCacheKey = themeKey;
+      const inkHdr = mix3([252, 249, 245], ac.uiInkLight, hdrLight);
+      const inkHdrMuted = mix3([232, 224, 228], [52, 56, 52], hdrLight);
+      const inkFtr = mix3([252, 249, 245], ac.uiInkLight, ftrLight);
+      const inkFtrMuted = mix3([228, 220, 224], [52, 56, 52], ftrLight);
 
-    r.setProperty("--bg-top", topRgb);
-    r.setProperty("--bg-bot", `rgb(${Math.round(botC[0])},${Math.round(botC[1])},${Math.round(botC[2])})`);
-    r.setProperty("--ink", `rgb(${Math.round(inkHdr[0])},${Math.round(inkHdr[1])},${Math.round(inkHdr[2])})`);
-    r.setProperty("--ink-muted", `rgb(${Math.round(inkHdrMuted[0])},${Math.round(inkHdrMuted[1])},${Math.round(inkHdrMuted[2])})`);
-    r.setProperty("--ink-faint", hdrLight > 0.5 ? "rgba(32,36,32,0.72)" : "rgba(246,239,232,0.72)");
+      const topRgb = `rgb(${tR},${tG},${tB})`;
+      const r = document.documentElement.style;
+      const scheme = isLight > 0.5 ? "only light" : "only dark";
+      if (r.colorScheme !== scheme) {
+        r.colorScheme = scheme;
+        if (metaColorSchemeEl) metaColorSchemeEl.setAttribute("content", scheme);
+      }
+      if (metaThemeEl) metaThemeEl.setAttribute("content", topRgb);
 
-    r.setProperty("--ink-hdr", `rgb(${Math.round(inkHdr[0])},${Math.round(inkHdr[1])},${Math.round(inkHdr[2])})`);
-    r.setProperty("--ink-hdr-muted", `rgb(${Math.round(inkHdrMuted[0])},${Math.round(inkHdrMuted[1])},${Math.round(inkHdrMuted[2])})`);
-    r.setProperty("--hdr-shadow", hdrLight > 0.5 ? "0 1px 0 rgba(255,255,255,0.62)" : "0 1px 8px rgba(0,0,0,0.48)");
+      r.setProperty("--bg-top", topRgb);
+      r.setProperty("--bg-bot", `rgb(${bR},${bG},${bB})`);
+      r.setProperty("--ink", `rgb(${Math.round(inkHdr[0])},${Math.round(inkHdr[1])},${Math.round(inkHdr[2])})`);
+      r.setProperty("--ink-muted", `rgb(${Math.round(inkHdrMuted[0])},${Math.round(inkHdrMuted[1])},${Math.round(inkHdrMuted[2])})`);
+      r.setProperty("--ink-faint", hdrLight > 0.5 ? "rgba(32,36,32,0.72)" : "rgba(246,239,232,0.72)");
 
-    r.setProperty("--ink-ftr", `rgb(${Math.round(inkFtr[0])},${Math.round(inkFtr[1])},${Math.round(inkFtr[2])})`);
-    r.setProperty("--ink-ftr-muted", `rgb(${Math.round(inkFtrMuted[0])},${Math.round(inkFtrMuted[1])},${Math.round(inkFtrMuted[2])})`);
-    r.setProperty("--ink-ftr-faint", ftrLight > 0.5 ? "rgba(32,36,32,0.76)" : "rgba(246,239,232,0.76)");
-    r.setProperty("--ftr-shadow", ftrLight > 0.5 ? "0 1px 0 rgba(255,255,255,0.58)" : "0 1px 8px rgba(0,0,0,0.44)");
+      r.setProperty("--ink-hdr", `rgb(${Math.round(inkHdr[0])},${Math.round(inkHdr[1])},${Math.round(inkHdr[2])})`);
+      r.setProperty("--ink-hdr-muted", `rgb(${Math.round(inkHdrMuted[0])},${Math.round(inkHdrMuted[1])},${Math.round(inkHdrMuted[2])})`);
+      r.setProperty("--hdr-shadow", hdrLight > 0.5 ? "0 1px 0 rgba(255,255,255,0.62)" : "0 1px 8px rgba(0,0,0,0.48)");
 
-    r.setProperty("--accent", `rgb(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])})`);
-    r.setProperty("--accent-soft", `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.22)`);
-    r.setProperty("--chamber-glow", `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.16)`);
+      r.setProperty("--ink-ftr", `rgb(${Math.round(inkFtr[0])},${Math.round(inkFtr[1])},${Math.round(inkFtr[2])})`);
+      r.setProperty("--ink-ftr-muted", `rgb(${Math.round(inkFtrMuted[0])},${Math.round(inkFtrMuted[1])},${Math.round(inkFtrMuted[2])})`);
+      r.setProperty("--ink-ftr-faint", ftrLight > 0.5 ? "rgba(32,36,32,0.76)" : "rgba(246,239,232,0.76)");
+      r.setProperty("--ftr-shadow", ftrLight > 0.5 ? "0 1px 0 rgba(255,255,255,0.58)" : "0 1px 8px rgba(0,0,0,0.44)");
 
-    r.setProperty("--pill-bg", hdrLight > 0.5 ? "rgba(255,253,249,0.82)" : "rgba(18,16,24,0.66)");
-    r.setProperty("--pill-hover", hdrLight > 0.5 ? "rgba(255,255,255,0.96)" : "rgba(32,28,44,0.84)");
-    r.setProperty("--pill-active-bg", hdrLight > 0.5 ? "rgba(247,236,214,0.95)" : `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.24)`);
-    r.setProperty("--pill-border", hdrLight > 0.5 ? `rgba(${Math.round(inkHdr[0])},${Math.round(inkHdr[1])},${Math.round(inkHdr[2])},0.22)` : `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.34)`);
+      r.setProperty("--accent", `rgb(${aR},${aG},${aB})`);
+      r.setProperty("--accent-soft", `rgba(${aR},${aG},${aB},0.22)`);
+      r.setProperty("--chamber-glow", `rgba(${aR},${aG},${aB},0.16)`);
 
-    r.setProperty("--card-bg", ftrLight > 0.5 ? "rgba(255,253,249,0.84)" : "rgba(18,16,24,0.68)");
-    r.setProperty("--card-border", ftrLight > 0.5 ? `rgba(${Math.round(inkFtr[0])},${Math.round(inkFtr[1])},${Math.round(inkFtr[2])},0.20)` : `rgba(${Math.round(acc[0])},${Math.round(acc[1])},${Math.round(acc[2])},0.28)`);
+      r.setProperty("--pill-bg", hdrLight > 0.5 ? "rgba(255,253,249,0.88)" : "rgba(18,16,24,0.76)");
+      r.setProperty("--pill-hover", hdrLight > 0.5 ? "rgba(255,255,255,0.98)" : "rgba(32,28,44,0.88)");
+      r.setProperty("--pill-active-bg", hdrLight > 0.5 ? "rgba(247,236,214,0.96)" : `rgba(${aR},${aG},${aB},0.26)`);
+      r.setProperty("--pill-border", hdrLight > 0.5 ? `rgba(${Math.round(inkHdr[0])},${Math.round(inkHdr[1])},${Math.round(inkHdr[2])},0.22)` : `rgba(${aR},${aG},${aB},0.34)`);
 
-    return { topC, botC, isLight };
+      r.setProperty("--card-bg", ftrLight > 0.5 ? "rgba(255,253,249,0.88)" : "rgba(18,16,24,0.76)");
+      r.setProperty("--card-border", ftrLight > 0.5 ? `rgba(${Math.round(inkFtr[0])},${Math.round(inkFtr[1])},${Math.round(inkFtr[2])},0.20)` : `rgba(${aR},${aG},${aB},0.28)`);
+    }
+
+    sim._lastThemeRes = { topC, botC, isLight };
+    return sim._lastThemeRes;
   }
 
   function stepCultivarMorph(dt) {
@@ -4955,15 +5677,59 @@
     }
   }
 
-  // Dedication Keepsake Note Persistence & Live Updates
+  // Dedication Keepsake Note, Special Anniversary Day & Panels Management
   const noteBtn = document.getElementById("noteBtn");
   const noteEditor = document.getElementById("noteEditor");
   const noteToInput = document.getElementById("noteToInput");
   const noteTextInput = document.getElementById("noteTextInput");
+  const noteDateInput = document.getElementById("noteDateInput");
+  const previewSpecialBtn = document.getElementById("previewSpecialBtn");
+  const specialDayBadge = document.getElementById("specialDayBadge");
   const dedicationToEl = document.getElementById("dedicationTo");
   const dedicationQuoteEl = document.getElementById("dedicationQuote");
   const plaque = document.getElementById("dedicationPlaque");
   const whisperEl = document.getElementById("cultivarWhisper");
+
+  const decorBtn = document.getElementById("decorBtn");
+  const decorPanel = document.getElementById("decorPanel");
+  const calmBtn = document.getElementById("calmBtn");
+  const calmHud = document.getElementById("calmHud");
+  const starsBtn = document.getElementById("starsBtn");
+  const wishDrawer = document.getElementById("wishDrawer");
+
+  function closeAllChamberPanels(except = "") {
+    if (except !== "note" && noteEditor.classList.contains("open")) {
+      noteEditor.classList.remove("open");
+      noteBtn.classList.remove("active");
+    }
+    if (except !== "decor" && decorPanel.classList.contains("open")) {
+      decorPanel.classList.remove("open");
+      decorBtn.classList.remove("active");
+    }
+    if (except !== "calm" && calmHud.classList.contains("open")) {
+      calmHud.classList.remove("open");
+      calmBtn.classList.toggle("active", sim.calm.active);
+    }
+    if (except !== "wish" && wishDrawer.classList.contains("open")) {
+      wishDrawer.classList.remove("open");
+    }
+  }
+
+  function updateSpecialDayState() {
+    const now = new Date();
+    const todayDDMM = `${String(now.getDate()).padStart(2, "0")}/${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const cleanDate = (noteDateInput.value || "").trim();
+    const matched = Boolean(cleanDate && cleanDate === todayDDMM);
+    const active = sim.previewSpecialDay || matched;
+    sim.specialDayActive = active;
+    plaque.classList.toggle("special-day", active);
+    if (matched) {
+      specialDayBadge.textContent = `✦ Özel Hatıra Günü · ${cleanDate}`;
+    } else if (sim.previewSpecialDay) {
+      specialDayBadge.textContent = "✦ Özel Gün Işığı (Önizleme)";
+    }
+    previewSpecialBtn.textContent = sim.previewSpecialDay ? "Önizleme Açık" : "Önizle";
+  }
 
   function loadNote() {
     let saved = null;
@@ -4972,13 +5738,18 @@
     const qTo = params.get("kime");
     const qNot = params.get("not");
     const qTur = params.get("tur");
+    const qGun = params.get("gun");
 
     const toVal = (qTo && qTo.trim()) || (saved && saved.to) || "En Güzel Hatıraya";
     const quoteVal = (qNot && qNot.trim()) || (saved && saved.quote) || "Bazı çiçekler zamanla solmaz; sevilen birinin kalbinde her şafak yeniden açar.";
+    const dateVal = (qGun && /^\d{2}\/\d{2}$/.test(qGun.trim()) && qGun.trim()) || (saved && saved.date) || "";
+
     dedicationToEl.textContent = toVal;
     dedicationQuoteEl.textContent = `“${quoteVal}”`;
     noteToInput.value = toVal;
     noteTextInput.value = quoteVal;
+    noteDateInput.value = dateVal;
+    sim.specialDateStr = dateVal;
 
     if (qTur !== null && /^[0-3]$/.test(qTur)) {
       const idx = Number(qTur);
@@ -4989,45 +5760,73 @@
         b.classList.toggle("active", Number(b.dataset.cultivar) === idx);
       });
     }
+    updateSpecialDayState();
   }
 
   function saveNote() {
     const toVal = noteToInput.value.trim() || "En Güzel Hatıraya";
     const quoteVal = noteTextInput.value.trim() || "Bazı çiçekler zamanla solmaz; sevilen birinin kalbinde her şafak yeniden açar.";
+    const dateVal = noteDateInput.value.trim();
     dedicationToEl.textContent = toVal;
     dedicationQuoteEl.textContent = `“${quoteVal}”`;
-    try { localStorage.setItem("lilium_dedication_v1", JSON.stringify({ to: toVal, quote: quoteVal })); } catch (_) {}
+    sim.specialDateStr = dateVal;
+    try {
+      localStorage.setItem("lilium_dedication_v1", JSON.stringify({ to: toVal, quote: quoteVal, date: dateVal }));
+    } catch (_) {}
+    updateSpecialDayState();
   }
-
-  const decorBtn = document.getElementById("decorBtn");
-  const decorPanel = document.getElementById("decorPanel");
 
   function toggleDecorPanel(force) {
     const isOpen = force !== undefined ? force : !decorPanel.classList.contains("open");
-    if (isOpen && noteEditor.classList.contains("open")) {
-      noteEditor.classList.remove("open");
-      noteBtn.classList.remove("active");
-    }
+    if (isOpen) closeAllChamberPanels("decor");
     decorPanel.classList.toggle("open", isOpen);
     decorBtn.classList.toggle("active", isOpen);
   }
 
   function toggleNoteEditor(force) {
     const isOpen = force !== undefined ? force : !noteEditor.classList.contains("open");
-    if (isOpen && decorPanel.classList.contains("open")) toggleDecorPanel(false);
+    if (isOpen) closeAllChamberPanels("note");
     noteEditor.classList.toggle("open", isOpen);
     noteBtn.classList.toggle("active", isOpen);
   }
 
+  function toggleCalmHud(force) {
+    const isOpen = force !== undefined ? force : !calmHud.classList.contains("open");
+    if (isOpen) closeAllChamberPanels("calm");
+    calmHud.classList.toggle("open", isOpen);
+    calmBtn.classList.toggle("active", isOpen || sim.calm.active);
+  }
+
+  function toggleWishDrawer(force) {
+    const isOpen = force !== undefined ? force : !wishDrawer.classList.contains("open");
+    if (isOpen) {
+      closeAllChamberPanels("wish");
+      if (typeof fetchGitHubPublicWishes === "function") fetchGitHubPublicWishes(false);
+    }
+    wishDrawer.classList.toggle("open", isOpen);
+  }
+
+  previewSpecialBtn.addEventListener("click", () => {
+    sim.previewSpecialDay = !sim.previewSpecialDay;
+    updateSpecialDayState();
+    if (sim.specialDayActive) {
+      plant.spawnMemoryOrbs(8);
+      spawnScentRing(0.9, 0.5, 0.5);
+      audio.unlock(false);
+      audio.playSecretRefrain();
+    }
+  });
+
   const shareNoteBtn = document.getElementById("shareNoteBtn");
   shareNoteBtn.addEventListener("click", () => {
-    audio.init();
+    audio.unlock(false);
     updateAudioBtn();
     saveNote();
     const url = new URL(window.location.href);
     url.searchParams.set("kime", noteToInput.value.trim() || "En Güzel Hatıraya");
     url.searchParams.set("not", noteTextInput.value.trim() || "Bazı çiçekler zamanla solmaz; sevilen birinin kalbinde her şafak yeniden açar.");
     url.searchParams.set("tur", String(sim.targetCultivarIdx));
+    if (noteDateInput.value.trim()) url.searchParams.set("gun", noteDateInput.value.trim());
     const finalUrl = url.toString();
     const doneCopy = () => {
       shareNoteBtn.textContent = "Kopyalandı ✓";
@@ -5052,21 +5851,100 @@
   document.getElementById("noteCloseBtn").addEventListener("click", () => toggleNoteEditor(false));
   noteToInput.addEventListener("input", saveNote);
   noteTextInput.addEventListener("input", saveNote);
-  document.querySelectorAll(".preset-chip").forEach((chip) => {
+  noteDateInput.addEventListener("input", saveNote);
+  document.querySelectorAll(".preset-chip[data-quote]").forEach((chip) => {
     chip.addEventListener("click", () => {
+      if (!chip.dataset.quote) return;
       noteTextInput.value = chip.dataset.quote;
       saveNote();
     });
   });
   loadNote();
 
-  // 3D Chamber Interaction (Hit-testing Petals, Anthers, Blooms + Orbit + Wheel Zoom)
+  // 3D Chamber Interaction (Memory Stars + Petals Harp + Anthers + Blooms + Water Mirror + Orbit)
   const lilyPtr = { active: false, mode: "none", lastX: 0, lastY: 0, lastWaterTs: 0 };
+  const starTooltip = document.getElementById("starTooltip");
+  const starTooltipHead = document.getElementById("starTooltipHead");
+  const starTooltipBody = document.getElementById("starTooltipBody");
+  const petalSeqHud = document.getElementById("petalSeqHud");
+  const petalNoteLabel = document.getElementById("petalNoteLabel");
+  const petalSeqDots = Array.from(document.querySelectorAll(".petal-seq-dot"));
+
+  const SECRET_MOTIF = [0, 2, 4, 5]; // Yaprak 1 -> 3 -> 5 -> 6
+  const LYDIAN_NAMES = ["F4", "G4", "A4", "B4", "C5", "E5"];
+  let motifPos = 0;
+  let petalHudTimer = null;
+  let tooltipPinTimer = null;
+
+  function showStarTooltip(star, durationMs = 0) {
+    if (!star || !star.screenPos) return;
+    starTooltipHead.textContent = `${star.vis === "public" ? "✦ Herkese Açık" : "🔒 Bana Özel"} · ${star.author}`;
+    starTooltipBody.textContent = `“${star.text}”`;
+    const rect = lilyCanvas.getBoundingClientRect();
+    const tx = clamp(star.screenPos[0], 110, Math.max(120, rect.width - 110));
+    const ty = clamp(star.screenPos[1], 72, Math.max(82, rect.height - 24));
+    starTooltip.style.left = `${tx}px`;
+    starTooltip.style.top = `${ty}px`;
+    starTooltip.classList.add("visible");
+    if (tooltipPinTimer) clearTimeout(tooltipPinTimer);
+    if (durationMs > 0) {
+      tooltipPinTimer = setTimeout(() => {
+        sim.hoveredStarId = null;
+        starTooltip.classList.remove("visible");
+      }, durationMs);
+    }
+  }
+
+  function hideStarTooltip() {
+    if (tooltipPinTimer) return;
+    starTooltip.classList.remove("visible");
+  }
+
+  function registerPetalHarp(petalIdx) {
+    const k = ((petalIdx % 6) + 6) % 6;
+    if (k === SECRET_MOTIF[motifPos]) {
+      motifPos++;
+    } else {
+      motifPos = k === SECRET_MOTIF[0] ? 1 : 0;
+    }
+
+    petalSeqDots.forEach((d, idx) => d.classList.toggle("lit", idx < motifPos));
+    petalNoteLabel.textContent = motifPos === 4
+      ? "✦ Gizli Nakarat Açıldı!"
+      : `♪ Yaprak ${k + 1} (${LYDIAN_NAMES[k]}) · İpucu: 1→3→5→6`;
+    petalSeqHud.classList.add("visible");
+    if (petalHudTimer) clearTimeout(petalHudTimer);
+    petalHudTimer = setTimeout(() => petalSeqHud.classList.remove("visible"), 4200);
+
+    if (motifPos >= SECRET_MOTIF.length) {
+      motifPos = 0;
+      audio.playSecretRefrain();
+      plant.spawnWishPetals(10);
+      plant.spawnMemoryOrbs(8);
+      spawnScentRing(1.0, 0.5, 0.48);
+      for (const bl of plant.blooms) bl.openBoost = Math.min(0.45, bl.openBoost + 0.22);
+      whisperEl.textContent = "“Tüm notalar aynı kalbe çıkar; her yaprakta bir hatıra saklı.”";
+      setTimeout(() => {
+        whisperEl.textContent = CULTIVARS[sim.targetCultivarIdx].whisper;
+      }, 6200);
+      return true;
+    }
+    return false;
+  }
 
   function hitTestLilium(clientX, clientY) {
     const rect = lilyCanvas.getBoundingClientRect();
     const px = clientX - rect.left;
     const py = clientY - rect.top;
+
+    let bestStar = null, minStarD = 26;
+    for (let i = 0; i < plant.pinnedStars.length; i++) {
+      const st = plant.pinnedStars[i];
+      if (!st.screenPos) continue;
+      const d = Math.hypot(px - st.screenPos[0], py - st.screenPos[1]);
+      if (d < minStarD) { minStarD = d; bestStar = st; }
+    }
+    if (bestStar) return { type: "star", star: bestStar };
 
     let bestAnther = null, minAntD = 26;
     for (let b = 0; b < plant.blooms.length; b++) {
@@ -5105,10 +5983,10 @@
     const fx = -Math.sin(sim.camYaw) * Math.cos(sim.camPitch);
     const fy = -Math.sin(sim.camPitch);
     const fz = -Math.cos(sim.camYaw) * Math.cos(sim.camPitch);
-    let rx = -fz, rz = fx; // cross(fwd, [0,1,0])
+    let rx = -fz, rz = fx;
     const rLen = Math.hypot(rx, rz) || 1;
     rx /= rLen; rz /= rLen;
-    const ux = -fy * rz, uy = rz * fx - rx * fz, uz = rx * fy; // cross(right, fwd)
+    const ux = -fy * rz, uy = rz * fx - rx * fz, uz = rx * fy;
     const dx = fx + rx * ndcX * (cssW / cssH) * tanHalf + ux * ndcY * tanHalf;
     const dy = fy + uy * ndcY * tanHalf;
     const dz = fz + rz * ndcX * (cssW / cssH) * tanHalf + uz * ndcY * tanHalf;
@@ -5125,9 +6003,8 @@
   }
 
   lilyCanvas.addEventListener("pointerdown", (e) => {
-    if (noteEditor.classList.contains("open")) toggleNoteEditor(false);
-    if (decorPanel.classList.contains("open")) toggleDecorPanel(false);
-    audio.init();
+    closeAllChamberPanels("");
+    audio.unlock(false);
     updateAudioBtn();
     lilyCanvas.setPointerCapture(e.pointerId);
     lilyPtr.active = true;
@@ -5136,7 +6013,14 @@
 
     const hit = hitTestLilium(e.clientX, e.clientY);
     if (hit) {
-      if (hit.type === "water") {
+      if (hit.type === "star") {
+        lilyPtr.mode = "stroke";
+        sim.hoveredStarId = hit.star.id;
+        showStarTooltip(hit.star, 4500);
+        plant.spawnMemoryOrbs(3);
+        spawnScentRing(0.65, clamp(hit.star.screenPos[0] / (lilyCanvas.clientWidth || 1), 0.1, 0.9), clamp(hit.star.screenPos[1] / (lilyCanvas.clientHeight || 1), 0.1, 0.9));
+        audio.playPollenSparkle();
+      } else if (hit.type === "water") {
         lilyPtr.mode = "water";
         plant.spawnWaterRipple(hit.wx, hit.wz, 0.96);
         audio.playWaterRippleNote(clamp((hit.dist - 0.16) / 0.70, 0, 1));
@@ -5149,7 +6033,8 @@
           audio.playPollenSparkle();
         } else if (hit.type === "petal") {
           plant.blooms[hit.b].petals[hit.k].flexVel += 4.2;
-          audio.playPetalTouch(hit.k);
+          const completed = registerPetalHarp(hit.k);
+          if (!completed) audio.playPetalInstrument(hit.k);
         } else if (hit.type === "bloom") {
           plant.blooms[hit.b].openBoost = Math.min(0.45, plant.blooms[hit.b].openBoost + 0.16);
           plant.spawnMemoryOrbs(2);
@@ -5164,7 +6049,15 @@
 
   lilyCanvas.addEventListener("pointermove", (e) => {
     if (!lilyPtr.active) {
-      lilyCanvas.classList.toggle("petaling", !!hitTestLilium(e.clientX, e.clientY));
+      const hoverHit = hitTestLilium(e.clientX, e.clientY);
+      lilyCanvas.classList.toggle("petaling", !!hoverHit);
+      if (hoverHit && hoverHit.type === "star") {
+        sim.hoveredStarId = hoverHit.star.id;
+        showStarTooltip(hoverHit.star, 0);
+      } else {
+        sim.hoveredStarId = null;
+        hideStarTooltip();
+      }
       return;
     }
     const dx = e.clientX - lilyPtr.lastX;
@@ -5236,7 +6129,9 @@
       swPtr.dragging = true;
       swPtr.moved = true;
       sim.autoCycle = false;
+      sim.liveClock = false;
       updateAutoBtn();
+      updateLiveClockBtn();
       sim.uTarget = clamp((sx - SW_KNOB_MIN) / (SW_KNOB_MAX - SW_KNOB_MIN), 0, 1);
       switchCanvas.classList.add("dragging");
       audio.playKnobTink(false);
@@ -5249,7 +6144,9 @@
       swPtr.dragging = true;
       swPtr.moved = true;
       sim.autoCycle = false;
+      sim.liveClock = false;
       updateAutoBtn();
+      updateLiveClockBtn();
       switchCanvas.classList.add("dragging");
     }
     if (swPtr.dragging) {
@@ -5297,7 +6194,17 @@
     volumeVal.textContent = `${pct}%`;
   }
 
+  const liveClockBtn = document.getElementById("liveClockBtn");
   function updateAutoBtn() { autoCycleBtn.classList.toggle("active", sim.autoCycle); }
+  function updateLiveClockBtn() { liveClockBtn.classList.toggle("active", sim.liveClock); }
+
+  function realTimeToU(d = new Date()) {
+    const mins = d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60;
+    // Maps real clock: 04:00 (240m) -> 0.0, 14:00 -> 0.50, 23:59 -> 0.999
+    let rel = (mins - 240) / 1200;
+    if (rel < 0) rel = 0.02;
+    return clamp(rel, 0.01, 0.995);
+  }
   function updateAudioBtn() {
     const running = audio.isRunning();
     const on = audio.ready && !audio.muted && running;
@@ -5320,7 +6227,28 @@
     audio.unlock(false);
     updateAudioBtn();
     sim.autoCycle = !sim.autoCycle;
+    if (sim.autoCycle) sim.liveClock = false;
     updateAutoBtn();
+    updateLiveClockBtn();
+  });
+
+  liveClockBtn.addEventListener("click", () => {
+    audio.unlock(false);
+    updateAudioBtn();
+    sim.liveClock = !sim.liveClock;
+    if (sim.liveClock) {
+      sim.autoCycle = false;
+      sim.uTarget = realTimeToU();
+      audio.playKnobTink(true);
+    }
+    updateAutoBtn();
+    updateLiveClockBtn();
+  });
+
+  calmBtn.addEventListener("click", () => {
+    audio.unlock(false);
+    updateAudioBtn();
+    toggleCalmHud();
   });
 
   audioBtn.addEventListener("click", () => {
@@ -5857,13 +6785,601 @@
   bgCustomInput.addEventListener("input", () => applyBgChoice(bgCustomInput.value));
   bgCustomInput.addEventListener("change", () => applyBgChoice(bgCustomInput.value));
 
+  // =========================================================================
+  // 6C. FEATURE 1 (CALM BREATHING), FEATURE 2 (PUBLIC/PRIVATE WISH STARS),
+  //     FEATURE 5 (HERBARIUM POSTCARD EXPORT)
+  // =========================================================================
+
+  // --- Feature 1: Sükûnet & Nefes 4-4-6 Sanctuary ---
+  const breathRingEl = document.getElementById("breathRing");
+  const breathSecEl = document.getElementById("breathSec");
+  const calmPhaseLabel = document.getElementById("calmPhaseLabel");
+  const calmTimerReadout = document.getElementById("calmTimerReadout");
+  const calmStartBtn = document.getElementById("calmStartBtn");
+  const calmBreathToggle = document.getElementById("calmBreathToggle");
+  const calmDurBtns = Array.from(document.querySelectorAll(".calm-dur-btn"));
+
+  function formatCalmClock(sec) {
+    if (sim.calm.infinite) return "∞ Sonsuz Akış";
+    const s = Math.max(0, Math.ceil(sec));
+    const m = Math.floor(s / 60);
+    const r = s % 60;
+    return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
+  }
+
+  function updateCalmHudUI() {
+    calmStartBtn.textContent = sim.calm.active ? "Duraklat" : "Başlat";
+    calmBtn.classList.toggle("active", calmHud.classList.contains("open") || sim.calm.active);
+    calmBreathToggle.classList.toggle("active", sim.calm.breathing);
+    calmTimerReadout.textContent = sim.calm.active
+      ? `${formatCalmClock(sim.calm.remainingSec)} · Odaklanılıyor`
+      : `${formatCalmClock(sim.calm.remainingSec)} · Sakin Akış`;
+    if (!sim.calm.active) {
+      breathRingEl.style.transform = "scale(0.76)";
+      breathSecEl.textContent = "4";
+      calmPhaseLabel.textContent = "Çiçekle nefes almaya hazır";
+    }
+  }
+
+  function stepCalmMode(dt) {
+    if (!sim.calm.active) {
+      plant.breathOpenBias = lerp(plant.breathOpenBias, 0, clamp(dt * 3, 0, 1));
+      return;
+    }
+    if (!sim.calm.infinite) {
+      sim.calm.remainingSec -= dt;
+      if (sim.calm.remainingSec <= 0) {
+        sim.calm.remainingSec = 0;
+        sim.calm.active = false;
+        plant.breathOpenBias = 0;
+        for (const bl of plant.blooms) bl.openBoost = 0.42;
+        plant.spawnMemoryOrbs(12);
+        plant.spawnWishPetals(10);
+        spawnScentRing(1.0, 0.5, 0.5);
+        audio.playCalmChime(true);
+        updateCalmHudUI();
+        calmPhaseLabel.textContent = "Sükûnet Tamamlandı ✦";
+        calmTimerReadout.textContent = "Kalbinde açan huzur";
+        return;
+      }
+    }
+    if (sim.calm.breathing) {
+      // 4s Inhale -> 4s Hold -> 6s Exhale (14s cycle)
+      sim.calm.breathTimer = (sim.calm.breathTimer + dt) % 14.0;
+      const bt = sim.calm.breathTimer;
+      let phaseIdx = 0;
+      let label = "Derin Nefes Al";
+      let countSec = 4;
+      let ringScale = 0.72;
+      let flowerBias = 0;
+      if (bt < 4.0) {
+        phaseIdx = 0;
+        const p = bt / 4.0;
+        label = "Derin Nefes Al";
+        countSec = Math.ceil(4.0 - bt);
+        ringScale = 0.68 + 0.32 * smoothstep(0, 1, p);
+        flowerBias = 0.14 * smoothstep(0, 1, p);
+      } else if (bt < 8.0) {
+        phaseIdx = 1;
+        label = "Sükûnetle Tut";
+        countSec = Math.ceil(8.0 - bt);
+        ringScale = 1.00;
+        flowerBias = 0.14;
+      } else {
+        phaseIdx = 2;
+        const p = (bt - 8.0) / 6.0;
+        label = "Yavaşça Nefes Ver";
+        countSec = Math.ceil(14.0 - bt);
+        ringScale = 1.00 - 0.32 * smoothstep(0, 1, p);
+        flowerBias = 0.14 * (1 - smoothstep(0, 1, p)) - 0.04 * smoothstep(0, 1, p);
+      }
+      if (phaseIdx !== sim.calm.prevPhase) {
+        sim.calm.prevPhase = phaseIdx;
+        if (phaseIdx === 0) audio.playCalmChime(false);
+        else if (phaseIdx === 2) audio.playDewDropPlink(0);
+      }
+      plant.breathOpenBias = lerp(plant.breathOpenBias, flowerBias, clamp(dt * 4, 0, 1));
+      breathRingEl.style.transform = `scale(${ringScale.toFixed(3)})`;
+      setTxt(breathSecEl, String(Math.max(1, countSec)));
+      setTxt(calmPhaseLabel, label);
+    } else {
+      plant.breathOpenBias = lerp(plant.breathOpenBias, 0.04 * Math.sin(sim.time * 0.7), clamp(dt * 2, 0, 1));
+      setTxt(calmPhaseLabel, "Sessiz Seyir");
+      setTxt(breathSecEl, "✦");
+    }
+    setTxt(calmTimerReadout, `${formatCalmClock(sim.calm.remainingSec)} · Akışta`);
+  }
+
+  calmDurBtns.forEach((b) => {
+    b.addEventListener("click", () => {
+      calmDurBtns.forEach((x) => x.classList.remove("active"));
+      b.classList.add("active");
+      const mins = Number(b.dataset.mins);
+      sim.calm.infinite = mins === 0;
+      sim.calm.durationSec = mins * 60;
+      sim.calm.remainingSec = mins * 60;
+      updateCalmHudUI();
+    });
+  });
+
+  calmBreathToggle.addEventListener("click", () => {
+    sim.calm.breathing = !sim.calm.breathing;
+    updateCalmHudUI();
+  });
+
+  calmStartBtn.addEventListener("click", () => {
+    audio.unlock(false);
+    updateAudioBtn();
+    if (!sim.calm.active && sim.calm.remainingSec <= 0 && !sim.calm.infinite) {
+      sim.calm.remainingSec = sim.calm.durationSec || 600;
+    }
+    sim.calm.active = !sim.calm.active;
+    sim.calm.breathTimer = 0;
+    sim.calm.prevPhase = -1;
+    if (sim.calm.active) audio.playCalmChime(false);
+    updateCalmHudUI();
+  });
+
+  document.getElementById("calmCloseBtn").addEventListener("click", () => toggleCalmHud(false));
+  updateCalmHudUI();
+
+  // --- Feature 2: Public & Private Memory Stars Wish Garden ---
+  const STAR_PALETTE = {
+    gold:     [1.00, 0.86, 0.50],
+    white:    [0.98, 0.99, 1.00],
+    rose:     [0.98, 0.62, 0.78],
+    lavender: [0.76, 0.72, 1.00],
+  };
+
+  const wishListEl = document.getElementById("wishList");
+  const starCountBadge = document.getElementById("starCountBadge");
+  const wishAuthorInput = document.getElementById("wishAuthorInput");
+  const wishTextInput = document.getElementById("wishTextInput");
+  const wishStatusMsg = document.getElementById("wishStatusMsg");
+  const visPublicBtn = document.getElementById("visPublicBtn");
+  const visPrivateBtn = document.getElementById("visPrivateBtn");
+  const wishTabBtns = Array.from(document.querySelectorAll(".wish-tab[data-wish-filter]"));
+  const starColBtns = Array.from(document.querySelectorAll(".star-col-btn"));
+
+  let wishFilter = "all";
+  let composeVis = "public";
+  let composeCol = "gold";
+  let remotePublicWishes = [];
+  let sharedUrlWishes = [];
+
+  function readWishStore(key) {
+    try {
+      const arr = JSON.parse(localStorage.getItem(key) || "[]");
+      return Array.isArray(arr) ? arr : [];
+    } catch (_) { return []; }
+  }
+  function writeWishStore(key, arr) {
+    try { localStorage.setItem(key, JSON.stringify(arr.slice(0, 40))); } catch (_) {}
+  }
+
+  let localPublicWishes = readWishStore("lilium_wishes_public_v1");
+  let localPrivateWishes = readWishStore("lilium_wishes_private_v1");
+
+  function encodeShareWish(w) {
+    try {
+      const payload = JSON.stringify({ a: w.author, t: w.text, c: w.col });
+      return btoa(unescape(encodeURIComponent(payload)));
+    } catch (_) { return ""; }
+  }
+
+  function decodeShareWish(raw) {
+    try {
+      const obj = JSON.parse(decodeURIComponent(escape(atob(raw))));
+      if (obj && obj.t) {
+        return {
+          id: "url_" + Math.abs(obj.t.length * 31),
+          author: String(obj.a || "Paylaşılan Anı").slice(0, 32),
+          text: String(obj.t).slice(0, 180),
+          col: STAR_PALETTE[obj.c] ? obj.c : "gold",
+          vis: "public",
+          dateStr: "Paylaşılan Yıldız",
+          source: "url",
+        };
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  (function parseSharedStarFromURL() {
+    const qStar = new URLSearchParams(window.location.search).get("yildiz");
+    if (qStar) {
+      const w = decodeShareWish(qStar);
+      if (w) sharedUrlWishes.push(w);
+    }
+  })();
+
+  function getMergedWishes() {
+    const seen = new Set();
+    const all = [];
+    for (const srcList of [sharedUrlWishes, localPublicWishes, remotePublicWishes, localPrivateWishes]) {
+      for (const w of srcList) {
+        const sig = `${w.vis}:${w.author}:${w.text}`;
+        if (seen.has(sig)) continue;
+        seen.add(sig);
+        all.push(w);
+      }
+    }
+    return all;
+  }
+
+  function syncPinnedStars() {
+    const all = getMergedWishes();
+    const visible = wishFilter === "all" ? all : all.filter((w) => w.vis === wishFilter);
+    setTxt(starCountBadge, all.length ? `(${all.length})` : "");
+    plant.pinnedStars = visible.slice(0, 18).map((w, i) => {
+      const h1 = hash2(i + 1, w.text.length + 7);
+      const h2 = hash2(i + 3, w.author.length + 13);
+      return {
+        ...w,
+        rgb: STAR_PALETTE[w.col] || STAR_PALETTE.gold,
+        angle: h1 * Math.PI * 2,
+        rad: 0.72 + h2 * 0.42,
+        baseY: -0.05 + (h1 - 0.35) * 0.92,
+        speed: 0.14 + h2 * 0.12,
+        phase: h1 * 6.28,
+        screenPos: null,
+      };
+    });
+  }
+
+  function buildGitHubWishIssueURL(w) {
+    const u = new URL("https://github.com/existye4t/lilium/issues/new");
+    u.searchParams.set("labels", "dilek");
+    u.searchParams.set("title", `Anı Yıldızı · ${w.author}`);
+    u.searchParams.set("body", `İsim: ${w.author}\nRenk: ${w.col}\nMesaj: ${w.text}`);
+    return u.toString();
+  }
+
+  function renderWishList() {
+    const all = getMergedWishes();
+    const list = wishFilter === "all" ? all : all.filter((w) => w.vis === wishFilter);
+    wishListEl.innerHTML = "";
+    if (!list.length) {
+      const empty = document.createElement("div");
+      empty.className = "wish-status-msg";
+      empty.style.padding = "12px 4px";
+      empty.textContent = wishFilter === "private"
+        ? "Henüz kendine özel bir dilek bırakmadın."
+        : "İlk anı yıldızını bırakarak göğü aydınlatabilirsin.";
+      wishListEl.appendChild(empty);
+      syncPinnedStars();
+      return;
+    }
+
+    list.forEach((w) => {
+      const card = document.createElement("div");
+      card.className = "wish-item";
+
+      const top = document.createElement("div");
+      top.className = "wish-item-top";
+      const leftMeta = document.createElement("span");
+      const rgb = STAR_PALETTE[w.col] || STAR_PALETTE.gold;
+      const dotHex = `rgb(${Math.round(rgb[0] * 255)}, ${Math.round(rgb[1] * 255)}, ${Math.round(rgb[2] * 255)})`;
+      leftMeta.innerHTML = `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${dotHex};margin-right:5px;box-shadow:0 0 6px ${dotHex};"></span>`;
+      const nameSpan = document.createElement("span");
+      nameSpan.textContent = `${w.author} · ${w.dateStr || "Bugün"}`;
+      leftMeta.appendChild(nameSpan);
+
+      const badge = document.createElement("span");
+      badge.className = `wish-badge-vis ${w.vis === "public" ? "pub" : "priv"}`;
+      badge.textContent = w.vis === "public"
+        ? (w.source === "github" ? "Ortak Duvar ★" : "Herkese Açık")
+        : "Bana Özel 🔒";
+
+      top.appendChild(leftMeta);
+      top.appendChild(badge);
+
+      const p = document.createElement("p");
+      p.className = "wish-item-text";
+      p.textContent = `“${w.text}”`;
+
+      card.appendChild(top);
+      card.appendChild(p);
+
+      const acts = document.createElement("div");
+      acts.className = "wish-item-actions";
+      if (w.vis === "public") {
+        const shareBtn = document.createElement("button");
+        shareBtn.type = "button";
+        shareBtn.className = "wish-mini-act";
+        shareBtn.textContent = "Linki Kopyala";
+        shareBtn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          const url = new URL(window.location.href);
+          url.searchParams.set("yildiz", encodeShareWish(w));
+          navigator.clipboard?.writeText(url.toString()).catch(() => {});
+          shareBtn.textContent = "Kopyalandı ✓";
+          setTimeout(() => { shareBtn.textContent = "Linki Kopyala"; }, 1800);
+        });
+        acts.appendChild(shareBtn);
+
+        if (w.source !== "github") {
+          const ghPub = document.createElement("a");
+          ghPub.href = buildGitHubWishIssueURL(w);
+          ghPub.target = "_blank";
+          ghPub.rel = "noopener noreferrer";
+          ghPub.className = "wish-mini-act";
+          ghPub.textContent = "Ortak Duvara İşle ↗";
+          ghPub.addEventListener("click", (ev) => ev.stopPropagation());
+          acts.appendChild(ghPub);
+        }
+      }
+      if (w.source === "local") {
+        const delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "wish-mini-act";
+        delBtn.textContent = "Kaldır";
+        delBtn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          localPublicWishes = localPublicWishes.filter((x) => x.id !== w.id);
+          localPrivateWishes = localPrivateWishes.filter((x) => x.id !== w.id);
+          writeWishStore("lilium_wishes_public_v1", localPublicWishes);
+          writeWishStore("lilium_wishes_private_v1", localPrivateWishes);
+          renderWishList();
+        });
+        acts.appendChild(delBtn);
+      }
+      card.appendChild(acts);
+
+      card.addEventListener("click", () => {
+        const match = plant.pinnedStars.find((s) => s.id === w.id);
+        audio.unlock(false);
+        audio.playPollenSparkle();
+        plant.spawnMemoryOrbs(4);
+        if (match) {
+          sim.hoveredStarId = match.id;
+          showStarTooltip(match, 4200);
+        }
+      });
+
+      wishListEl.appendChild(card);
+    });
+    syncPinnedStars();
+  }
+
+  function parseGitHubIssueToWish(issue) {
+    const body = String(issue.body || "");
+    const authorM = /İsim:\s*(.+)/i.exec(body);
+    const colM = /Renk:\s*(gold|white|rose|lavender)/i.exec(body);
+    const msgM = /Mesaj:\s*([\s\S]+)/i.exec(body);
+    const d = issue.created_at ? new Date(issue.created_at) : new Date();
+    const dateStr = `${String(d.getDate()).padStart(2, "0")}.${String(d.getMonth() + 1).padStart(2, "0")}.${d.getFullYear()}`;
+    return {
+      id: "gh_" + issue.number,
+      author: (authorM ? authorM[1].trim() : (issue.user?.login || "Ziyaretçi")).slice(0, 32),
+      text: (msgM ? msgM[1].trim() : issue.title || "").slice(0, 180),
+      col: colM ? colM[1].toLowerCase() : "gold",
+      vis: "public",
+      dateStr,
+      source: "github",
+    };
+  }
+
+  async function fetchGitHubPublicWishes(showBusy = false) {
+    if (showBusy) wishStatusMsg.textContent = "Ortak yıldızlar yükleniyor...";
+    try {
+      const res = await fetch("https://api.github.com/repos/existye4t/lilium/issues?labels=dilek&state=open&per_page=30", {
+        headers: { Accept: "application/vnd.github+json" },
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        remotePublicWishes = data.map(parseGitHubIssueToWish).filter((x) => x.text);
+        renderWishList();
+        if (showBusy) wishStatusMsg.textContent = `${remotePublicWishes.length} ortak anı yıldızı güncel.`;
+      }
+    } catch (_) {
+      if (showBusy) wishStatusMsg.textContent = "Çevrimdışı önbellekteki yıldızlar gösteriliyor.";
+    }
+  }
+
+  starsBtn.addEventListener("click", () => {
+    audio.unlock(false);
+    updateAudioBtn();
+    toggleWishDrawer();
+  });
+  document.getElementById("wishCloseBtn").addEventListener("click", () => toggleWishDrawer(false));
+  document.getElementById("refreshPublicWishesBtn").addEventListener("click", () => fetchGitHubPublicWishes(true));
+
+  visPublicBtn.addEventListener("click", () => {
+    composeVis = "public";
+    visPublicBtn.classList.add("active");
+    visPrivateBtn.classList.remove("active");
+    wishStatusMsg.textContent = "Herkese açık: bahçede parlar, paylaşılabilir & ortak duvara işlenir.";
+  });
+
+  visPrivateBtn.addEventListener("click", () => {
+    composeVis = "private";
+    visPrivateBtn.classList.add("active");
+    visPublicBtn.classList.remove("active");
+    wishStatusMsg.textContent = "Bana özel: yalnızca bu cihazda gizli hatıra olarak saklanır.";
+  });
+
+  starColBtns.forEach((b) => {
+    b.addEventListener("click", () => {
+      starColBtns.forEach((x) => x.classList.remove("active"));
+      b.classList.add("active");
+      composeCol = b.dataset.col || "gold";
+    });
+  });
+
+  wishTabBtns.forEach((b) => {
+    b.addEventListener("click", () => {
+      wishTabBtns.forEach((x) => x.classList.remove("active"));
+      b.classList.add("active");
+      wishFilter = b.dataset.wishFilter || "all";
+      renderWishList();
+    });
+  });
+
+  document.getElementById("wishForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    audio.unlock(false);
+    updateAudioBtn();
+    const txt = (wishTextInput.value || "").trim();
+    if (!txt) {
+      wishStatusMsg.textContent = "Lütfen kısa bir dilek veya hatıra yaz.";
+      wishTextInput.focus();
+      return;
+    }
+    const author = (wishAuthorInput.value || "").trim() || (composeVis === "private" ? "Kalbimden" : "Bir Seven");
+    const now = new Date();
+    const dateStr = `${String(now.getDate()).padStart(2, "0")}.${String(now.getMonth() + 1).padStart(2, "0")}.${now.getFullYear()}`;
+    const item = {
+      id: "loc_" + Date.now().toString(36),
+      author,
+      text: txt,
+      col: composeCol,
+      vis: composeVis,
+      dateStr,
+      source: "local",
+    };
+    if (composeVis === "public") {
+      localPublicWishes.unshift(item);
+      writeWishStore("lilium_wishes_public_v1", localPublicWishes);
+      wishStatusMsg.textContent = "Yıldızın göğe bırakıldı! Ortak Duvar linki aşağıda hazır ✦";
+    } else {
+      localPrivateWishes.unshift(item);
+      writeWishStore("lilium_wishes_private_v1", localPrivateWishes);
+      wishStatusMsg.textContent = "Özel dileğin bu cihazda güvenle saklandı 🔒";
+    }
+    wishTextInput.value = "";
+    plant.spawnWishPetals(6);
+    plant.spawnMemoryOrbs(8);
+    spawnScentRing(0.92, 0.5, 0.5);
+    audio.playWishRelease();
+    renderWishList();
+  });
+
+  renderWishList();
+  fetchGitHubPublicWishes(false);
+
+  // --- Feature 5: One-Click Botanical Postcard Export (1600x1040 PNG) ---
+  function exportMemoryPostcard(triggerBtn) {
+    audio.unlock(false);
+    updateAudioBtn();
+    const prevText = triggerBtn ? triggerBtn.textContent : "";
+
+    // Synchronously draw current crisp WebGL scene right before reading canvas pixels
+    const curTheme = updatePageThemeAndReadouts();
+    chamber.draw(sim, sim.activeCultivar);
+
+    const card = document.createElement("canvas");
+    card.width = 1600;
+    card.height = 1040;
+    const cctx = card.getContext("2d");
+    const { topC, botC, isLight } = curTheme;
+
+    const bg = cctx.createLinearGradient(0, 0, 0, card.height);
+    bg.addColorStop(0, `rgb(${Math.round(topC[0])},${Math.round(topC[1])},${Math.round(topC[2])})`);
+    bg.addColorStop(1, `rgb(${Math.round(botC[0])},${Math.round(botC[1])},${Math.round(botC[2])})`);
+    cctx.fillStyle = bg;
+    cctx.fillRect(0, 0, card.width, card.height);
+
+    cctx.save();
+    cctx.globalAlpha = 0.24;
+    cctx.translate(48, 86);
+    cctx.rotate(0.45);
+    paintLiliumLeaf(cctx, 96, 26, 0.12, 0.5, 0.9);
+    cctx.restore();
+    cctx.save();
+    cctx.globalAlpha = 0.24;
+    cctx.translate(1550, 96);
+    cctx.rotate(Math.PI - 0.42);
+    paintLiliumLeaf(cctx, 92, 24, -0.10, 0.65, 0.9);
+    cctx.restore();
+
+    const ink = isLight > 0.5 ? "#2b2a26" : "#f7efe8";
+    const muted = isLight > 0.5 ? "rgba(43,42,38,0.68)" : "rgba(247,239,232,0.70)";
+    cctx.strokeStyle = isLight > 0.5 ? "rgba(43,42,38,0.22)" : "rgba(255,244,232,0.22)";
+    cctx.lineWidth = 2;
+    cctx.strokeRect(26, 26, card.width - 52, card.height - 52);
+
+    const fx = 96, fy = 78, fw = 1408, fh = 696, fr = 24;
+    cctx.save();
+    cctx.shadowColor = "rgba(0, 0, 0, 0.28)";
+    cctx.shadowBlur = 32;
+    cctx.shadowOffsetY = 12;
+    cctx.beginPath();
+    cctx.roundRect(fx, fy, fw, fh, fr);
+    cctx.fillStyle = "#14121b";
+    cctx.fill();
+    cctx.restore();
+
+    cctx.save();
+    cctx.beginPath();
+    cctx.roundRect(fx, fy, fw, fh, fr);
+    cctx.clip();
+    const srcRatio = lilyCanvas.width / Math.max(1, lilyCanvas.height);
+    const dstRatio = fw / fh;
+    let dw = fw, dh = fh, dx = fx, dy = fy;
+    if (srcRatio > dstRatio) {
+      dw = fh * srcRatio;
+      dx = fx - (dw - fw) * 0.5;
+    } else {
+      dh = fw / srcRatio;
+      dy = fy - (dh - fh) * 0.5;
+    }
+    cctx.drawImage(lilyCanvas, dx, dy, dw, dh);
+    cctx.restore();
+
+    cctx.strokeStyle = isLight > 0.5 ? "rgba(50,46,42,0.28)" : "rgba(255,246,236,0.28)";
+    cctx.lineWidth = 2;
+    cctx.beginPath();
+    cctx.roundRect(fx, fy, fw, fh, fr);
+    cctx.stroke();
+
+    cctx.fillStyle = muted;
+    cctx.font = '500 17px "JetBrains Mono", monospace';
+    cctx.fillText(`✦  ${(noteToInput.value.trim() || "En Güzel Hatıraya").toUpperCase()}`, fx + 8, 824);
+
+    cctx.fillStyle = ink;
+    cctx.font = 'italic 36px "Cormorant Garamond", Georgia, serif';
+    const quoteRaw = `“${noteTextInput.value.trim() || "Bazı çiçekler zamanla solmaz; sevilen birinin kalbinde her şafak yeniden açar."}”`;
+    cctx.fillText(quoteRaw.slice(0, 92), fx + 8, 876, fw - 16);
+    if (quoteRaw.length > 92) {
+      cctx.fillText(quoteRaw.slice(92), fx + 8, 920, fw - 16);
+    }
+
+    const cv = CULTIVARS[sim.targetCultivarIdx] || CULTIVARS[0];
+    const now = new Date();
+    const stamp = `${String(now.getDate()).padStart(2, "0")}.${String(now.getMonth() + 1).padStart(2, "0")}.${now.getFullYear()}`;
+    cctx.fillStyle = muted;
+    cctx.font = '500 16px "JetBrains Mono", monospace';
+    cctx.fillText(`LILIUM CANDIDUM STUDIO · NO. 072 · ${String(cv.name || "Lilium").toUpperCase()} (${String(cv.meaning || "Saf Sevgi").toUpperCase()})`, fx + 8, 976);
+    cctx.textAlign = "right";
+    cctx.fillText(`${readoutPhaseEl.textContent} · ${stamp}`, fx + fw - 8, 976);
+
+    const a = document.createElement("a");
+    a.download = `lilium-hatira-${stamp.replace(/\./g, "-")}.png`;
+    a.href = card.toDataURL("image/png");
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    audio.playSecretRefrain();
+    plant.spawnMemoryOrbs(6);
+    spawnScentRing(0.9, 0.5, 0.5);
+    if (triggerBtn) {
+      triggerBtn.textContent = "Kaydedildi ✓";
+      setTimeout(() => { triggerBtn.textContent = prevText; }, 2200);
+    }
+  }
+
+  document.getElementById("postcardBtn").addEventListener("click", (e) => exportMemoryPostcard(e.currentTarget));
+  document.getElementById("postcardFromNoteBtn").addEventListener("click", (e) => exportMemoryPostcard(e.currentTarget));
+
   window.addEventListener("keydown", (e) => {
     const ae = document.activeElement;
     if (ae && (ae.tagName === "TEXTAREA" || (ae.tagName === "INPUT" && ae.type === "text"))) return;
 
     if (e.key === "Escape") {
-      if (decorPanel.classList.contains("open")) toggleDecorPanel(false);
-      if (noteEditor.classList.contains("open")) toggleNoteEditor(false);
+      closeAllChamberPanels("");
       return;
     }
 
@@ -5871,7 +7387,9 @@
       audio.init();
       updateAudioBtn();
       sim.autoCycle = false;
+      sim.liveClock = false;
       updateAutoBtn();
+      updateLiveClockBtn();
       const step = e.shiftKey ? 0.08 : 0.025;
       sim.uTarget = clamp(sim.uTarget + (e.key === "ArrowRight" ? step : -step), 0, 1);
       e.preventDefault();
@@ -5903,14 +7421,24 @@
   // =========================================================================
   let lastTs = performance.now();
   function frame(ts) {
-    const dt = Math.min(0.05, Math.max(0.001, (ts - lastTs) / 1000));
+    const rawDt = Math.max(0.001, (ts - lastTs) / 1000);
+    const dt = Math.min(0.05, rawDt);
     lastTs = ts;
     sim.time += dt;
 
-    if (sim.autoCycle && !swPtr.dragging) {
+    // Adaptive DPR backoff keeps animation silky on low-power phones / heavy windows
+    sim._smoothDt = sim._smoothDt * 0.92 + Math.min(0.08, rawDt) * 0.08;
+    if (sim._smoothDt > 0.032 && sim.perfDprCap > 1.1) sim.perfDprCap = 1.1;
+    else if (sim._smoothDt < 0.019 && sim.perfDprCap < 1.5) sim.perfDprCap = 1.5;
+
+    if (sim.liveClock && !swPtr.dragging) {
+      sim.uTarget = realTimeToU();
+    } else if (sim.autoCycle && !swPtr.dragging) {
       sim.uTarget += dt * 0.014;
       if (sim.uTarget > 1.0) sim.uTarget -= 1.0;
     }
+
+    stepCalmMode(dt);
 
     const prevVel = sim.uVel;
     if (swPtr.dragging) {
@@ -5974,6 +7502,7 @@
   syncBgControls();
   updateAudioBtn();
   updateAutoBtn();
+  updateLiveClockBtn();
   const initTheme = updatePageThemeAndReadouts();
   ambientBackdrop.draw(sim, sim.activeCultivar, initTheme);
   requestAnimationFrame(frame);
