@@ -1129,8 +1129,8 @@
   /* Interactive & Draggable Floating "Hatıra Goncası" Card inside Chamber */
   .star-tooltip {
     position: absolute;
-    max-width: 264px;
-    min-width: 175px;
+    max-width: 296px;
+    min-width: 195px;
     padding: 8px 11px 9px 11px;
     border-radius: 13px;
     background: rgba(18, 15, 24, 0.94);
@@ -1711,6 +1711,7 @@
           <div class="star-tooltip-head" id="starTooltipHead">Hatıra Yaprağı</div>
           <div class="star-tooltip-btns">
             <button type="button" class="tip-mini-btn" id="tipEditBtn" style="display:none;">Düzenle</button>
+            <button type="button" class="tip-mini-btn" id="tipDeleteBtn" style="color:#f6b4c4;border-color:rgba(246,160,180,0.34);">Sil</button>
             <button type="button" class="tip-mini-btn" id="tipResetBtn" style="display:none;" title="Yörüngeye geri bırak">&#8634;</button>
             <button type="button" class="tip-mini-btn" id="tipCloseBtn" aria-label="Kapat">&#10005;</button>
           </div>
@@ -6065,6 +6066,7 @@
   const starTooltipHead = document.getElementById("starTooltipHead");
   const starTooltipBody = document.getElementById("starTooltipBody");
   const tipEditBtn = document.getElementById("tipEditBtn");
+  const tipDeleteBtn = document.getElementById("tipDeleteBtn");
   const tipResetBtn = document.getElementById("tipResetBtn");
   const tipCloseBtn = document.getElementById("tipCloseBtn");
   const petalSeqHud = document.getElementById("petalSeqHud");
@@ -6096,6 +6098,7 @@
     starTooltipHead.textContent = `${bud.vis === "public" ? "❀ Herkese Açık" : "🔒 Bana Özel"} · ${bud.author}`;
     starTooltipBody.textContent = `“${bud.text}”`;
     tipEditBtn.style.display = bud.source === "local" ? "inline-flex" : "none";
+    tipDeleteBtn.textContent = bud.source === "local" ? "Sil" : "Gizle";
     tipResetBtn.style.display = (bud.customPos || bud.customTip) ? "inline-flex" : "none";
 
     const rect = lilyCanvas.getBoundingClientRect();
@@ -6179,6 +6182,12 @@
     e.stopPropagation();
     const bud = plant.pinnedBuds.find((b) => b.id === (pinnedBudId || sim.hoveredStarId));
     if (bud && typeof startEditWish === "function") startEditWish(bud);
+  });
+
+  tipDeleteBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const bud = plant.pinnedBuds.find((b) => b.id === (pinnedBudId || sim.hoveredStarId));
+    if (bud && typeof deleteWishItem === "function") deleteWishItem(bud);
   });
 
   function registerPetalHarp(petalIdx) {
@@ -7274,6 +7283,31 @@
 
   let localPublicWishes = readWishStore("lilium_wishes_public_v1");
   let localPrivateWishes = readWishStore("lilium_wishes_private_v1");
+  let hiddenWishSigs = new Set(readWishStore("lilium_hidden_wishes_v1"));
+
+  function wishSig(w) {
+    return `${w.vis}:${w.author}:${w.text}`;
+  }
+
+  function deleteWishItem(w) {
+    if (!w) return;
+    if (editingWishId === w.id) cancelEditWish();
+    if (pinnedBudId === w.id || sim.hoveredStarId === w.id) hideStarTooltip(true);
+    saveBudPosition(w.id, null);
+    if (w.source === "local") {
+      localPublicWishes = localPublicWishes.filter((x) => x.id !== w.id);
+      localPrivateWishes = localPrivateWishes.filter((x) => x.id !== w.id);
+      writeWishStore("lilium_wishes_public_v1", localPublicWishes);
+      writeWishStore("lilium_wishes_private_v1", localPrivateWishes);
+      wishStatusMsg.textContent = "Hatıra yaprağı silindi.";
+    } else {
+      hiddenWishSigs.add(wishSig(w));
+      writeWishStore("lilium_hidden_wishes_v1", Array.from(hiddenWishSigs));
+      wishStatusMsg.textContent = "Yaprak bu cihazdaki bahçeden gizlendi.";
+    }
+    audio.playKnobTink(false);
+    renderWishList();
+  }
 
   function setComposeVis(vis) {
     composeVis = vis;
@@ -7350,8 +7384,9 @@
     const all = [];
     for (const srcList of [sharedUrlWishes, localPublicWishes, remotePublicWishes, localPrivateWishes]) {
       for (const w of srcList) {
-        const sig = `${w.vis}:${w.author}:${w.text}`;
+        const sig = wishSig(w);
         if (seen.has(sig)) continue;
+        if (w.source !== "local" && hiddenWishSigs.has(sig)) continue;
         seen.add(sig);
         all.push(w);
       }
@@ -7483,18 +7518,22 @@
         const delBtn = document.createElement("button");
         delBtn.type = "button";
         delBtn.className = "wish-mini-act";
-        delBtn.textContent = "Kaldır";
+        delBtn.textContent = "Sil";
         delBtn.addEventListener("click", (ev) => {
           ev.stopPropagation();
-          if (editingWishId === w.id) cancelEditWish();
-          if (pinnedBudId === w.id) hideStarTooltip(true);
-          localPublicWishes = localPublicWishes.filter((x) => x.id !== w.id);
-          localPrivateWishes = localPrivateWishes.filter((x) => x.id !== w.id);
-          writeWishStore("lilium_wishes_public_v1", localPublicWishes);
-          writeWishStore("lilium_wishes_private_v1", localPrivateWishes);
-          renderWishList();
+          deleteWishItem(w);
         });
         acts.appendChild(delBtn);
+      } else {
+        const hideBtn = document.createElement("button");
+        hideBtn.type = "button";
+        hideBtn.className = "wish-mini-act";
+        hideBtn.textContent = "Gizle";
+        hideBtn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          deleteWishItem(w);
+        });
+        acts.appendChild(hideBtn);
       }
       card.appendChild(acts);
 
