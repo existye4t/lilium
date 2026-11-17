@@ -1126,28 +1126,46 @@
 
   .wish-mini-act:hover { color: #f4d293; }
 
-  /* Floating 3D Memory Star Tooltip inside Chamber */
+  /* Interactive & Draggable Floating "Hatıra Goncası" Card inside Chamber */
   .star-tooltip {
     position: absolute;
-    max-width: 240px;
-    padding: 8px 11px;
-    border-radius: 12px;
-    background: rgba(18, 15, 24, 0.92);
+    max-width: 264px;
+    min-width: 175px;
+    padding: 8px 11px 9px 11px;
+    border-radius: 13px;
+    background: rgba(18, 15, 24, 0.94);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(244, 210, 147, 0.45);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.42);
+    border: 1px solid rgba(244, 210, 147, 0.50);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.46);
     color: #fff8ee;
     pointer-events: none;
-    z-index: 10;
+    z-index: 12;
     opacity: 0;
     transform: translate(-50%, -115%) scale(0.95);
     transition: opacity 0.2s ease, transform 0.2s ease;
+    user-select: none;
+    touch-action: none;
   }
 
   .star-tooltip.visible {
     opacity: 1;
+    pointer-events: auto;
     transform: translate(-50%, -115%) scale(1);
+    cursor: grab;
+  }
+
+  .star-tooltip.dragging {
+    cursor: grabbing;
+    transition: none;
+  }
+
+  .star-tooltip-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 3px;
   }
 
   .star-tooltip-head {
@@ -1156,13 +1174,46 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #f4d293;
-    margin-bottom: 3px;
+  }
+
+  .star-tooltip-btns {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .tip-mini-btn {
+    appearance: none;
+    border: 1px solid rgba(255, 244, 224, 0.20);
+    background: rgba(255, 255, 255, 0.08);
+    color: #f9e6c4;
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 8px;
+    padding: 1.5px 6px;
+    cursor: pointer;
+    line-height: 1.3;
+  }
+
+  .tip-mini-btn:hover {
+    background: rgba(244, 210, 147, 0.28);
+    border-color: rgba(244, 210, 147, 0.6);
   }
 
   .star-tooltip-body {
     font-family: var(--serif);
     font-style: italic;
-    font-size: 13px;
+    font-size: 13.5px;
+    line-height: 1.26;
+    margin-bottom: 3px;
+  }
+
+  .star-tooltip-hint {
+    font-family: var(--mono);
+    font-size: 7.8px;
+    color: rgba(249, 242, 236, 0.56);
+    letter-spacing: 0.03em;
+  }
     line-height: 1.25;
   }
 
@@ -1650,14 +1701,22 @@
           <button id="breezeBtn" class="mini-pill" type="button" title="Ilık esinti ve polen ışıltısı gönder">Esinti</button>
           <button id="wishBtn" class="mini-pill" type="button" title="Süzülen dilek taç yaprakları bırak">Dilek Yaprağı</button>
           <button id="scentBtn" class="mini-pill" type="button" title="Koku ve ışık halkası yay">Koku Dalgası</button>
-          <button id="starsBtn" class="mini-pill active-star" type="button" title="Herkese açık veya sana özel anı yıldızı bırak">&#10022; Anı Yıldızları <span id="starCountBadge"></span></button>
+          <button id="starsBtn" class="mini-pill active-star" type="button" title="Herkese açık veya sana özel 3B hatıra goncası bırak">&#10048; Hatıra Goncaları <span id="starCountBadge"></span></button>
           <button id="postcardBtn" class="mini-pill" type="button" title="Bu anı çerçeveli hatıra kartpostalı olarak indir">Kartpostal</button>
         </div>
       </div>
 
-      <div id="starTooltip" class="star-tooltip" role="status" aria-live="polite">
-        <div class="star-tooltip-head" id="starTooltipHead">Anı Yıldızı</div>
+      <div id="starTooltip" class="star-tooltip" role="dialog" aria-label="Hatıra Goncası Kartı">
+        <div class="star-tooltip-bar">
+          <div class="star-tooltip-head" id="starTooltipHead">Hatıra Goncası</div>
+          <div class="star-tooltip-btns">
+            <button type="button" class="tip-mini-btn" id="tipEditBtn" style="display:none;">Düzenle</button>
+            <button type="button" class="tip-mini-btn" id="tipResetBtn" style="display:none;" title="Yörüngeye geri bırak">&#8634;</button>
+            <button type="button" class="tip-mini-btn" id="tipCloseBtn" aria-label="Kapat">&#10005;</button>
+          </div>
+        </div>
         <div class="star-tooltip-body" id="starTooltipBody"></div>
+        <div class="star-tooltip-hint">Sürükle: Kartı veya 3B goncayı taşı</div>
       </div>
 
       <div class="chamber-bottom">
@@ -1676,7 +1735,7 @@
               <span class="petal-seq-dot"></span>
             </span>
           </div>
-          <div class="chamber-hint">Sürükle: Döndür &middot; Yaprağa/Yıldıza dokun: Nota &amp; Anı</div>
+          <div class="chamber-hint">Sürükle: Döndür &amp; Goncayı Taşı &middot; Yaprağa/Goncaya dokun: Nota</div>
         </div>
       </div>
 
@@ -1727,11 +1786,11 @@
         </div>
       </div>
 
-      <div class="wish-drawer" id="wishDrawer" role="dialog" aria-label="Anı Yıldızları ve Dilek Bahçesi">
+      <div class="wish-drawer" id="wishDrawer" role="dialog" aria-label="Hatıra Goncaları ve Dilek Bahçesi">
         <div class="wish-head">
-          <span class="wish-head-title">&#10022; Anı Yıldızları &amp; Dilekler</span>
+          <span class="wish-head-title">&#10048; Hatıra Goncaları &amp; Dilek Bahçesi</span>
           <div style="display:flex;gap:5px;">
-            <button class="mini-pill" id="refreshPublicWishesBtn" type="button" style="padding:3px 8px;" title="GitHub ortak dileklerini yenile">Yenile</button>
+            <button class="mini-pill" id="refreshPublicWishesBtn" type="button" style="padding:3px 8px;" title="GitHub ortak goncalarını yenile">Yenile</button>
             <button class="mini-pill" id="wishCloseBtn" type="button" style="padding:3px 8px;">Kapat</button>
           </div>
         </div>
@@ -1744,11 +1803,11 @@
           <input id="wishAuthorInput" type="text" maxlength="32" placeholder="İsim veya rumuz (Örn: Bir Seven)" />
           <textarea id="wishTextInput" rows="2" maxlength="180" placeholder="Kalbinden geçen bir dilek veya hatıra yaz..."></textarea>
           <div class="wish-options-row">
-            <div class="vis-toggle" role="group" aria-label="Dilek Görünürlüğü">
+            <div class="vis-toggle" role="group" aria-label="Gonca Görünürlüğü">
               <button class="vis-btn active" data-vis="public" id="visPublicBtn" type="button">Herkese Açık</button>
               <button class="vis-btn" data-vis="private" id="visPrivateBtn" type="button">Bana Özel</button>
             </div>
-            <div class="star-colors" role="group" aria-label="Yıldız Rengi">
+            <div class="star-colors" role="group" aria-label="Gonca Rengi">
               <button class="star-col-btn active" data-col="gold" type="button" title="Altın Kehribar" style="background:#f5cf7a;color:#f5cf7a;"></button>
               <button class="star-col-btn" data-col="white" type="button" title="Beyaz İnci" style="background:#f7fbff;color:#f7fbff;"></button>
               <button class="star-col-btn" data-col="rose" type="button" title="Gül Şafağı" style="background:#f58fb2;color:#f58fb2;"></button>
@@ -1756,8 +1815,11 @@
             </div>
           </div>
           <div class="wish-publish-row">
-            <span class="wish-status-msg" id="wishStatusMsg">Herkese açık dilekler ortak bahçe yıldızı olur.</span>
-            <button class="mini-pill active-star" id="submitWishBtn" type="submit">Yıldızı Bırak &#10022;</button>
+            <span class="wish-status-msg" id="wishStatusMsg">Herkese açık goncalar bahçede 3B açar.</span>
+            <div style="display:inline-flex;gap:5px;align-items:center;">
+              <button class="mini-pill" id="cancelEditWishBtn" type="button" style="display:none;padding:4px 8px;">Vazgeç</button>
+              <button class="mini-pill active-star" id="submitWishBtn" type="submit">Gonca Bırak &#10048;</button>
+            </div>
           </div>
         </form>
         <div class="wish-list" id="wishList"></div>
@@ -2987,7 +3049,7 @@
       this.pollen = [];
       this.wishPetals = [];
       this.memoryOrbs = [];
-      this.pinnedStars = [];
+      this.pinnedBuds = [];
       this.breathOpenBias = 0;
       this._pt = [0, 0, 0];
       this._nm = [0, 0, 0];
@@ -3193,6 +3255,19 @@
       this.bfWingVStart = Array.from({ length: 4 }, () => addGrid(this.bfSegsU, this.bfSegsV));
       this.bfBodySegsU = 4; this.bfBodySegsV = 4;
       this.bfBodyVStart = addGrid(this.bfBodySegsU, this.bfBodySegsV);
+
+      // 9. Sculpted 3D "Hatıra Goncaları" (up to 16 floating miniature Lilium buds)
+      this.maxBuds = 16;
+      this.budTepSegsU = 3; this.budTepSegsV = 5;
+      this.budCoreSegsU = 6; this.budCoreSegsV = 4;
+      this.budTepVStart = Array.from({ length: this.maxBuds }, () => [
+        addGrid(this.budTepSegsU, this.budTepSegsV),
+        addGrid(this.budTepSegsU, this.budTepSegsV),
+        addGrid(this.budTepSegsU, this.budTepSegsV),
+      ]);
+      this.budCoreVStart = Array.from({ length: this.maxBuds }, () =>
+        addGrid(this.budCoreSegsU, this.budCoreSegsV)
+      );
 
       this.vertexCount = vCursor;
       this.indices = new Uint16Array(idx);
@@ -3453,7 +3528,7 @@
       return target;
     }
 
-    updateAndBuildGeometry(uCycle, cultivar, time, windVec, dt) {
+    updateAndBuildGeometry(uCycle, cultivar, time, windVec, dt, hoveredBudId = null) {
       const windX = windVec[0];
       const windZ = windVec[1];
       this.stemVelX += (windX * 0.42 - 20.0 * this.stemSwayX - 3.4 * this.stemVelX) * dt;
@@ -3937,6 +4012,106 @@
         }
         this._computeNormalsRange(this.bfBodyVStart, this.bfBodySegsU, this.bfBodySegsV);
       }
+
+      // 11. Sculpted 3D "Hatıra Goncaları" (3-petal luminous baby Lilium buds orbiting gently)
+      for (let b = 0; b < this.maxBuds; b++) {
+        const bud = this.pinnedBuds[b];
+        if (!bud) {
+          for (let p = 0; p < 3; p++) {
+            const vs = this.budTepVStart[b][p];
+            for (let k = 0; k < (this.budTepSegsU + 1) * (this.budTepSegsV + 1); k++) {
+              this._writeRaw(vs + k, 0, -10, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0);
+            }
+          }
+          const cs = this.budCoreVStart[b];
+          for (let k = 0; k < (this.budCoreSegsU + 1) * (this.budCoreSegsV + 1); k++) {
+            this._writeRaw(cs + k, 0, -10, 0, 0, 1, 0, 0, 0, 10.6, 0, 0, 0);
+          }
+          continue;
+        }
+
+        let bx, by, bz;
+        if (bud.customPos) {
+          bx = bud.customPos.x;
+          by = bud.customPos.y + Math.sin(time * 1.15 + bud.phase) * 0.022;
+          bz = bud.customPos.z;
+        } else {
+          const ang0 = bud.angle + time * bud.speed;
+          bx = Math.cos(ang0) * bud.rad;
+          bz = Math.sin(ang0) * bud.rad * 0.74;
+          by = bud.baseY + Math.sin(time * 1.15 + bud.phase) * 0.085;
+        }
+        const ang = bud.angle + time * bud.speed;
+        if (!bud.worldPos) bud.worldPos = [bx, by, bz];
+        else { bud.worldPos[0] = bx; bud.worldPos[1] = by; bud.worldPos[2] = bz; }
+
+        const isHov = bud.id === hoveredBudId ? 1.0 : 0.0;
+        const sc = (0.175 + 0.042 * isHov) * (0.96 + 0.04 * Math.sin(time * 2.2 + bud.phase));
+        const openB = lerp(0.22, 0.54, isHov);
+        const rotY = ang + time * 0.42;
+        const tilt = 0.24 + 0.08 * Math.sin(time * 1.3 + bud.phase);
+        const ct = Math.cos(tilt), st = Math.sin(tilt);
+        const cy = Math.cos(rotY), sy = Math.sin(rotY);
+
+        for (let p = 0; p < 3; p++) {
+          const vs = this.budTepVStart[b][p];
+          const phi = rotY + p * (Math.PI * 2 / 3);
+          const cp = Math.cos(phi), sp = Math.sin(phi);
+          const tx = -sp, tz = cp;
+
+          for (let iy = 0; iy <= this.budTepSegsV; iy++) {
+            const u = iy / this.budTepSegsV; // 0 base -> 1 bud tip
+            // Pointed teardrop Lilium bud curve that swells cleanly in middle and kisses shut near tip
+            const belly = Math.sin(Math.pow(u, 0.72) * Math.PI);
+            const rRad = (0.14 + belly * (0.34 + 0.34 * openB) + u * 0.26 * openB) * sc;
+            const yLoc = (u - 0.38) * 1.18 * sc;
+            const halfW = belly * 0.36 * sc;
+
+            for (let ix = 0; ix <= this.budTepSegsU; ix++) {
+              const vCoord = (ix / this.budTepSegsU) * 2 - 1;
+              const lat = vCoord * halfW;
+              const cup = (1.0 - vCoord * vCoord) * 0.065 * sc * belly;
+              const pxLoc = cp * (rRad + cup) + tx * lat;
+              const pzLoc = sp * (rRad + cup) + tz * lat;
+
+              // Gentle sway tilt around local Z then write
+              const yT = yLoc * ct - pzLoc * st;
+              const zT = yLoc * st + pzLoc * ct;
+              this._writeRaw(
+                vs + iy * (this.budTepSegsU + 1) + ix,
+                bx + pxLoc, by + yT, bz + zT,
+                0, 1, 0, u, vCoord,
+                10.0, bud.colorIdx, isHov, 0.96
+              );
+            }
+          }
+          this._computeNormalsRange(vs, this.budTepSegsU, this.budTepSegsV);
+        }
+
+        // Inner glowing heart pearl/nectar bulb inside each 3D Hatıra Goncası
+        const cs = this.budCoreVStart[b];
+        const cRadX = 0.22 * sc;
+        const cRadY = 0.32 * sc;
+        for (let iy = 0; iy <= this.budCoreSegsV; iy++) {
+          const phi = (iy / this.budCoreSegsV - 0.5) * Math.PI;
+          const cp = Math.cos(phi), sp = Math.sin(phi);
+          for (let ix = 0; ix <= this.budCoreSegsU; ix++) {
+            const th = (ix / this.budCoreSegsU) * Math.PI * 2 + rotY;
+            const lx = Math.cos(th) * cp * cRadX;
+            const lz = Math.sin(th) * cp * cRadX;
+            const ly = sp * cRadY - 0.04 * sc;
+            const yT = ly * ct - lz * st;
+            const zT = ly * st + lz * ct;
+            this._writeRaw(
+              cs + iy * (this.budCoreSegsU + 1) + ix,
+              bx + lx * cy + zT * sy, by + yT, bz - lx * sy + zT * cy,
+              Math.cos(th) * cp, sp, Math.sin(th) * cp,
+              ix / this.budCoreSegsU, iy / this.budCoreSegsV,
+              10.6, bud.colorIdx, isHov, 0.98
+            );
+          }
+        }
+      }
     }
   }
 
@@ -4312,7 +4487,7 @@
       specPow = 28.0;
       specStr = 0.25;
       emission = uBioCol * (0.25 + 0.65 * uBioGlow) * nightAmt;
-    } else {
+    } else if (partType < 9.5) {
       // Articulated 3D Swallowtail Butterfly (Wings & Body)
       if (partType > 9.15) {
         albedo = vec3(0.16, 0.12, 0.14);
@@ -4330,6 +4505,25 @@
         specStr = 0.35;
         emission = uButterflyA * 0.16 * (0.4 + 0.6 * dayAmt);
       }
+    } else {
+      // 3D Sculpted "Hatıra Goncası" (Miniature Translucent Blooming Lilium Bud)
+      float cIdx = vMeta.y;
+      vec3 budCol = vec3(0.99, 0.85, 0.50);
+      if (cIdx > 0.5 && cIdx < 1.5) budCol = vec3(0.98, 0.99, 1.00);
+      else if (cIdx >= 1.5 && cIdx < 2.5) budCol = vec3(0.98, 0.62, 0.78);
+      else if (cIdx >= 2.5) budCol = vec3(0.76, 0.72, 1.00);
+
+      float isCore = step(10.4, partType);
+      float hoverBoost = vMeta.z;
+      float edgeGlow = pow(abs(v), 1.6) * 0.45 + smoothstep(0.55, 1.0, u) * 0.35;
+      vec3 basePearlescent = mix(vec3(0.98, 0.97, 0.95), budCol, 0.42 + 0.38 * u);
+      albedo = mix(basePearlescent, budCol * 1.12, isCore);
+      translucency = mix(0.85, 0.35, isCore);
+      specPow = 56.0;
+      specStr = 0.55;
+      float pulse = 0.80 + 0.20 * sin(uTime * 2.5 + cIdx * 1.7);
+      float lum = mix(0.28 + 0.34 * nightAmt + 0.24 * edgeGlow, 0.92, isCore) * (1.0 + 0.78 * hoverBoost) * pulse;
+      emission = budCol * lum;
     }
 
     float ndl = dot(N, L);
@@ -4347,7 +4541,7 @@
     float spec = pow(max(dot(N, H), 0.0), specPow) * specStr;
 
     vec3 col = albedo * (skyAmb + keyCol * wrapDiff * 0.88) + sss + rim + keyCol * spec + emission;
-    float alpha = partType > 7.5 ? metaW : 1.0;
+    float alpha = (partType > 7.5 && partType < 9.5) ? metaW : (partType >= 9.9 ? 0.96 : 1.0);
     outColor = vec4(clamp(col, 0.0, 1.18), alpha);
   }`;
 
@@ -4643,6 +4837,9 @@
         for (const pt of bl.petals) pt.screenTip = projectToScreen(pt.tipWorld, vp, cssW, cssH);
         for (const ant of bl.anthers) ant.screenPos = projectToScreen(ant.worldPos, vp, cssW, cssH);
       }
+      for (const bud of this.plant.pinnedBuds) {
+        if (bud.worldPos) bud.screenPos = projectToScreen(bud.worldPos, vp, cssW, cssH);
+      }
 
       const sunAngle = (sim.u - 0.15) * Math.PI * 1.15;
       const sunDir = [-Math.cos(sunAngle) * 1.2, Math.sin(sunAngle) * 0.9 + 0.36, -0.75];
@@ -4739,22 +4936,6 @@
         const fade = clamp(m.life * 2.4, 0, 1);
         const shimmer = 0.8 + 0.2 * Math.sin(sim.time * 4.2 + m.phase);
         pushSprite(m.x, m.y, m.z, 0.044 * m.size * fade, 1.0 * fade * shimmer, 0.92 * fade * shimmer, 0.70 * fade * shimmer, 2.0);
-      }
-      for (const st of this.plant.pinnedStars) {
-        const ang = st.angle + sim.time * st.speed;
-        const sx = Math.cos(ang) * st.rad;
-        const sz = Math.sin(ang) * st.rad * 0.72;
-        const sy = st.baseY + Math.sin(sim.time * 1.15 + st.phase) * 0.09;
-        st.worldPos = [sx, sy, sz];
-        st.screenPos = projectToScreen(st.worldPos, vp, cssW, cssH);
-        const shimmer = 0.78 + 0.22 * Math.sin(sim.time * 2.8 + st.phase);
-        const isSel = sim.hoveredStarId === st.id;
-        pushSprite(
-          sx, sy, sz,
-          (isSel ? 0.088 : 0.062) * (0.9 + 0.2 * shimmer),
-          st.rgb[0] * shimmer, st.rgb[1] * shimmer, st.rgb[2] * shimmer,
-          2.0
-        );
       }
       for (const p of this.plant.pollen) {
         pushSprite(p.x, p.y, p.z, 0.018 * p.size * p.life, cultivar.pollenCol[0], cultivar.pollenCol[1], cultivar.pollenCol[2], 1.0);
@@ -5861,11 +6042,14 @@
   });
   loadNote();
 
-  // 3D Chamber Interaction (Memory Stars + Petals Harp + Anthers + Blooms + Water Mirror + Orbit)
-  const lilyPtr = { active: false, mode: "none", lastX: 0, lastY: 0, lastWaterTs: 0 };
+  // 3D Chamber Interaction (3D Hatıra Goncaları + Petals Harp + Anthers + Blooms + Water Mirror + Orbit)
+  const lilyPtr = { active: false, mode: "none", lastX: 0, lastY: 0, lastWaterTs: 0, moveBudId: null, movedDist: 0 };
   const starTooltip = document.getElementById("starTooltip");
   const starTooltipHead = document.getElementById("starTooltipHead");
   const starTooltipBody = document.getElementById("starTooltipBody");
+  const tipEditBtn = document.getElementById("tipEditBtn");
+  const tipResetBtn = document.getElementById("tipResetBtn");
+  const tipCloseBtn = document.getElementById("tipCloseBtn");
   const petalSeqHud = document.getElementById("petalSeqHud");
   const petalNoteLabel = document.getElementById("petalNoteLabel");
   const petalSeqDots = Array.from(document.querySelectorAll(".petal-seq-dot"));
@@ -5874,31 +6058,111 @@
   const LYDIAN_NAMES = ["F4", "G4", "A4", "B4", "C5", "E5"];
   let motifPos = 0;
   let petalHudTimer = null;
-  let tooltipPinTimer = null;
+  let pinnedBudId = null;
 
-  function showStarTooltip(star, durationMs = 0) {
-    if (!star || !star.screenPos) return;
-    starTooltipHead.textContent = `${star.vis === "public" ? "✦ Herkese Açık" : "🔒 Bana Özel"} · ${star.author}`;
-    starTooltipBody.textContent = `“${star.text}”`;
+  function loadBudPositions() {
+    try { return JSON.parse(localStorage.getItem("lilium_bud_pos_v1") || "{}"); } catch (_) { return {}; }
+  }
+  function saveBudPosition(id, data) {
+    try {
+      const all = loadBudPositions();
+      if (!data) delete all[id];
+      else all[id] = { ...(all[id] || {}), ...data };
+      localStorage.setItem("lilium_bud_pos_v1", JSON.stringify(all));
+    } catch (_) {}
+  }
+
+  function showStarTooltip(bud, pinned = false) {
+    if (!bud) return;
+    if (pinned) pinnedBudId = bud.id;
+    sim.hoveredStarId = bud.id;
+    starTooltipHead.textContent = `${bud.vis === "public" ? "❀ Herkese Açık" : "🔒 Bana Özel"} · ${bud.author}`;
+    starTooltipBody.textContent = `“${bud.text}”`;
+    tipEditBtn.style.display = bud.source === "local" ? "inline-flex" : "none";
+    tipResetBtn.style.display = (bud.customPos || bud.customTip) ? "inline-flex" : "none";
+
     const rect = lilyCanvas.getBoundingClientRect();
-    const tx = clamp(star.screenPos[0], 110, Math.max(120, rect.width - 110));
-    const ty = clamp(star.screenPos[1], 72, Math.max(82, rect.height - 24));
+    let tx, ty;
+    if (bud.customTip) {
+      tx = clamp(bud.customTip.x * rect.width, 130, Math.max(140, rect.width - 130));
+      ty = clamp(bud.customTip.y * rect.height, 96, Math.max(106, rect.height - 20));
+    } else if (bud.screenPos) {
+      tx = clamp(bud.screenPos[0], 130, Math.max(140, rect.width - 130));
+      ty = clamp(bud.screenPos[1] - 12, 96, Math.max(106, rect.height - 20));
+    } else {
+      tx = rect.width * 0.5;
+      ty = rect.height * 0.42;
+    }
     starTooltip.style.left = `${tx}px`;
     starTooltip.style.top = `${ty}px`;
     starTooltip.classList.add("visible");
-    if (tooltipPinTimer) clearTimeout(tooltipPinTimer);
-    if (durationMs > 0) {
-      tooltipPinTimer = setTimeout(() => {
-        sim.hoveredStarId = null;
-        starTooltip.classList.remove("visible");
-      }, durationMs);
-    }
   }
 
-  function hideStarTooltip() {
-    if (tooltipPinTimer) return;
+  function hideStarTooltip(force = false) {
+    if (!force && pinnedBudId) return;
+    pinnedBudId = null;
+    sim.hoveredStarId = null;
     starTooltip.classList.remove("visible");
   }
+
+  // Drag-and-place support for the floating Hatıra Goncası tooltip card itself
+  const tipDrag = { active: false, pointerId: null, offX: 0, offY: 0 };
+  starTooltip.addEventListener("pointerdown", (e) => {
+    if (e.target.closest("button")) return;
+    e.stopPropagation();
+    const rect = lilyCanvas.getBoundingClientRect();
+    const curL = parseFloat(starTooltip.style.left) || rect.width * 0.5;
+    const curT = parseFloat(starTooltip.style.top) || rect.height * 0.5;
+    tipDrag.active = true;
+    tipDrag.pointerId = e.pointerId;
+    tipDrag.offX = e.clientX - (rect.left + curL);
+    tipDrag.offY = e.clientY - (rect.top + curT);
+    starTooltip.setPointerCapture(e.pointerId);
+    starTooltip.classList.add("dragging");
+  });
+  starTooltip.addEventListener("pointermove", (e) => {
+    if (!tipDrag.active) return;
+    const rect = lilyCanvas.getBoundingClientRect();
+    const nx = clamp(e.clientX - tipDrag.offX - rect.left, 115, Math.max(125, rect.width - 115));
+    const ny = clamp(e.clientY - tipDrag.offY - rect.top, 82, Math.max(92, rect.height - 16));
+    starTooltip.style.left = `${nx}px`;
+    starTooltip.style.top = `${ny}px`;
+    const activeBud = plant.pinnedBuds.find((b) => b.id === (pinnedBudId || sim.hoveredStarId));
+    if (activeBud) {
+      activeBud.customTip = { x: nx / Math.max(1, rect.width), y: ny / Math.max(1, rect.height) };
+      saveBudPosition(activeBud.id, { tipX: activeBud.customTip.x, tipY: activeBud.customTip.y });
+      tipResetBtn.style.display = "inline-flex";
+    }
+  });
+  function endTipDrag() {
+    tipDrag.active = false;
+    starTooltip.classList.remove("dragging");
+  }
+  starTooltip.addEventListener("pointerup", endTipDrag);
+  starTooltip.addEventListener("pointercancel", endTipDrag);
+
+  tipCloseBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    hideStarTooltip(true);
+  });
+
+  tipResetBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const bud = plant.pinnedBuds.find((b) => b.id === (pinnedBudId || sim.hoveredStarId));
+    if (!bud) return;
+    bud.customPos = null;
+    bud.customTip = null;
+    saveBudPosition(bud.id, null);
+    tipResetBtn.style.display = "none";
+    audio.playKnobTink(false);
+    setTimeout(() => showStarTooltip(bud, true), 40);
+  });
+
+  tipEditBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const bud = plant.pinnedBuds.find((b) => b.id === (pinnedBudId || sim.hoveredStarId));
+    if (bud && typeof startEditWish === "function") startEditWish(bud);
+  });
 
   function registerPetalHarp(petalIdx) {
     const k = ((petalIdx % 6) + 6) % 6;
@@ -5937,14 +6201,14 @@
     const px = clientX - rect.left;
     const py = clientY - rect.top;
 
-    let bestStar = null, minStarD = 26;
-    for (let i = 0; i < plant.pinnedStars.length; i++) {
-      const st = plant.pinnedStars[i];
-      if (!st.screenPos) continue;
-      const d = Math.hypot(px - st.screenPos[0], py - st.screenPos[1]);
-      if (d < minStarD) { minStarD = d; bestStar = st; }
+    let bestBud = null, minBudD = 28;
+    for (let i = 0; i < plant.pinnedBuds.length; i++) {
+      const bd = plant.pinnedBuds[i];
+      if (!bd.screenPos) continue;
+      const d = Math.hypot(px - bd.screenPos[0], py - bd.screenPos[1]);
+      if (d < minBudD) { minBudD = d; bestBud = bd; }
     }
-    if (bestStar) return { type: "star", star: bestStar };
+    if (bestBud) return { type: "bud", bud: bestBud };
 
     let bestAnther = null, minAntD = 26;
     for (let b = 0; b < plant.blooms.length; b++) {
@@ -6010,15 +6274,21 @@
     lilyPtr.active = true;
     lilyPtr.lastX = e.clientX;
     lilyPtr.lastY = e.clientY;
+    lilyPtr.movedDist = 0;
+    lilyPtr.moveBudId = null;
 
     const hit = hitTestLilium(e.clientX, e.clientY);
     if (hit) {
-      if (hit.type === "star") {
-        lilyPtr.mode = "stroke";
-        sim.hoveredStarId = hit.star.id;
-        showStarTooltip(hit.star, 4500);
+      if (hit.type === "bud") {
+        lilyPtr.mode = "moveBud";
+        lilyPtr.moveBudId = hit.bud.id;
+        pinnedBudId = hit.bud.id;
+        sim.hoveredStarId = hit.bud.id;
+        showStarTooltip(hit.bud, true);
         plant.spawnMemoryOrbs(3);
-        spawnScentRing(0.65, clamp(hit.star.screenPos[0] / (lilyCanvas.clientWidth || 1), 0.1, 0.9), clamp(hit.star.screenPos[1] / (lilyCanvas.clientHeight || 1), 0.1, 0.9));
+        if (hit.bud.screenPos) {
+          spawnScentRing(0.65, clamp(hit.bud.screenPos[0] / (lilyCanvas.clientWidth || 1), 0.1, 0.9), clamp(hit.bud.screenPos[1] / (lilyCanvas.clientHeight || 1), 0.1, 0.9));
+        }
         audio.playPollenSparkle();
       } else if (hit.type === "water") {
         lilyPtr.mode = "water";
@@ -6042,6 +6312,7 @@
         }
       }
     } else {
+      hideStarTooltip(true);
       lilyPtr.mode = "orbit";
       lilyCanvas.classList.add("orbiting");
     }
@@ -6051,21 +6322,43 @@
     if (!lilyPtr.active) {
       const hoverHit = hitTestLilium(e.clientX, e.clientY);
       lilyCanvas.classList.toggle("petaling", !!hoverHit);
-      if (hoverHit && hoverHit.type === "star") {
-        sim.hoveredStarId = hoverHit.star.id;
-        showStarTooltip(hoverHit.star, 0);
+      if (hoverHit && hoverHit.type === "bud") {
+        if (!pinnedBudId) showStarTooltip(hoverHit.bud, false);
       } else {
-        sim.hoveredStarId = null;
-        hideStarTooltip();
+        if (!pinnedBudId) hideStarTooltip(false);
       }
       return;
     }
     const dx = e.clientX - lilyPtr.lastX;
     const dy = e.clientY - lilyPtr.lastY;
+    lilyPtr.movedDist += Math.hypot(dx, dy);
     lilyPtr.lastX = e.clientX;
     lilyPtr.lastY = e.clientY;
 
-    if (lilyPtr.mode === "orbit") {
+    if (lilyPtr.mode === "moveBud" && lilyPtr.moveBudId) {
+      const bud = plant.pinnedBuds.find((b) => b.id === lilyPtr.moveBudId);
+      if (bud && lilyPtr.movedDist > 4) {
+        const cssH = lilyCanvas.clientHeight || 500;
+        const scale = (2 * sim.camR * Math.tan(0.68 / 2)) / cssH;
+        const fx = -Math.sin(sim.camYaw) * Math.cos(sim.camPitch);
+        const fy = -Math.sin(sim.camPitch);
+        const fz = -Math.cos(sim.camYaw) * Math.cos(sim.camPitch);
+        let rx = -fz, rz = fx;
+        const rLen = Math.hypot(rx, rz) || 1;
+        rx /= rLen; rz /= rLen;
+        const ux = -fy * rz, uy = rz * fx - rx * fz, uz = rx * fy;
+        const wp = bud.customPos || { x: bud.worldPos?.[0] || 0.7, y: bud.worldPos?.[1] || 0.2, z: bud.worldPos?.[2] || 0 };
+        bud.customPos = {
+          x: clamp(wp.x + (rx * dx - ux * dy) * scale, -1.65, 1.65),
+          y: clamp(wp.y + (-uy * dy) * scale, -1.10, 1.45),
+          z: clamp(wp.z + (rz * dx - uz * dy) * scale, -1.55, 1.55),
+        };
+        saveBudPosition(bud.id, { x: bud.customPos.x, y: bud.customPos.y, z: bud.customPos.z });
+        if (!bud.customTip && bud.screenPos) {
+          showStarTooltip(bud, true);
+        }
+      }
+    } else if (lilyPtr.mode === "orbit") {
       sim.camYaw -= dx * 0.006;
       sim.camPitch = clamp(sim.camPitch + dy * 0.005, -0.18, 0.72);
     } else if (lilyPtr.mode === "stroke") {
@@ -6092,6 +6385,7 @@
   function endLilyPtr() {
     lilyPtr.active = false;
     lilyPtr.mode = "none";
+    lilyPtr.moveBudId = null;
     lilyCanvas.classList.remove("orbiting");
   }
   lilyCanvas.addEventListener("pointerup", endLilyPtr);
@@ -6923,13 +7217,14 @@
   document.getElementById("calmCloseBtn").addEventListener("click", () => toggleCalmHud(false));
   updateCalmHudUI();
 
-  // --- Feature 2: Public & Private Memory Stars Wish Garden ---
+  // --- Feature 2: Public & Private 3D "Hatıra Goncaları" Wish Garden ---
   const STAR_PALETTE = {
     gold:     [1.00, 0.86, 0.50],
     white:    [0.98, 0.99, 1.00],
     rose:     [0.98, 0.62, 0.78],
     lavender: [0.76, 0.72, 1.00],
   };
+  const BUD_COLOR_INDEX = { gold: 0, white: 1, rose: 2, lavender: 3 };
 
   const wishListEl = document.getElementById("wishList");
   const starCountBadge = document.getElementById("starCountBadge");
@@ -6938,12 +7233,15 @@
   const wishStatusMsg = document.getElementById("wishStatusMsg");
   const visPublicBtn = document.getElementById("visPublicBtn");
   const visPrivateBtn = document.getElementById("visPrivateBtn");
+  const submitWishBtn = document.getElementById("submitWishBtn");
+  const cancelEditWishBtn = document.getElementById("cancelEditWishBtn");
   const wishTabBtns = Array.from(document.querySelectorAll(".wish-tab[data-wish-filter]"));
   const starColBtns = Array.from(document.querySelectorAll(".star-col-btn"));
 
   let wishFilter = "all";
   let composeVis = "public";
   let composeCol = "gold";
+  let editingWishId = null;
   let remotePublicWishes = [];
   let sharedUrlWishes = [];
 
@@ -6959,6 +7257,42 @@
 
   let localPublicWishes = readWishStore("lilium_wishes_public_v1");
   let localPrivateWishes = readWishStore("lilium_wishes_private_v1");
+
+  function setComposeVis(vis) {
+    composeVis = vis;
+    visPublicBtn.classList.toggle("active", vis === "public");
+    visPrivateBtn.classList.toggle("active", vis === "private");
+  }
+
+  function setComposeCol(col) {
+    composeCol = STAR_PALETTE[col] ? col : "gold";
+    starColBtns.forEach((b) => b.classList.toggle("active", b.dataset.col === composeCol));
+  }
+
+  function startEditWish(w) {
+    if (!w || w.source !== "local") return;
+    editingWishId = w.id;
+    wishAuthorInput.value = w.author || "";
+    wishTextInput.value = w.text || "";
+    setComposeVis(w.vis === "private" ? "private" : "public");
+    setComposeCol(w.col || "gold");
+    submitWishBtn.textContent = "Gonca Güncelle ❀";
+    cancelEditWishBtn.style.display = "inline-flex";
+    wishStatusMsg.textContent = "Gonca düzenleniyor · Güncelle veya vazgeç.";
+    toggleWishDrawer(true);
+    wishTextInput.focus();
+  }
+
+  function cancelEditWish() {
+    editingWishId = null;
+    wishAuthorInput.value = "";
+    wishTextInput.value = "";
+    submitWishBtn.textContent = "Gonca Bırak ❀";
+    cancelEditWishBtn.style.display = "none";
+    wishStatusMsg.textContent = composeVis === "public"
+      ? "Herkese açık goncalar bahçede 3B açar."
+      : "Bana özel: yalnızca bu cihazda gizli saklanır.";
+  }
 
   function encodeShareWish(w) {
     try {
@@ -6977,7 +7311,7 @@
           text: String(obj.t).slice(0, 180),
           col: STAR_PALETTE[obj.c] ? obj.c : "gold",
           vis: "public",
-          dateStr: "Paylaşılan Yıldız",
+          dateStr: "Paylaşılan Gonca",
           source: "url",
         };
       }
@@ -6986,7 +7320,8 @@
   }
 
   (function parseSharedStarFromURL() {
-    const qStar = new URLSearchParams(window.location.search).get("yildiz");
+    const sp = new URLSearchParams(window.location.search);
+    const qStar = sp.get("gonca") || sp.get("yildiz");
     if (qStar) {
       const w = decodeShareWish(qStar);
       if (w) sharedUrlWishes.push(w);
@@ -7010,18 +7345,26 @@
   function syncPinnedStars() {
     const all = getMergedWishes();
     const visible = wishFilter === "all" ? all : all.filter((w) => w.vis === wishFilter);
+    const posMap = loadBudPositions();
     setTxt(starCountBadge, all.length ? `(${all.length})` : "");
-    plant.pinnedStars = visible.slice(0, 18).map((w, i) => {
+    plant.pinnedBuds = visible.slice(0, plant.maxBuds || 16).map((w, i) => {
       const h1 = hash2(i + 1, w.text.length + 7);
       const h2 = hash2(i + 3, w.author.length + 13);
+      const saved = posMap[w.id];
+      const customPos = (saved && typeof saved.x === "number") ? { x: saved.x, y: saved.y, z: saved.z } : null;
+      const customTip = (saved && typeof saved.tipX === "number") ? { x: saved.tipX, y: saved.tipY } : null;
       return {
         ...w,
+        colorIdx: BUD_COLOR_INDEX[w.col] ?? 0,
         rgb: STAR_PALETTE[w.col] || STAR_PALETTE.gold,
         angle: h1 * Math.PI * 2,
-        rad: 0.72 + h2 * 0.42,
-        baseY: -0.05 + (h1 - 0.35) * 0.92,
-        speed: 0.14 + h2 * 0.12,
+        rad: 0.78 + h2 * 0.42,
+        baseY: -0.04 + (h1 - 0.35) * 0.88,
+        speed: 0.13 + h2 * 0.10,
         phase: h1 * 6.28,
+        customPos,
+        customTip,
+        worldPos: customPos ? [customPos.x, customPos.y, customPos.z] : null,
         screenPos: null,
       };
     });
@@ -7030,7 +7373,7 @@
   function buildGitHubWishIssueURL(w) {
     const u = new URL("https://github.com/existye4t/lilium/issues/new");
     u.searchParams.set("labels", "dilek");
-    u.searchParams.set("title", `Anı Yıldızı · ${w.author}`);
+    u.searchParams.set("title", `Hatıra Goncası · ${w.author}`);
     u.searchParams.set("body", `İsim: ${w.author}\nRenk: ${w.col}\nMesaj: ${w.text}`);
     return u.toString();
   }
@@ -7044,8 +7387,8 @@
       empty.className = "wish-status-msg";
       empty.style.padding = "12px 4px";
       empty.textContent = wishFilter === "private"
-        ? "Henüz kendine özel bir dilek bırakmadın."
-        : "İlk anı yıldızını bırakarak göğü aydınlatabilirsin.";
+        ? "Henüz kendine özel bir hatıra goncası bırakmadın."
+        : "İlk hatıra goncasını bırakarak bahçeyi çiçeklendirebilirsin.";
       wishListEl.appendChild(empty);
       syncPinnedStars();
       return;
@@ -7068,7 +7411,7 @@
       const badge = document.createElement("span");
       badge.className = `wish-badge-vis ${w.vis === "public" ? "pub" : "priv"}`;
       badge.textContent = w.vis === "public"
-        ? (w.source === "github" ? "Ortak Duvar ★" : "Herkese Açık")
+        ? (w.source === "github" ? "Ortak Duvar ❀" : "Herkese Açık")
         : "Bana Özel 🔒";
 
       top.appendChild(leftMeta);
@@ -7091,7 +7434,7 @@
         shareBtn.addEventListener("click", (ev) => {
           ev.stopPropagation();
           const url = new URL(window.location.href);
-          url.searchParams.set("yildiz", encodeShareWish(w));
+          url.searchParams.set("gonca", encodeShareWish(w));
           navigator.clipboard?.writeText(url.toString()).catch(() => {});
           shareBtn.textContent = "Kopyalandı ✓";
           setTimeout(() => { shareBtn.textContent = "Linki Kopyala"; }, 1800);
@@ -7110,12 +7453,24 @@
         }
       }
       if (w.source === "local") {
+        const editBtn = document.createElement("button");
+        editBtn.type = "button";
+        editBtn.className = "wish-mini-act";
+        editBtn.textContent = "Düzenle";
+        editBtn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          startEditWish(w);
+        });
+        acts.appendChild(editBtn);
+
         const delBtn = document.createElement("button");
         delBtn.type = "button";
         delBtn.className = "wish-mini-act";
         delBtn.textContent = "Kaldır";
         delBtn.addEventListener("click", (ev) => {
           ev.stopPropagation();
+          if (editingWishId === w.id) cancelEditWish();
+          if (pinnedBudId === w.id) hideStarTooltip(true);
           localPublicWishes = localPublicWishes.filter((x) => x.id !== w.id);
           localPrivateWishes = localPrivateWishes.filter((x) => x.id !== w.id);
           writeWishStore("lilium_wishes_public_v1", localPublicWishes);
@@ -7127,13 +7482,12 @@
       card.appendChild(acts);
 
       card.addEventListener("click", () => {
-        const match = plant.pinnedStars.find((s) => s.id === w.id);
+        const match = plant.pinnedBuds.find((s) => s.id === w.id);
         audio.unlock(false);
         audio.playPollenSparkle();
         plant.spawnMemoryOrbs(4);
         if (match) {
-          sim.hoveredStarId = match.id;
-          showStarTooltip(match, 4200);
+          showStarTooltip(match, true);
         }
       });
 
@@ -7161,7 +7515,7 @@
   }
 
   async function fetchGitHubPublicWishes(showBusy = false) {
-    if (showBusy) wishStatusMsg.textContent = "Ortak yıldızlar yükleniyor...";
+    if (showBusy) wishStatusMsg.textContent = "Ortak goncalar yükleniyor...";
     try {
       const res = await fetch("https://api.github.com/repos/existye4t/lilium/issues?labels=dilek&state=open&per_page=30", {
         headers: { Accept: "application/vnd.github+json" },
@@ -7171,10 +7525,10 @@
       if (Array.isArray(data)) {
         remotePublicWishes = data.map(parseGitHubIssueToWish).filter((x) => x.text);
         renderWishList();
-        if (showBusy) wishStatusMsg.textContent = `${remotePublicWishes.length} ortak anı yıldızı güncel.`;
+        if (showBusy) wishStatusMsg.textContent = `${remotePublicWishes.length} ortak hatıra goncası güncel.`;
       }
     } catch (_) {
-      if (showBusy) wishStatusMsg.textContent = "Çevrimdışı önbellekteki yıldızlar gösteriliyor.";
+      if (showBusy) wishStatusMsg.textContent = "Çevrimdışı önbellekteki goncalar gösteriliyor.";
     }
   }
 
@@ -7185,27 +7539,20 @@
   });
   document.getElementById("wishCloseBtn").addEventListener("click", () => toggleWishDrawer(false));
   document.getElementById("refreshPublicWishesBtn").addEventListener("click", () => fetchGitHubPublicWishes(true));
+  cancelEditWishBtn.addEventListener("click", cancelEditWish);
 
   visPublicBtn.addEventListener("click", () => {
-    composeVis = "public";
-    visPublicBtn.classList.add("active");
-    visPrivateBtn.classList.remove("active");
-    wishStatusMsg.textContent = "Herkese açık: bahçede parlar, paylaşılabilir & ortak duvara işlenir.";
+    setComposeVis("public");
+    if (!editingWishId) wishStatusMsg.textContent = "Herkese açık: bahçede 3B gonca olur & paylaşılır.";
   });
 
   visPrivateBtn.addEventListener("click", () => {
-    composeVis = "private";
-    visPrivateBtn.classList.add("active");
-    visPublicBtn.classList.remove("active");
-    wishStatusMsg.textContent = "Bana özel: yalnızca bu cihazda gizli hatıra olarak saklanır.";
+    setComposeVis("private");
+    if (!editingWishId) wishStatusMsg.textContent = "Bana özel: yalnızca bu cihazda gizli hatıra olarak saklanır.";
   });
 
   starColBtns.forEach((b) => {
-    b.addEventListener("click", () => {
-      starColBtns.forEach((x) => x.classList.remove("active"));
-      b.classList.add("active");
-      composeCol = b.dataset.col || "gold";
-    });
+    b.addEventListener("click", () => setComposeCol(b.dataset.col || "gold"));
   });
 
   wishTabBtns.forEach((b) => {
@@ -7230,30 +7577,59 @@
     const author = (wishAuthorInput.value || "").trim() || (composeVis === "private" ? "Kalbimden" : "Bir Seven");
     const now = new Date();
     const dateStr = `${String(now.getDate()).padStart(2, "0")}.${String(now.getMonth() + 1).padStart(2, "0")}.${now.getFullYear()}`;
-    const item = {
-      id: "loc_" + Date.now().toString(36),
-      author,
-      text: txt,
-      col: composeCol,
-      vis: composeVis,
-      dateStr,
-      source: "local",
-    };
-    if (composeVis === "public") {
-      localPublicWishes.unshift(item);
+
+    if (editingWishId) {
+      const prevPub = localPublicWishes.find((x) => x.id === editingWishId);
+      const prevPriv = localPrivateWishes.find((x) => x.id === editingWishId);
+      const prev = prevPub || prevPriv;
+      const updated = {
+        id: editingWishId,
+        author,
+        text: txt,
+        col: composeCol,
+        vis: composeVis,
+        dateStr: (prev && prev.dateStr) || dateStr,
+        source: "local",
+      };
+      localPublicWishes = localPublicWishes.filter((x) => x.id !== editingWishId);
+      localPrivateWishes = localPrivateWishes.filter((x) => x.id !== editingWishId);
+      if (composeVis === "public") localPublicWishes.unshift(updated);
+      else localPrivateWishes.unshift(updated);
       writeWishStore("lilium_wishes_public_v1", localPublicWishes);
-      wishStatusMsg.textContent = "Yıldızın göğe bırakıldı! Ortak Duvar linki aşağıda hazır ✦";
-    } else {
-      localPrivateWishes.unshift(item);
       writeWishStore("lilium_wishes_private_v1", localPrivateWishes);
-      wishStatusMsg.textContent = "Özel dileğin bu cihazda güvenle saklandı 🔒";
+      const updatedId = editingWishId;
+      cancelEditWish();
+      wishStatusMsg.textContent = "Hatıra goncan güncellendi ❀";
+      renderWishList();
+      const updatedBud = plant.pinnedBuds.find((b) => b.id === updatedId);
+      if (updatedBud && pinnedBudId === updatedId) showStarTooltip(updatedBud, true);
+    } else {
+      const item = {
+        id: "loc_" + Date.now().toString(36),
+        author,
+        text: txt,
+        col: composeCol,
+        vis: composeVis,
+        dateStr,
+        source: "local",
+      };
+      if (composeVis === "public") {
+        localPublicWishes.unshift(item);
+        writeWishStore("lilium_wishes_public_v1", localPublicWishes);
+        wishStatusMsg.textContent = "3B hatıra goncan açıldı! Paylaşma linki aşağıda hazır ❀";
+      } else {
+        localPrivateWishes.unshift(item);
+        writeWishStore("lilium_wishes_private_v1", localPrivateWishes);
+        wishStatusMsg.textContent = "Özel goncan bu cihazda güvenle saklandı 🔒";
+      }
+      wishTextInput.value = "";
+      renderWishList();
     }
-    wishTextInput.value = "";
+
     plant.spawnWishPetals(6);
     plant.spawnMemoryOrbs(8);
     spawnScentRing(0.92, 0.5, 0.5);
     audio.playWishRelease();
-    renderWishList();
   });
 
   renderWishList();
@@ -7479,7 +7855,7 @@
     }
 
     stepCultivarMorph(dt);
-    plant.updateAndBuildGeometry(sim.u, sim.activeCultivar, sim.time, sim.windVec, dt);
+    plant.updateAndBuildGeometry(sim.u, sim.activeCultivar, sim.time, sim.windVec, dt, sim.hoveredStarId);
 
     audio.setState(sim.u, sim.windEnergy, 0, swPtr.dragging ? speed * 1.4 : 0);
 
