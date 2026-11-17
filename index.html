@@ -229,12 +229,25 @@
   input[type="range"]#volumeSlider {
     -webkit-appearance: none;
     appearance: none;
-    width: 68px;
-    height: 4px;
-    border-radius: 999px;
-    background: rgba(150, 145, 140, 0.34);
+    width: 70px;
+    height: 18px;
+    margin: -5px 0;
+    background: transparent;
     outline: none;
     cursor: pointer;
+    touch-action: none;
+  }
+
+  input[type="range"]#volumeSlider::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(150, 145, 140, 0.36);
+  }
+
+  input[type="range"]#volumeSlider::-moz-range-track {
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(150, 145, 140, 0.36);
   }
 
   input[type="range"]#volumeSlider::-webkit-slider-thumb {
@@ -242,6 +255,7 @@
     appearance: none;
     width: 12px;
     height: 12px;
+    margin-top: -4px;
     border-radius: 50%;
     background: var(--accent);
     border: 1.5px solid rgba(255, 252, 248, 0.92);
@@ -257,6 +271,23 @@
     border: 1.5px solid rgba(255, 252, 248, 0.92);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
     cursor: pointer;
+  }
+
+  @media (pointer: coarse) {
+    input[type="range"]#volumeSlider {
+      width: 78px;
+      height: 22px;
+      margin: -6px 0;
+    }
+    input[type="range"]#volumeSlider::-webkit-slider-thumb {
+      width: 16px;
+      height: 16px;
+      margin-top: -6px;
+    }
+    input[type="range"]#volumeSlider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+    }
   }
 
   .volume-pill .vol-val {
@@ -1400,13 +1431,18 @@
   // 2. WEB AUDIO ENGINE ("BEYAZ ZAMBAK NOKTÜRNÜ" — 8-BAR F LYDIAN SUITE)
   // =========================================================================
   class BotanicalAudio {
-    constructor(onScentPulse) {
+    constructor(onScentPulse, onStateChange) {
       this.onScentPulse = onScentPulse;
+      this.onStateChange = onStateChange || null;
       this.ctx = null;
       this.ready = false;
       this.muted = false;
       this.volume = 0.78;
       this.u = 0.22;
+      this._htmlAudioUnlocked = false;
+      this._unlockAudioEl = null;
+      this._silentBuf = null;
+      this._schedulerId = null;
 
       // 74 BPM heartfelt botanical nocturne (8 bars = 128 sixteenth steps)
       this.stepDur = 60 / 74 / 4; // ~0.2027s
@@ -1444,14 +1480,141 @@
       this.rubFilter = null;
     }
 
+    isRunning() {
+      return Boolean(this.ctx && this.ctx.state === "running");
+    }
+
+    _notifyState() {
+      if (typeof this.onStateChange === "function") this.onStateChange();
+    }
+
+    _ensurePlaybackSession() {
+      // Switch iOS 17+ WebKit AudioSession to playback so hardware silent switch does not mute
+      try {
+        if (navigator.audioSession && navigator.audioSession.type !== "playback") {
+          navigator.audioSession.type = "playback";
+        }
+      } catch (_) {}
+      // Play a tiny unmuted silent WAV on user gesture to unlock iOS <17 / in-app WebView playback channel
+      if (!this._unlockAudioEl && typeof Audio !== "undefined") {
+        try {
+          const a = new Audio("data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA");
+          a.setAttribute("playsinline", "");
+          a.playsInline = true;
+          a.preload = "auto";
+          a.volume = 0.01;
+          this._unlockAudioEl = a;
+        } catch (_) {}
+      }
+      if (this._unlockAudioEl && !this._htmlAudioUnlocked) {
+        try {
+          const p = this._unlockAudioEl.play();
+          if (p && typeof p.then === "function") {
+            p.then(() => { this._htmlAudioUnlocked = true; }).catch(() => {});
+          }
+        } catch (_) {}
+      }
+    }
+
+    _createPan(panVal = 0) {
+      if (this.ctx && typeof this.ctx.createStereoPanner === "function") {
+        const p = this.ctx.createStereoPanner();
+        p.pan.value = clamp(panVal, -0.85, 0.85);
+        return p;
+      }
+      return this.ctx.createGain();
+    }
+
+    _playSilentWebAudioUnlock() {
+      if (!this.ctx) return;
+      try {
+        if (!this._silentBuf) {
+          this._silentBuf = this.ctx.createBuffer(1, 1, Math.min(this.ctx.sampleRate || 44100, 48000));
+        }
+        const src = this.ctx.createBufferSource();
+        src.buffer = this._silentBuf;
+        src.connect(this.ctx.destination);
+        src.start(0);
+      } catch (_) {}
+    }
+
+    _kickResume() {
+      if (!this.ctx) return;
+      this._playSilentWebAudioUnlock();
+      if (this.ctx.state !== "running" && typeof this.ctx.resume === "function") {
+        try {
+          const p = this.ctx.resume();
+          if (p && typeof p.then === "function") {
+            p.then(() => {
+              if (this.ctx && this.ctx.state === "running") {
+                const now = this.ctx.currentTime;
+                if (Math.abs(now - this.nextStepTime) > 0.45) {
+                  this.nextStepTime = now + 0.03;
+                  this.nextCricket = now + 0.35;
+                }
+                this._schedule();
+              }
+              this._notifyState();
+            }).catch(() => {
+              this._notifyState();
+            });
+          }
+        } catch (_) {}
+      }
+    }
+
+    resumeIfNeeded() {
+      if (!this.ctx || this.muted) return;
+      this._ensurePlaybackSession();
+      this._kickResume();
+    }
+
+    unlock(forceUnmute = false) {
+      this._ensurePlaybackSession();
+      if (!this.ctx) {
+        this.init();
+      } else {
+        this._kickResume();
+      }
+      if (forceUnmute && this.muted) {
+        this.muted = false;
+        if (this.volume <= 0.01) this.volume = 0.65;
+        if (this.outGain && this.ctx) {
+          const g = Math.pow(this.volume, 1.35);
+          this.outGain.gain.setTargetAtTime(g, this.ctx.currentTime, 0.035);
+          this._playGlassPad(this._currentChord().pad, this.ctx.currentTime + 0.015, this.stepDur * 8, 0.082);
+        }
+      }
+      this._notifyState();
+    }
+
     init() {
+      this._ensurePlaybackSession();
       if (this.ctx) {
-        if (this.ctx.state === "suspended") this.ctx.resume();
+        if (this.ctx.state !== "running") this._kickResume();
         return;
       }
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
-      this.ctx = new AC();
+      try {
+        this.ctx = new AC({ latencyHint: "interactive" });
+      } catch (_) {
+        this.ctx = new AC();
+      }
+
+      if (typeof this.ctx.addEventListener === "function") {
+        this.ctx.addEventListener("statechange", () => {
+          if (this.ctx && this.ctx.state === "running") {
+            const now = this.ctx.currentTime;
+            if (Math.abs(now - this.nextStepTime) > 0.45) {
+              this.nextStepTime = now + 0.03;
+              this.nextCricket = now + 0.35;
+            }
+            this._schedule();
+          }
+          this._notifyState();
+        });
+      }
 
       this.comp = this.ctx.createDynamicsCompressor();
       this.comp.threshold.value = -14;
@@ -1463,42 +1626,40 @@
       this.comp.connect(this.outGain);
       this.outGain.connect(this.ctx.destination);
 
-      this.noiseBuf = this._makeNoise(2.2);
+      this.noiseBuf = this._makeNoise(1.8);
       this.reverb = this.ctx.createConvolver();
-      this.reverb.buffer = this._makeImpulse(2.85, 2.2);
+      this.reverb.buffer = this._makeImpulse(1.85, 2.3, 92000);
 
       this.musicBus = this.ctx.createGain();
       this.musicLP = this.ctx.createBiquadFilter();
       this.musicLP.type = "lowpass";
-      this.musicLP.frequency.value = 1100;
+      this.musicLP.frequency.value = 1280;
       this.musicLP.Q.value = 0.55;
 
       this.musicMaster = this.ctx.createGain();
-      this.musicMaster.gain.value = 0.54;
+      this.musicMaster.gain.value = 0.72;
 
       this.reverbSend = this.ctx.createGain();
-      this.reverbSend.gain.value = 0.44;
+      this.reverbSend.gain.value = 0.42;
       this.reverbSend.connect(this.reverb);
       this.reverb.connect(this.musicLP);
 
       // Stereo ping-pong conservatory echo
       this.delaySend = this.ctx.createGain();
-      this.delaySend.gain.value = 0.28;
+      this.delaySend.gain.value = 0.26;
       this.delayL = this.ctx.createDelay(1.2);
       this.delayR = this.ctx.createDelay(1.2);
       this.delayL.delayTime.value = this.stepDur * 3.0;
       this.delayR.delayTime.value = this.stepDur * 4.0;
       const delayLP = this.ctx.createBiquadFilter();
       delayLP.type = "lowpass";
-      delayLP.frequency.value = 1900;
+      delayLP.frequency.value = 2000;
       const fbL = this.ctx.createGain();
       fbL.gain.value = 0.34;
       const fbR = this.ctx.createGain();
       fbR.gain.value = 0.28;
-      const panL = this.ctx.createStereoPanner();
-      panL.pan.value = -0.52;
-      const panR = this.ctx.createStereoPanner();
-      panR.pan.value = 0.52;
+      const panL = this._createPan(-0.52);
+      const panR = this._createPan(0.52);
 
       this.delaySend.connect(this.delayL);
       this.delayL.connect(delayLP);
@@ -1518,24 +1679,28 @@
       this.musicMaster.connect(this.comp);
 
       this.sfxBus = this.ctx.createGain();
-      this.sfxBus.gain.value = 0.74;
+      this.sfxBus.gain.value = 0.80;
       this.sfxBus.connect(this.comp);
 
       this.sfxRev = this.ctx.createConvolver();
-      this.sfxRev.buffer = this._makeImpulse(1.75, 2.7);
+      this.sfxRev.buffer = this._makeImpulse(1.15, 2.7, 56000);
       this.sfxRevSend = this.ctx.createGain();
-      this.sfxRevSend.gain.value = 0.38;
+      this.sfxRevSend.gain.value = 0.36;
       this.sfxRevSend.connect(this.sfxRev);
       this.sfxRev.connect(this.comp);
 
       this._setupWind();
       this._setupKnobRub();
 
-      this.nextStepTime = this.ctx.currentTime + 0.08;
+      this.nextStepTime = this.ctx.currentTime + 0.05;
       this.nextCricket = this.ctx.currentTime + 0.35;
-      setInterval(() => this._schedule(), 25);
+      if (!this._schedulerId) {
+        this._schedulerId = setInterval(() => this._schedule(), 25);
+      }
       this.ready = true;
       this.setState(this.u, 0, 0);
+      this._kickResume();
+      this._notifyState();
     }
 
     getMovementName() {
@@ -1556,23 +1721,30 @@
     }
 
     toggleMute() {
+      this._ensurePlaybackSession();
       if (!this.ctx) {
         this.init();
         this.muted = false;
       } else {
         this.muted = !this.muted;
         if (!this.muted && this.volume <= 0.01) this.volume = 0.55;
-        if (this.ctx.state === "suspended") this.ctx.resume();
+        if (this.ctx.state !== "running") this._kickResume();
       }
-      if (this.outGain) {
+      if (this.outGain && this.ctx) {
         const g = (this.muted || this.volume <= 0.001) ? 0 : Math.pow(this.volume, 1.35);
         this.outGain.gain.setTargetAtTime(g, this.ctx.currentTime, 0.04);
+        if (!this.muted && this.ctx.state === "running") {
+          const now = this.ctx.currentTime;
+          if (Math.abs(now - this.nextStepTime) > 0.45) this.nextStepTime = now + 0.03;
+          this._playGlassPad(this._currentChord().pad, now + 0.015, this.stepDur * 8, 0.082);
+        }
       }
+      this._notifyState();
       return !this.muted;
     }
 
     _makeNoise(sec) {
-      const n = Math.floor(this.ctx.sampleRate * sec);
+      const n = Math.min(88200, Math.floor(this.ctx.sampleRate * sec));
       const b = this.ctx.createBuffer(2, n, this.ctx.sampleRate);
       for (let c = 0; c < 2; c++) {
         const d = b.getChannelData(c);
@@ -1581,8 +1753,8 @@
       return b;
     }
 
-    _makeImpulse(sec, decay) {
-      const n = Math.floor(this.ctx.sampleRate * sec);
+    _makeImpulse(sec, decay, maxSamples = 92000) {
+      const n = Math.min(maxSamples, Math.floor(this.ctx.sampleRate * sec));
       const b = this.ctx.createBuffer(2, n, this.ctx.sampleRate);
       for (let c = 0; c < 2; c++) {
         const d = b.getChannelData(c);
@@ -1638,7 +1810,7 @@
       const now = this.ctx.currentTime;
 
       const dayCurve = Math.sin(clamp(u, 0, 1) * Math.PI);
-      const lpFreq = 580 + dayCurve * 9800;
+      const lpFreq = 920 + dayCurve * 9500;
       this.musicLP.frequency.setTargetAtTime(lpFreq, now, 0.035);
 
       if (this.windGain) {
@@ -1655,17 +1827,26 @@
     _schedule() {
       if (!this.ctx || this.ctx.state !== "running") return;
       const now = this.ctx.currentTime;
+      if (now - this.nextStepTime > 0.5 || this.nextStepTime < now - 0.5) {
+        this.nextStepTime = now + 0.04;
+      }
+      if (now - this.nextCricket > 1.2 || this.nextCricket < now - 1.2) {
+        this.nextCricket = now + 0.35;
+      }
 
+      const active = !this.muted && this.volume > 0.002;
       const nightAmt = clamp(1 - smoothstep(0.14, 0.34, this.u) + smoothstep(0.76, 0.94, this.u), 0, 1);
       while (this.nextCricket < now + 0.16) {
-        if (nightAmt > 0.10 && !this.muted) {
+        if (nightAmt > 0.10 && active) {
           this._playCricket(this.nextCricket, nightAmt);
         }
         this.nextCricket += 0.8 + Math.random() * 1.4;
       }
 
       while (this.nextStepTime < now + 0.12) {
-        this._triggerStep(this.stepIdx, this.nextStepTime);
+        if (active) {
+          this._triggerStep(this.stepIdx, this.nextStepTime);
+        }
         this.nextStepTime += this.stepDur;
         this.stepIdx = (this.stepIdx + 1) % 128;
       }
@@ -1673,8 +1854,7 @@
 
     _playCricket(t, amt) {
       const f = 3650 + Math.random() * 440;
-      const pan = this.ctx.createStereoPanner();
-      pan.pan.value = (Math.random() * 2 - 1) * 0.72;
+      const pan = this._createPan((Math.random() * 2 - 1) * 0.72);
       pan.connect(this.sfxBus);
       for (let i = 0; i < 3; i++) {
         const ct = t + i * 0.048;
@@ -1788,11 +1968,17 @@
       const sub = this.ctx.createOscillator();
       sub.type = "sine";
       sub.frequency.setValueAtTime(freq, t);
+      const over = this.ctx.createOscillator();
+      over.type = "sine";
+      over.frequency.setValueAtTime(freq * 2.0, t);
 
       const lp = this.ctx.createBiquadFilter();
       lp.type = "lowpass";
-      lp.frequency.setValueAtTime(340, t);
-      lp.frequency.exponentialRampToValueAtTime(140, t + dur);
+      lp.frequency.setValueAtTime(380, t);
+      lp.frequency.exponentialRampToValueAtTime(160, t + dur);
+
+      const og = this.ctx.createGain();
+      og.gain.value = 0.22;
 
       const g = this.ctx.createGain();
       g.gain.setValueAtTime(0.0001, t);
@@ -1800,14 +1986,17 @@
       g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
 
       o.connect(lp);
+      over.connect(og); og.connect(lp);
       sub.connect(g);
       lp.connect(g);
       g.connect(this.musicBus);
       g.connect(this.reverbSend);
       o.start(t);
       sub.start(t);
+      over.start(t);
       o.stop(t + dur + 0.05);
       sub.stop(t + dur + 0.05);
+      over.stop(t + dur + 0.05);
     }
 
     _playFeltPiano(freq, t, level, tail = 1.4, panVal = 0) {
@@ -1824,7 +2013,7 @@
       const lp = this.ctx.createBiquadFilter();
       lp.type = "lowpass";
       lp.frequency.setValueAtTime(Math.min(2600, freq * 5.2), t);
-      lp.frequency.exponentialRampToValueAtTime(Math.max(240, freq * 1.3), t + 0.48);
+      lp.frequency.exponentialRampToValueAtTime(Math.max(260, freq * 1.3), t + 0.48);
 
       const g2 = this.ctx.createGain();
       g2.gain.value = 0.24;
@@ -1836,8 +2025,7 @@
       g.gain.linearRampToValueAtTime(level, t + 0.014);
       g.gain.exponentialRampToValueAtTime(0.0001, t + tail);
 
-      const pan = this.ctx.createStereoPanner();
-      pan.pan.value = clamp(panVal, -0.75, 0.75);
+      const pan = this._createPan(clamp(panVal, -0.75, 0.75));
 
       o1.connect(lp);
       o2.connect(g2); g2.connect(lp);
@@ -1876,8 +2064,7 @@
       g.gain.linearRampToValueAtTime(level, t + 0.008);
       g.gain.exponentialRampToValueAtTime(0.0001, t + tail);
 
-      const pan = this.ctx.createStereoPanner();
-      pan.pan.value = panVal;
+      const pan = this._createPan(panVal);
 
       o1.connect(lp);
       lp.connect(g);
@@ -1924,8 +2111,7 @@
       g.gain.setValueAtTime(level * 0.88, t + Math.max(atk, dur - rel));
       g.gain.exponentialRampToValueAtTime(0.0001, t + dur + 0.08);
 
-      const pan = this.ctx.createStereoPanner();
-      pan.pan.value = 0.08;
+      const pan = this._createPan(0.08);
 
       o1.connect(lp); o2.connect(lp);
       lp.connect(g);
@@ -1955,8 +2141,7 @@
       g.gain.linearRampToValueAtTime(level, t + 0.009);
       g.gain.exponentialRampToValueAtTime(0.0001, t + 1.45);
 
-      const pan = this.ctx.createStereoPanner();
-      pan.pan.value = (Math.random() - 0.5) * 0.65;
+      const pan = this._createPan((Math.random() - 0.5) * 0.65);
 
       o1.connect(g);
       o2.connect(g2); g2.connect(g);
@@ -1991,8 +2176,7 @@
       g.gain.setValueAtTime(0.0001, t);
       g.gain.linearRampToValueAtTime(level, t + 0.022);
       g.gain.exponentialRampToValueAtTime(0.0001, t + 1.35);
-      const pan = this.ctx.createStereoPanner();
-      pan.pan.value = panVal;
+      const pan = this._createPan(panVal);
       o.connect(g);
       g.connect(pan);
       pan.connect(this.sfxBus);
@@ -2001,12 +2185,18 @@
       o.stop(t + 1.4);
     }
 
+    _canPlaySfx() {
+      if (!this.ready || !this.ctx || this.muted || this.volume <= 0.002) return false;
+      if (this.ctx.state !== "running") this._kickResume();
+      return true;
+    }
+
     playPetalTouch(petalIdx) {
-      if (!this.ready || this.muted) return;
+      if (!this._canPlaySfx()) return;
       const chord = this._currentChord();
       const m = chord.arp[petalIdx % chord.arp.length];
       const f = noteFreq(m);
-      const t = this.ctx.currentTime;
+      const t = this.ctx.currentTime + 0.01;
       const p = ((petalIdx % 6) - 2.5) * 0.22;
       this._playGlassHarmonic(f, t, 0.11, p);
       this._playGlassHarmonic(f * 2.0, t + 0.02, 0.032, -p);
@@ -2014,20 +2204,20 @@
     }
 
     playWaterRippleNote(normDist = 0.5) {
-      if (!this.ready || this.muted) return;
+      if (!this._canPlaySfx()) return;
       const chord = this._currentChord();
       const idx = Math.floor(clamp(normDist, 0, 0.99) * chord.arp.length);
       const f = noteFreq(chord.arp[idx]);
-      const t = this.ctx.currentTime;
-      this.playDewDropPlink(0);
+      const t = this.ctx.currentTime + 0.01;
+      this.playDewDropPlink(0.01);
       this._playGlassHarmonic(f, t + 0.02, 0.085, (normDist - 0.5) * 0.7);
       this._playCelesta(f * 2.0, t + 0.05, 0.035);
     }
 
     playWishRelease() {
-      if (!this.ready || this.muted) return;
+      if (!this._canPlaySfx()) return;
       const chord = this._currentChord();
-      const t = this.ctx.currentTime;
+      const t = this.ctx.currentTime + 0.01;
       chord.arp.slice(0, 6).forEach((m, i) => {
         this._playHarp(noteFreq(m), t + i * 0.065, 0.065, 1.6, (i - 2.5) * 0.22);
         this._playGlassHarmonic(noteFreq(m + 12), t + i * 0.065 + 0.02, 0.042, (2.5 - i) * 0.20);
@@ -2035,9 +2225,9 @@
     }
 
     playPollenSparkle() {
-      if (!this.ready || this.muted) return;
+      if (!this._canPlaySfx()) return;
       const chord = this._currentChord();
-      const t = this.ctx.currentTime;
+      const t = this.ctx.currentTime + 0.01;
       [0, 2, 4, 5, 7].forEach((k, i) => {
         const m = chord.arp[k % chord.arp.length] + 12;
         this._playCelesta(noteFreq(m), t + i * 0.048, 0.055);
@@ -2045,8 +2235,8 @@
     }
 
     playMistSpray() {
-      if (!this.ready || this.muted) return;
-      const t = this.ctx.currentTime;
+      if (!this._canPlaySfx()) return;
+      const t = this.ctx.currentTime + 0.01;
       const src = this.ctx.createBufferSource();
       src.buffer = this.noiseBuf;
       const hp = this.ctx.createBiquadFilter();
@@ -2069,8 +2259,8 @@
     }
 
     playDewDropPlink(delay = 0) {
-      if (!this.ready || this.muted) return;
-      const t = this.ctx.currentTime + delay;
+      if (!this._canPlaySfx()) return;
+      const t = this.ctx.currentTime + Math.max(0.005, delay);
       const f0 = 620 + Math.random() * 480;
       const o = this.ctx.createOscillator();
       o.type = "sine";
@@ -2088,17 +2278,17 @@
     }
 
     playScentWave() {
-      if (!this.ready || this.muted) return;
+      if (!this._canPlaySfx()) return;
       const chord = this._currentChord();
-      const t = this.ctx.currentTime;
+      const t = this.ctx.currentTime + 0.01;
       chord.pad.forEach((m, i) => {
         this._playGlassHarmonic(noteFreq(m + 12), t + i * 0.045, 0.055, (i - 2) * 0.25);
       });
     }
 
     playKnobTink(bright = false) {
-      if (!this.ready || this.muted) return;
-      const t = this.ctx.currentTime;
+      if (!this._canPlaySfx()) return;
+      const t = this.ctx.currentTime + 0.008;
       for (const [f, lv] of [[bright ? 3050 : 2480, 0.065], [bright ? 4700 : 3950, 0.035]]) {
         const o = this.ctx.createOscillator();
         o.type = "sine";
@@ -4630,7 +4820,10 @@
     if (sim.scentRings.length > 4) sim.scentRings.shift();
   }
 
-  const audio = new BotanicalAudio((strength) => spawnScentRing(strength, 0.5, 0.52));
+  const audio = new BotanicalAudio(
+    (strength) => spawnScentRing(strength, 0.5, 0.52),
+    () => { if (typeof updateAudioBtn === "function") updateAudioBtn(); }
+  );
   try {
     const savedVol = parseFloat(localStorage.getItem("lilium_vol_v1") || "0.78");
     if (Number.isFinite(savedVol)) audio.setVolume(savedVol);
@@ -4678,7 +4871,7 @@
 
     document.getElementById("readoutPhase").textContent = `${hh}:${mm} · ${phase}`;
     document.getElementById("readoutCultivar").textContent = `${CULTIVARS[sim.targetCultivarIdx].name} · ${CULTIVARS[sim.targetCultivarIdx].meaning}`;
-    document.getElementById("readoutEco").textContent = (audio.ready && !audio.muted)
+    document.getElementById("readoutEco").textContent = (audio.ready && !audio.muted && audio.isRunning())
       ? audio.getMovementName()
       : `${lightWord} · ${plant.dewdrops.length} Çiy · ${ecoSuffix}`;
 
@@ -5106,9 +5299,13 @@
 
   function updateAutoBtn() { autoCycleBtn.classList.toggle("active", sim.autoCycle); }
   function updateAudioBtn() {
-    const on = audio.ready && !audio.muted;
+    const running = audio.isRunning();
+    const on = audio.ready && !audio.muted && running;
     audioBtn.classList.toggle("active", on);
-    audioBtnText.textContent = !audio.ready ? "Ses: Başlat" : audio.muted ? "Ses: Kapalı" : "Ses: Açık";
+    if (!audio.ready) audioBtnText.textContent = "Ses: Başlat";
+    else if (audio.muted) audioBtnText.textContent = "Ses: Kapalı";
+    else if (!running) audioBtnText.textContent = "Ses: Dokun";
+    else audioBtnText.textContent = "Ses: Açık";
     syncVolumeUI();
   }
 
@@ -5120,28 +5317,27 @@
   });
 
   autoCycleBtn.addEventListener("click", () => {
-    audio.init();
+    audio.unlock(false);
     updateAudioBtn();
     sim.autoCycle = !sim.autoCycle;
     updateAutoBtn();
   });
 
   audioBtn.addEventListener("click", () => {
-    if (!audio.ready) {
-      audio.init();
+    if (!audio.ready || !audio.isRunning()) {
+      audio.unlock(true);
     } else {
-      audio.toggleMute();
-      if (!audio.muted && audio.volume < 0.03) audio.setVolume(0.65);
+      const unmuted = audio.toggleMute();
+      if (unmuted && audio.volume < 0.03) audio.setVolume(0.65);
     }
     updateAudioBtn();
   });
 
-  volumeSlider.addEventListener("input", () => {
+  function handleVolumeInput() {
     const pct = clamp(Number(volumeSlider.value) || 0, 0, 100);
     const vol = pct / 100;
     if (vol > 0.005) {
-      if (!audio.ready) audio.init();
-      audio.muted = false;
+      audio.unlock(true);
       audio.setVolume(vol);
       try { localStorage.setItem("lilium_vol_v1", vol.toFixed(2)); } catch (_) {}
     } else {
@@ -5149,6 +5345,36 @@
       audio.setVolume(0);
     }
     updateAudioBtn();
+  }
+  volumeSlider.addEventListener("input", handleVolumeInput);
+  volumeSlider.addEventListener("change", handleVolumeInput);
+  volumeSlider.addEventListener("touchend", () => {
+    if (Number(volumeSlider.value) > 0) audio.unlock(true);
+  }, { passive: true });
+
+  // Universal mobile gesture unlock & iOS interruption recovery
+  const handleGlobalAudioGesture = (e) => {
+    const tgt = e.target && typeof e.target.closest === "function" ? e.target : null;
+    if (tgt && tgt.closest("#audioBtn")) return;
+    if (!audio.ready) {
+      if (tgt && tgt.closest("#lilyCanvas, #timeSwitchCanvas, .cultivar-pill, .mini-pill, .herbarium-frame, .ctrl-btn, .volume-pill, #githubLink")) {
+        audio.unlock(false);
+      }
+    } else if (!audio.muted && !audio.isRunning()) {
+      audio.resumeIfNeeded();
+    }
+  };
+  document.addEventListener("touchend", handleGlobalAudioGesture, { capture: true, passive: true });
+  document.addEventListener("click", handleGlobalAudioGesture, { capture: true, passive: true });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && audio.ready && !audio.muted && !audio.isRunning()) {
+      audio.resumeIfNeeded();
+    }
+  });
+  window.addEventListener("pageshow", () => {
+    if (audio.ready && !audio.muted && !audio.isRunning()) {
+      audio.resumeIfNeeded();
+    }
   });
 
   document.querySelectorAll(".cultivar-pill").forEach((btn) => {
