@@ -1701,14 +1701,14 @@
           <button id="breezeBtn" class="mini-pill" type="button" title="Ilık esinti ve polen ışıltısı gönder">Esinti</button>
           <button id="wishBtn" class="mini-pill" type="button" title="Süzülen dilek taç yaprakları bırak">Dilek Yaprağı</button>
           <button id="scentBtn" class="mini-pill" type="button" title="Koku ve ışık halkası yay">Koku Dalgası</button>
-          <button id="starsBtn" class="mini-pill active-star" type="button" title="Herkese açık veya sana özel 3B hatıra goncası bırak">&#10048; Hatıra Goncaları <span id="starCountBadge"></span></button>
+          <button id="starsBtn" class="mini-pill active-star" type="button" title="Herkese açık veya sana özel 3B hatıra yaprağı bırak">&#10048; Hatıra Yaprakları <span id="starCountBadge"></span></button>
           <button id="postcardBtn" class="mini-pill" type="button" title="Bu anı çerçeveli hatıra kartpostalı olarak indir">Kartpostal</button>
         </div>
       </div>
 
-      <div id="starTooltip" class="star-tooltip" role="dialog" aria-label="Hatıra Goncası Kartı">
+      <div id="starTooltip" class="star-tooltip" role="dialog" aria-label="Hatıra Yaprağı Kartı">
         <div class="star-tooltip-bar">
-          <div class="star-tooltip-head" id="starTooltipHead">Hatıra Goncası</div>
+          <div class="star-tooltip-head" id="starTooltipHead">Hatıra Yaprağı</div>
           <div class="star-tooltip-btns">
             <button type="button" class="tip-mini-btn" id="tipEditBtn" style="display:none;">Düzenle</button>
             <button type="button" class="tip-mini-btn" id="tipResetBtn" style="display:none;" title="Yörüngeye geri bırak">&#8634;</button>
@@ -1716,7 +1716,7 @@
           </div>
         </div>
         <div class="star-tooltip-body" id="starTooltipBody"></div>
-        <div class="star-tooltip-hint">Sürükle: Kartı veya 3B goncayı taşı</div>
+        <div class="star-tooltip-hint">Sürükle: Kartı veya 3B yaprağı taşı</div>
       </div>
 
       <div class="chamber-bottom">
@@ -1735,7 +1735,7 @@
               <span class="petal-seq-dot"></span>
             </span>
           </div>
-          <div class="chamber-hint">Sürükle: Döndür &amp; Goncayı Taşı &middot; Yaprağa/Goncaya dokun: Nota</div>
+          <div class="chamber-hint">Sürükle: Döndür &amp; Yaprağı Taşı &middot; Yaprağa dokun: Nota &amp; Anı</div>
         </div>
       </div>
 
@@ -1786,11 +1786,11 @@
         </div>
       </div>
 
-      <div class="wish-drawer" id="wishDrawer" role="dialog" aria-label="Hatıra Goncaları ve Dilek Bahçesi">
+      <div class="wish-drawer" id="wishDrawer" role="dialog" aria-label="Hatıra Yaprakları ve Dilek Bahçesi">
         <div class="wish-head">
-          <span class="wish-head-title">&#10048; Hatıra Goncaları &amp; Dilek Bahçesi</span>
+          <span class="wish-head-title">&#10048; Hatıra Yaprakları &amp; Dilek Bahçesi</span>
           <div style="display:flex;gap:5px;">
-            <button class="mini-pill" id="refreshPublicWishesBtn" type="button" style="padding:3px 8px;" title="GitHub ortak goncalarını yenile">Yenile</button>
+            <button class="mini-pill" id="refreshPublicWishesBtn" type="button" style="padding:3px 8px;" title="GitHub ortak hatıra yapraklarını yenile">Yenile</button>
             <button class="mini-pill" id="wishCloseBtn" type="button" style="padding:3px 8px;">Kapat</button>
           </div>
         </div>
@@ -1803,11 +1803,11 @@
           <input id="wishAuthorInput" type="text" maxlength="32" placeholder="İsim veya rumuz (Örn: Bir Seven)" />
           <textarea id="wishTextInput" rows="2" maxlength="180" placeholder="Kalbinden geçen bir dilek veya hatıra yaz..."></textarea>
           <div class="wish-options-row">
-            <div class="vis-toggle" role="group" aria-label="Gonca Görünürlüğü">
+            <div class="vis-toggle" role="group" aria-label="Yaprak Görünürlüğü">
               <button class="vis-btn active" data-vis="public" id="visPublicBtn" type="button">Herkese Açık</button>
               <button class="vis-btn" data-vis="private" id="visPrivateBtn" type="button">Bana Özel</button>
             </div>
-            <div class="star-colors" role="group" aria-label="Gonca Rengi">
+            <div class="star-colors" role="group" aria-label="Yaprak Işığı Rengi">
               <button class="star-col-btn active" data-col="gold" type="button" title="Altın Kehribar" style="background:#f5cf7a;color:#f5cf7a;"></button>
               <button class="star-col-btn" data-col="white" type="button" title="Beyaz İnci" style="background:#f7fbff;color:#f7fbff;"></button>
               <button class="star-col-btn" data-col="rose" type="button" title="Gül Şafağı" style="background:#f58fb2;color:#f58fb2;"></button>
@@ -1815,10 +1815,10 @@
             </div>
           </div>
           <div class="wish-publish-row">
-            <span class="wish-status-msg" id="wishStatusMsg">Herkese açık goncalar bahçede 3B açar.</span>
+            <span class="wish-status-msg" id="wishStatusMsg">Herkese açık yapraklar bahçede 3B süzülür.</span>
             <div style="display:inline-flex;gap:5px;align-items:center;">
               <button class="mini-pill" id="cancelEditWishBtn" type="button" style="display:none;padding:4px 8px;">Vazgeç</button>
-              <button class="mini-pill active-star" id="submitWishBtn" type="submit">Gonca Bırak &#10048;</button>
+              <button class="mini-pill active-star" id="submitWishBtn" type="submit">Yaprak Bırak &#10048;</button>
             </div>
           </div>
         </form>
@@ -4013,7 +4013,7 @@
         this._computeNormalsRange(this.bfBodyVStart, this.bfBodySegsU, this.bfBodySegsV);
       }
 
-      // 11. Sculpted 3D "Hatıra Goncaları" (3-petal luminous baby Lilium buds orbiting gently)
+      // 11. Sculpted 3D "Hatıra Yaprakları" (Arched luminous Lilium petals + nectar dewdrop pearl)
       for (let b = 0; b < this.maxBuds; b++) {
         const bud = this.pinnedBuds[b];
         if (!bud) {
@@ -4046,66 +4046,83 @@
         else { bud.worldPos[0] = bx; bud.worldPos[1] = by; bud.worldPos[2] = bz; }
 
         const isHov = bud.id === hoveredBudId ? 1.0 : 0.0;
-        const sc = (0.175 + 0.042 * isHov) * (0.96 + 0.04 * Math.sin(time * 2.2 + bud.phase));
-        const openB = lerp(0.22, 0.54, isHov);
-        const rotY = ang + time * 0.42;
-        const tilt = 0.24 + 0.08 * Math.sin(time * 1.3 + bud.phase);
-        const ct = Math.cos(tilt), st = Math.sin(tilt);
+        const sc = (0.165 + 0.038 * isHov) * (0.96 + 0.04 * Math.sin(time * 2.1 + bud.phase));
+        const rotY = ang + time * 0.48 + (isHov * 0.35);
+        const pitch = -0.26 + Math.sin(time * 1.25 + bud.phase) * 0.14;
+        const roll = Math.cos(time * 1.45 + bud.phase) * 0.24;
         const cy = Math.cos(rotY), sy = Math.sin(rotY);
+        const cp = Math.cos(pitch), sp = Math.sin(pitch);
+        const cr = Math.cos(roll), sr = Math.sin(roll);
 
-        for (let p = 0; p < 3; p++) {
-          const vs = this.budTepVStart[b][p];
-          const phi = rotY + p * (Math.PI * 2 / 3);
-          const cp = Math.cos(phi), sp = Math.sin(phi);
-          const tx = -sp, tz = cp;
+        // Primary curved 3D Lilium Hatıra Yaprağı lamina (grid 0)
+        const vs = this.budTepVStart[b][0];
+        const pLen = 1.62 * sc;
+        for (let iy = 0; iy <= this.budTepSegsV; iy++) {
+          const u = iy / this.budTepSegsV;
+          const belly = Math.sin(Math.pow(u, 0.70) * Math.PI);
+          const halfW = 0.54 * sc * belly;
+          const zBase = (u - 0.5) * pLen;
+          // S-curve arch + graceful reflexed tip lift
+          const yArch = Math.sin(u * Math.PI) * 0.19 * sc - Math.pow(Math.max(0, u - 0.65), 1.6) * 0.28 * sc;
 
-          for (let iy = 0; iy <= this.budTepSegsV; iy++) {
-            const u = iy / this.budTepSegsV; // 0 base -> 1 bud tip
-            // Pointed teardrop Lilium bud curve that swells cleanly in middle and kisses shut near tip
-            const belly = Math.sin(Math.pow(u, 0.72) * Math.PI);
-            const rRad = (0.14 + belly * (0.34 + 0.34 * openB) + u * 0.26 * openB) * sc;
-            const yLoc = (u - 0.38) * 1.18 * sc;
-            const halfW = belly * 0.36 * sc;
+          for (let ix = 0; ix <= this.budTepSegsU; ix++) {
+            const vCoord = (ix / this.budTepSegsU) * 2 - 1;
+            const lx0 = vCoord * halfW;
+            const keelCup = (vCoord * vCoord) * 0.12 * sc * belly - (1.0 - Math.abs(vCoord)) * 0.04 * sc * Math.sin(u * Math.PI);
+            const ly0 = yArch + keelCup;
+            const lz0 = zBase;
 
-            for (let ix = 0; ix <= this.budTepSegsU; ix++) {
-              const vCoord = (ix / this.budTepSegsU) * 2 - 1;
-              const lat = vCoord * halfW;
-              const cup = (1.0 - vCoord * vCoord) * 0.065 * sc * belly;
-              const pxLoc = cp * (rRad + cup) + tx * lat;
-              const pzLoc = sp * (rRad + cup) + tz * lat;
+            // Rotate Roll (Z) -> Pitch (X) -> Yaw (Y)
+            const x1 = lx0 * cr - ly0 * sr;
+            const y1 = lx0 * sr + ly0 * cr;
+            const y2 = y1 * cp - lz0 * sp;
+            const z2 = y1 * sp + lz0 * cp;
+            const wx = x1 * cy + z2 * sy;
+            const wz = -x1 * sy + z2 * cy;
 
-              // Gentle sway tilt around local Z then write
-              const yT = yLoc * ct - pzLoc * st;
-              const zT = yLoc * st + pzLoc * ct;
-              this._writeRaw(
-                vs + iy * (this.budTepSegsU + 1) + ix,
-                bx + pxLoc, by + yT, bz + zT,
-                0, 1, 0, u, vCoord,
-                10.0, bud.colorIdx, isHov, 0.96
-              );
-            }
+            this._writeRaw(
+              vs + iy * (this.budTepSegsU + 1) + ix,
+              bx + wx, by + y2, bz + wz,
+              0, 1, 0, u, vCoord,
+              10.0, bud.colorIdx, isHov, 0.96
+            );
           }
-          this._computeNormalsRange(vs, this.budTepSegsU, this.budTepSegsV);
+        }
+        this._computeNormalsRange(vs, this.budTepSegsU, this.budTepSegsV);
+
+        // Park secondary auxiliary bud grids cleanly off-stage
+        for (let p = 1; p < 3; p++) {
+          const ps = this.budTepVStart[b][p];
+          for (let k = 0; k < (this.budTepSegsU + 1) * (this.budTepSegsV + 1); k++) {
+            this._writeRaw(ps + k, 0, -10, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0);
+          }
         }
 
-        // Inner glowing heart pearl/nectar bulb inside each 3D Hatıra Goncası
+        // Glistening nectar dewdrop pearl perched gracefully inside the leaf curve
         const cs = this.budCoreVStart[b];
-        const cRadX = 0.22 * sc;
-        const cRadY = 0.32 * sc;
+        const cRad = 0.145 * sc;
+        const uDrop = 0.36;
+        const lyDrop = Math.sin(uDrop * Math.PI) * 0.19 * sc + 0.09 * sc;
+        const lzDrop = (uDrop - 0.5) * pLen;
         for (let iy = 0; iy <= this.budCoreSegsV; iy++) {
           const phi = (iy / this.budCoreSegsV - 0.5) * Math.PI;
-          const cp = Math.cos(phi), sp = Math.sin(phi);
+          const cpD = Math.cos(phi), spD = Math.sin(phi);
           for (let ix = 0; ix <= this.budCoreSegsU; ix++) {
-            const th = (ix / this.budCoreSegsU) * Math.PI * 2 + rotY;
-            const lx = Math.cos(th) * cp * cRadX;
-            const lz = Math.sin(th) * cp * cRadX;
-            const ly = sp * cRadY - 0.04 * sc;
-            const yT = ly * ct - lz * st;
-            const zT = ly * st + lz * ct;
+            const th = (ix / this.budCoreSegsU) * Math.PI * 2;
+            const lx0 = Math.cos(th) * cpD * cRad;
+            const ly0 = lyDrop + spD * cRad * 0.88;
+            const lz0 = lzDrop + Math.sin(th) * cpD * cRad;
+
+            const x1 = lx0 * cr - ly0 * sr;
+            const y1 = lx0 * sr + ly0 * cr;
+            const y2 = y1 * cp - lz0 * sp;
+            const z2 = y1 * sp + lz0 * cp;
+            const wx = x1 * cy + z2 * sy;
+            const wz = -x1 * sy + z2 * cy;
             this._writeRaw(
               cs + iy * (this.budCoreSegsU + 1) + ix,
-              bx + lx * cy + zT * sy, by + yT, bz - lx * sy + zT * cy,
-              Math.cos(th) * cp, sp, Math.sin(th) * cp,
+              bx + wx, by + y2, bz + wz,
+              Math.cos(th) * cpD, spD, Math.sin(th) * cpD,
               ix / this.budCoreSegsU, iy / this.budCoreSegsV,
               10.6, bud.colorIdx, isHov, 0.98
             );
@@ -7276,9 +7293,9 @@
     wishTextInput.value = w.text || "";
     setComposeVis(w.vis === "private" ? "private" : "public");
     setComposeCol(w.col || "gold");
-    submitWishBtn.textContent = "Gonca Güncelle ❀";
+    submitWishBtn.textContent = "Yaprağı Güncelle ❀";
     cancelEditWishBtn.style.display = "inline-flex";
-    wishStatusMsg.textContent = "Gonca düzenleniyor · Güncelle veya vazgeç.";
+    wishStatusMsg.textContent = "Yaprak düzenleniyor · Güncelle veya vazgeç.";
     toggleWishDrawer(true);
     wishTextInput.focus();
   }
@@ -7287,10 +7304,10 @@
     editingWishId = null;
     wishAuthorInput.value = "";
     wishTextInput.value = "";
-    submitWishBtn.textContent = "Gonca Bırak ❀";
+    submitWishBtn.textContent = "Yaprak Bırak ❀";
     cancelEditWishBtn.style.display = "none";
     wishStatusMsg.textContent = composeVis === "public"
-      ? "Herkese açık goncalar bahçede 3B açar."
+      ? "Herkese açık yapraklar bahçede 3B süzülür."
       : "Bana özel: yalnızca bu cihazda gizli saklanır.";
   }
 
@@ -7311,7 +7328,7 @@
           text: String(obj.t).slice(0, 180),
           col: STAR_PALETTE[obj.c] ? obj.c : "gold",
           vis: "public",
-          dateStr: "Paylaşılan Gonca",
+          dateStr: "Paylaşılan Yaprak",
           source: "url",
         };
       }
@@ -7321,7 +7338,7 @@
 
   (function parseSharedStarFromURL() {
     const sp = new URLSearchParams(window.location.search);
-    const qStar = sp.get("gonca") || sp.get("yildiz");
+    const qStar = sp.get("yaprak") || sp.get("gonca") || sp.get("yildiz");
     if (qStar) {
       const w = decodeShareWish(qStar);
       if (w) sharedUrlWishes.push(w);
@@ -7373,7 +7390,7 @@
   function buildGitHubWishIssueURL(w) {
     const u = new URL("https://github.com/existye4t/lilium/issues/new");
     u.searchParams.set("labels", "dilek");
-    u.searchParams.set("title", `Hatıra Goncası · ${w.author}`);
+    u.searchParams.set("title", `Hatıra Yaprağı · ${w.author}`);
     u.searchParams.set("body", `İsim: ${w.author}\nRenk: ${w.col}\nMesaj: ${w.text}`);
     return u.toString();
   }
@@ -7387,8 +7404,8 @@
       empty.className = "wish-status-msg";
       empty.style.padding = "12px 4px";
       empty.textContent = wishFilter === "private"
-        ? "Henüz kendine özel bir hatıra goncası bırakmadın."
-        : "İlk hatıra goncasını bırakarak bahçeyi çiçeklendirebilirsin.";
+        ? "Henüz kendine özel bir hatıra yaprağı bırakmadın."
+        : "İlk hatıra yaprağını bırakarak bahçeyi aydınlatabilirsin.";
       wishListEl.appendChild(empty);
       syncPinnedStars();
       return;
@@ -7434,7 +7451,7 @@
         shareBtn.addEventListener("click", (ev) => {
           ev.stopPropagation();
           const url = new URL(window.location.href);
-          url.searchParams.set("gonca", encodeShareWish(w));
+          url.searchParams.set("yaprak", encodeShareWish(w));
           navigator.clipboard?.writeText(url.toString()).catch(() => {});
           shareBtn.textContent = "Kopyalandı ✓";
           setTimeout(() => { shareBtn.textContent = "Linki Kopyala"; }, 1800);
@@ -7515,7 +7532,7 @@
   }
 
   async function fetchGitHubPublicWishes(showBusy = false) {
-    if (showBusy) wishStatusMsg.textContent = "Ortak goncalar yükleniyor...";
+    if (showBusy) wishStatusMsg.textContent = "Ortak hatıra yaprakları yükleniyor...";
     try {
       const res = await fetch("https://api.github.com/repos/existye4t/lilium/issues?labels=dilek&state=open&per_page=30", {
         headers: { Accept: "application/vnd.github+json" },
@@ -7525,10 +7542,10 @@
       if (Array.isArray(data)) {
         remotePublicWishes = data.map(parseGitHubIssueToWish).filter((x) => x.text);
         renderWishList();
-        if (showBusy) wishStatusMsg.textContent = `${remotePublicWishes.length} ortak hatıra goncası güncel.`;
+        if (showBusy) wishStatusMsg.textContent = `${remotePublicWishes.length} ortak hatıra yaprağı güncel.`;
       }
     } catch (_) {
-      if (showBusy) wishStatusMsg.textContent = "Çevrimdışı önbellekteki goncalar gösteriliyor.";
+      if (showBusy) wishStatusMsg.textContent = "Çevrimdışı önbellekteki yapraklar gösteriliyor.";
     }
   }
 
@@ -7543,7 +7560,7 @@
 
   visPublicBtn.addEventListener("click", () => {
     setComposeVis("public");
-    if (!editingWishId) wishStatusMsg.textContent = "Herkese açık: bahçede 3B gonca olur & paylaşılır.";
+    if (!editingWishId) wishStatusMsg.textContent = "Herkese açık: bahçede 3B yaprak süzülür & paylaşılır.";
   });
 
   visPrivateBtn.addEventListener("click", () => {
@@ -7599,7 +7616,7 @@
       writeWishStore("lilium_wishes_private_v1", localPrivateWishes);
       const updatedId = editingWishId;
       cancelEditWish();
-      wishStatusMsg.textContent = "Hatıra goncan güncellendi ❀";
+      wishStatusMsg.textContent = "Hatıra yaprağın güncellendi ❀";
       renderWishList();
       const updatedBud = plant.pinnedBuds.find((b) => b.id === updatedId);
       if (updatedBud && pinnedBudId === updatedId) showStarTooltip(updatedBud, true);
@@ -7616,11 +7633,11 @@
       if (composeVis === "public") {
         localPublicWishes.unshift(item);
         writeWishStore("lilium_wishes_public_v1", localPublicWishes);
-        wishStatusMsg.textContent = "3B hatıra goncan açıldı! Paylaşma linki aşağıda hazır ❀";
+        wishStatusMsg.textContent = "3B hatıra yaprağın süzüldü! Paylaşma linki aşağıda hazır ❀";
       } else {
         localPrivateWishes.unshift(item);
         writeWishStore("lilium_wishes_private_v1", localPrivateWishes);
-        wishStatusMsg.textContent = "Özel goncan bu cihazda güvenle saklandı 🔒";
+        wishStatusMsg.textContent = "Özel yaprağın bu cihazda güvenle saklandı 🔒";
       }
       wishTextInput.value = "";
       renderWishList();
